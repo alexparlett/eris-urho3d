@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<settings>
+  <graphics>
+    <resolution>1024 768</resolution>
+    <fullscreen>false</fullscreen>
+    <antialiasing>2</antialiasing>
+    <vsync>false</vsync>
+    <anisotropic>0</anisotropic>
+    <shadows>2</shadows>
+    <gamma>1.0</gamma>
+    <shaders>1</shaders>
+    <ssao>true</ssao>
+  </graphics>
+  <sound>
+    <master>1.0</master>
+    <music>0.75</music>
+    <interface>0.75</interface>
+    <ambient>0.75</ambient>
+    <effects>0.75</effects>
+  </sound>
+</settings>
