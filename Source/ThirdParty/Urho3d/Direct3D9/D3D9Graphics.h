@@ -84,7 +84,7 @@ public:
     /// Set window title.
     void SetWindowTitle(const String& windowTitle);
 	/// Set window icon.
-	void SetWindowIcon(const String& windowIcon);
+	void SetWindowIcon(Image* windowIcon);
     /// Set window position.
     void SetWindowPosition(const IntVector2& position);
     /// Set window position.
@@ -420,7 +420,7 @@ private:
     /// Window title.
     String windowTitle_;
 	/// Window Icon File Name
-	String windowIcon_;
+	Image* windowIcon_;
     /// External window, null if not in use (default.)
     void* externalWindow_;
     /// Window width.

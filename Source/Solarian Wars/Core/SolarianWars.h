@@ -1,22 +1,17 @@
 #pragma once
 
-#include "SolarianWarsConfig.h"
-#include "IO/Settings.h"
-
-#include <Application.h>
 #include <Engine.h>
+#include <Application.h>
 
-using namespace Urho3D;
-
-class SolarianWars : public Application
+class SolarianWars : public Urho3D::Application
 {
-	OBJECT(SolarianWars)
+    OBJECT(SolarianWars)
 
 public:
-	SolarianWars(Context* context);
+    SolarianWars(Urho3D::Context* context);
 
-	virtual void Setup();
-	virtual void Start();
-	virtual void Stop();
+    virtual void Setup();
+    virtual void Start();
+    virtual void Stop();
 };
 

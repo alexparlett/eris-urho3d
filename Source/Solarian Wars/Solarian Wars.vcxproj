@@ -167,16 +167,18 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Events.h" />
     <ClInclude Include="Core\SolarianWars.h" />
     <ClInclude Include="IO\Settings.h" />
     <ClInclude Include="Exceptions\Exception.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="SolarianWarsConfig.h" />
+    <ClInclude Include="Core\StateManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\SolarianWars.cpp" />
     <ClCompile Include="IO\Settings.cpp" />
     <ClCompile Include="Exceptions\Exception.cpp" />
+    <ClCompile Include="Core\StateManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\..\Assets\CoreData\settings.xml">

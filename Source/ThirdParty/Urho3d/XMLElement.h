@@ -88,9 +88,11 @@ public:
     /// Select elements/attributes using XPath query.
     XPathResultSet SelectPrepared(const XPathQuery& query) const;
 
-	/// Set the value for an inner node in the following format <node>value</node>.
+	/// Set the value for an inner node in the following format
+	/// <node>value</node>. Must be used on the <node> element.
 	bool SetValue(const String& value);
-	/// Set the value for an inner node in the following format <node>value</node>.
+	/// Set the value for an inner node in the following format
+	/// <node>value</node>. Must be used on the <node> element.
 	bool SetValue(const char* value);
     /// Set an attribute.
     bool SetAttribute(const String& name, const String& value);
