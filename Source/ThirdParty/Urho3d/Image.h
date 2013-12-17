@@ -25,6 +25,8 @@
 #include "ArrayPtr.h"
 #include "Resource.h"
 
+struct SDL_Surface;
+
 namespace Urho3D
 {
 
@@ -127,6 +129,8 @@ public:
     SharedPtr<Image> GetNextLevel() const;
     /// Return a compressed mip level.
     CompressedLevel GetCompressedLevel(unsigned index) const;
+    /// Return an SDL surface from the image, or null if failed. Only RGB images are supported. Specify rect to only return partial image. You must free the surface yourself.
+    SDL_Surface* GetSDLSurface(const IntRect& rect = IntRect::ZERO) const;
     
 private:
     /// Decode an image using stb_image.

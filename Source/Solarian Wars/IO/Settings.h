@@ -1,3 +1,10 @@
+////////////////////////////////////////////
+//
+// Copyright (c) 2013-2014 Homonoia Studios
+//
+////////////////////////////////////////////
+
+
 #pragma once
 
 #include <Object.h>
@@ -15,8 +22,8 @@ public:
     void Load();
     void Save();
 
-    Urho3D::Variant GetSetting(const Urho3D::String& name, const Urho3D::Variant& default = Urho3D::Variant::EMPTY) const;
-    void SetSetting(const Urho3D::String& name, const Urho3D::String& value);
+    const Urho3D::Variant& GetSetting(const Urho3D::String& name, const Urho3D::Variant& default = Urho3D::Variant::EMPTY);
+    void SetSetting(const Urho3D::String& name, const Urho3D::Variant& value);
 
 private:
     const Urho3D::String GetUserDirectory();

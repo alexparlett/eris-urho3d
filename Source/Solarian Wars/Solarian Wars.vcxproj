@@ -76,6 +76,7 @@
     <IntDir>$(SolutionDir)Temp\$(Platform)$(Configuration)\</IntDir>
     <IncludePath>$(SolutionDir)Source\SolarianWars;$(IncludePath)</IncludePath>
     <SourcePath>$(SolutionDir)Source\SolarianWars;$(SourcePath)</SourcePath>
+    <TargetName>$(ProjectName)64</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)Lib\$(Platform)$(Configuration)\</OutDir>
@@ -88,6 +89,7 @@
     <IntDir>$(SolutionDir)Temp\$(Platform)$(Configuration)\</IntDir>
     <IncludePath>$(SolutionDir)Source\SolarianWars;$(IncludePath)</IncludePath>
     <SourcePath>$(SolutionDir)Source\SolarianWars;$(SourcePath)</SourcePath>
+    <TargetName>$(ProjectName)64</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -122,7 +124,10 @@
       <ProfileGuidedDatabase>$(IntDir)$(TargetName).pgd</ProfileGuidedDatabase>
     </Link>
     <PreBuildEvent>
-      <Command>$(SolutionDir)Tools\PackageTool.exe "$(SolutionDir)Assets\CoreData" "$(SolutionDir)Assets\CoreData.pak"</Command>
+      <Command>$(SolutionDir)Tools\PackageTool.exe "$(SolutionDir)Assets\CoreData" "$(SolutionDir)Game\CoreData.pak"
+xcopy "$(SolutionDir)Assets\Data" "$(SolutionDir)Game\Data" /Y /I /E /D
+xcopy "$(SolutionDir)Assets\Mods" "$(SolutionDir)Game\Mods" /Y /I /E /D
+xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -163,14 +168,21 @@
       <AdditionalDependencies>Urho3d.lib;d3d9.lib;dbghelp.lib;imm32.lib;version.lib;winmm.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>$(SolutionDir)Tools\PackageTool.exe "$(SolutionDir)Assets\CoreData" "$(SolutionDir)Assets\CoreData.pak"</Command>
+      <Command>$(SolutionDir)Tools\PackageTool.exe "$(SolutionDir)Assets\CoreData" "$(SolutionDir)Game\CoreData.pak"
+xcopy "$(SolutionDir)Assets\Data" "$(SolutionDir)Game\Data" /Y /I /E /D
+xcopy "$(SolutionDir)Assets\Mods" "$(SolutionDir)Game\Mods" /Y /I /E /D
+xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Core\Events.h" />
     <ClInclude Include="Core\SolarianWars.h" />
+    <ClInclude Include="Core\State.h" />
     <ClInclude Include="IO\Settings.h" />
     <ClInclude Include="Exceptions\Exception.h" />
+    <ClInclude Include="IO\Mod.h" />
+    <ClInclude Include="Core\ModManager.h" />
+    <ClInclude Include="States\LaunchState.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Core\StateManager.h" />
   </ItemGroup>
@@ -179,11 +191,9 @@
     <ClCompile Include="IO\Settings.cpp" />
     <ClCompile Include="Exceptions\Exception.cpp" />
     <ClCompile Include="Core\StateManager.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Xml Include="..\..\Assets\CoreData\settings.xml">
-      <SubType>Designer</SubType>
-    </Xml>
+    <ClCompile Include="IO\Mod.cpp" />
+    <ClCompile Include="Core\ModManager.cpp" />
+    <ClCompile Include="States\LaunchState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Solarian Wars.rc" />

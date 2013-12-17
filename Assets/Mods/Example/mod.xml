@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mod id="example_mod">
+    <name>Example Mod</name>
+    <description>This is an example mod.</description>
+    <author>Azalrion</author>
+    <version>1.0</version>
+</mod>

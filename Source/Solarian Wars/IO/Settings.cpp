@@ -1,3 +1,10 @@
+////////////////////////////////////////////
+//
+// Copyright (c) 2013-2014 Homonoia Studios
+//
+////////////////////////////////////////////
+
+
 #include "Settings.h"
 #include "Exceptions/Exception.h"
 
@@ -51,24 +58,26 @@ void Settings::Save(void)
     }
 }
 
-Variant Settings::GetSetting(const String& name, const Variant& default) const
+const Variant& Settings::GetSetting(const String& name, const Variant& default)
 {
-    VariantMap::ConstIterator find = m_Settings.Find(name);
+    VariantMap::Iterator find = m_Settings.Find(name);
 
     if (find != m_Settings.End())
     {
         if (find->second_.IsEmpty())
         {
+            find->second_ = default;
             return default;
         }
 
-        return &find;
+        return find->second_;
     }
 
+    m_Settings[name] = default;
     return default;
 }
 
-void Settings::SetSetting(const String& name, const String& value)
+void Settings::SetSetting(const String& name, const Variant& value)
 {
     m_Settings[name] = value;
 }

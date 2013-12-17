@@ -6,18 +6,19 @@
 
 #pragma once
 
-#include <Engine.h>
-#include <Application.h>
+#include "Core\State.h"
 
-class SolarianWars : public Urho3D::Application
+class LaunchState : public State
 {
-    OBJECT(SolarianWars)
+    OBJECT(LaunchState)
 
 public:
-    SolarianWars(Urho3D::Context* context);
+    LaunchState(Urho3D::Context* context);
+    virtual ~LaunchState();
 
-    virtual void Setup();
+    virtual void Create();
     virtual void Start();
     virtual void Stop();
+    virtual void Destroy();
 };
 
