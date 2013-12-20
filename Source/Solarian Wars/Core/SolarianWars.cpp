@@ -42,7 +42,6 @@ void SolarianWars::Setup()
         ModManager* mm = GetSubsystem<ModManager>();
 
         cache->SetAutoReloadResources(false);
-
         settings->Load();
         
         engineParameters_["WindowTitle"] = "Solarian Wars";
@@ -60,7 +59,7 @@ void SolarianWars::Setup()
         audio->SetMasterGain(SoundType::SOUND_AMBIENT, settings->GetSetting("ambient", "0.75").GetFloat());
         audio->SetMasterGain(SoundType::SOUND_MUSIC, settings->GetSetting("music", "0.75").GetFloat());
         audio->SetMasterGain(SoundType::SOUND_EFFECT, settings->GetSetting("effects", "0.75").GetFloat());
-        //audio->SetMasterGain(SoundType::SOUND_UI, settings->GetSetting("interface", "0.75").GetFloat());
+        audio->SetMasterGain(SoundType::SOUND_UI, settings->GetSetting("interface", "0.75").GetFloat());
 
         mm->Initialize();
     }

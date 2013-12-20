@@ -30,7 +30,7 @@ void ModManager::Initialize()
     dirList.Remove(".");
     dirList.Remove("..");
 
-    for (int i = 0; i < dirList.Size(); i++)
+    for (unsigned int i = 0; i < dirList.Size(); i++)
     {
         Vector<String> descriptorFile;
         fs->ScanDir(descriptorFile, "Mods/" + dirList[i], "mod.xml", SCAN_FILES, false);

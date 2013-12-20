@@ -22,19 +22,46 @@
 
 #pragma once
 
+#include "ArrayPtr.h"
+#include "Resource.h"
+
+struct lua_State;
+
 namespace Urho3D
 {
 
-/// SoundSource type enumeration for master gain control.
-enum SoundType
+/// Lua file.
+class URHO3D_API LuaFile : public Resource
 {
-    SOUND_EFFECT = 0,
-    SOUND_AMBIENT,
-    SOUND_VOICE,
-    SOUND_MUSIC,
-    SOUND_UI,
-    SOUND_MASTER,
-    MAX_SOUND_TYPES
+    OBJECT(LuaFile);
+
+public:
+    /// Construct.
+    LuaFile(Context* context);
+    /// Destruct.
+    virtual ~LuaFile();
+    /// Register object factory.
+    static void RegisterObject(Context* context);
+
+    /// Load resource. Return true if successful.
+    virtual bool Load(Deserializer& source);
+    /// Save resource. Return true if successful.
+    virtual bool Save(Serializer& dest) const;
+
+    /// Load buffer as chunk.
+    bool LoadChunk(lua_State* luaState);
+    /// Load buffer as chunk and execute.
+    bool LoadAndExecute(lua_State* luaState);
+
+private:
+    /// File size.
+    unsigned size_;
+    /// File data.
+    SharedArrayPtr<char> data_;
+    /// Has loaded.
+    bool hasLoaded_;
+    /// Has executed.
+    bool hasExecuted_;
 };
 
 }

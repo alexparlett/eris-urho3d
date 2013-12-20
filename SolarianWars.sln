@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Solarian Wars", "Source\Sol
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Launcher", "Source\Launcher\Launcher.vcxproj", "{B7A0CB5D-5E09-4FB8-BF91-C26A91C7BB74}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Editor", "Source\Editor\Editor.vcxproj", "{36BA8E86-E495-4F07-812D-CCDD8B97DC0E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -38,6 +40,16 @@ Global
 		{B7A0CB5D-5E09-4FB8-BF91-C26A91C7BB74}.Release|Win32.ActiveCfg = Release|Win32
 		{B7A0CB5D-5E09-4FB8-BF91-C26A91C7BB74}.Release|Win32.Build.0 = Release|Win32
 		{B7A0CB5D-5E09-4FB8-BF91-C26A91C7BB74}.Release|x64.ActiveCfg = Release|Win32
+		{36BA8E86-E495-4F07-812D-CCDD8B97DC0E}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{36BA8E86-E495-4F07-812D-CCDD8B97DC0E}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{36BA8E86-E495-4F07-812D-CCDD8B97DC0E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{36BA8E86-E495-4F07-812D-CCDD8B97DC0E}.Debug|Win32.Build.0 = Debug|Win32
+		{36BA8E86-E495-4F07-812D-CCDD8B97DC0E}.Debug|x64.ActiveCfg = Debug|Win32
+		{36BA8E86-E495-4F07-812D-CCDD8B97DC0E}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{36BA8E86-E495-4F07-812D-CCDD8B97DC0E}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{36BA8E86-E495-4F07-812D-CCDD8B97DC0E}.Release|Win32.ActiveCfg = Release|Win32
+		{36BA8E86-E495-4F07-812D-CCDD8B97DC0E}.Release|Win32.Build.0 = Release|Win32
+		{36BA8E86-E495-4F07-812D-CCDD8B97DC0E}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
