@@ -109,11 +109,11 @@ void ModManager::Save()
     }
 }
 
-bool ModManager::Activate(const Urho3D::String& id, unsigned int priorty /*= PRIORTY_LAST*/)
+bool ModManager::Activate(const Urho3D::String& id, unsigned int priorty)
 {
     if (!m_ActiveMods.Contains(id) && m_ModDescriptors.Contains(id))
     {
-        if (priorty > PRIORTY_LAST && priorty < m_ActiveMods.Size())
+        if (priorty > PRIORITY_LOW && priorty < m_ActiveMods.Size())
         {
             m_ActiveMods.Insert(priorty, id);
             GetSubsystem<ResourceCache>()->AddResourceDir(m_ModDescriptors[id].GetDirectory(), priorty);

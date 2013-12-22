@@ -13,7 +13,8 @@
 
 #include "IO\Mod.h"
 
-#define PRIORTY_LAST -1
+#define PRIORITY_LOW -1
+#define PRIORITY_HIGH 0
 
 class ModManager : public Urho3D::Object
 {
@@ -25,7 +26,7 @@ public:
     void Load();
     void Save();
 
-    bool Activate(const Urho3D::String& id, unsigned int priorty = PRIORTY_LAST);
+    bool Activate(const Urho3D::String& id, unsigned int priorty = PRIORITY_LOW);
     bool Deactivate(const Urho3D::String& id);
 
     const Urho3D::HashMap<Urho3D::String, Mod>& GetModDescriptors() const;

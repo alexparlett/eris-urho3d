@@ -75,7 +75,7 @@
     <OutDir>$(SolutionDir)Lib\$(Platform)$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Temp\$(Platform)$(Configuration)\</IntDir>
     <IncludePath>$(SolutionDir)Source\SolarianWars;$(IncludePath)</IncludePath>
-    <SourcePath>$(SolutionDir)Source\SolarianWars;$(SourcePath)</SourcePath>
+    <SourcePath>$(SourcePath)</SourcePath>
     <TargetName>$(ProjectName) 64</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -110,7 +110,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir);..\ThirdParty\Urho3d;..\ThirdParty\Urho3d\Bullet;..\ThirdParty\Urho3d\Direct3D9;..\ThirdParty\Urho3d\kNet;..\ThirdParty\Urho3d\OpenGL;..\ThirdParty\Urho3d\SDL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);..\ThirdParty;..\ThirdParty\Urho3d;..\ThirdParty\Urho3d\Bullet;..\ThirdParty\Urho3d\Direct3D9;..\ThirdParty\Urho3d\kNet;..\ThirdParty\Urho3d\OpenGL;..\ThirdParty\Urho3d\SDL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>ENABLE_LOGGING;ENABLE_SSE;ENABLE_MINIDUMPS;ENABLE_PROFILING;ENABLE_ANGELSCRIPT;URHO3D_STATIC_DEFINE;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -186,6 +186,8 @@ xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D</Command>
     <ClInclude Include="Exceptions\Exception.h" />
     <ClInclude Include="IO\Mod.h" />
     <ClInclude Include="Core\ModManager.h" />
+    <ClInclude Include="Core\SaveManager.h" />
+    <ClInclude Include="IO\SaveFile.h" />
     <ClInclude Include="States\LaunchState.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Core\StateManager.h" />
@@ -197,6 +199,8 @@ xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D</Command>
     <ClCompile Include="Core\StateManager.cpp" />
     <ClCompile Include="IO\Mod.cpp" />
     <ClCompile Include="Core\ModManager.cpp" />
+    <ClCompile Include="Core\SaveManager.cpp" />
+    <ClCompile Include="IO\SaveFile.cpp" />
     <ClCompile Include="States\LaunchState.cpp" />
   </ItemGroup>
   <ItemGroup>
