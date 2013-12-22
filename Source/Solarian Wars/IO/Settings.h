@@ -22,11 +22,10 @@ public:
     void Load();
     void Save();
 
-    const Urho3D::Variant& GetSetting(const Urho3D::String& name, const Urho3D::Variant& default = Urho3D::Variant::EMPTY);
+    const Urho3D::Variant& GetSetting(const Urho3D::String& name, const Urho3D::Variant& default = Urho3D::Variant::EMPTY) const;
     void SetSetting(const Urho3D::String& name, const Urho3D::Variant& value);
 
 private:
-    const Urho3D::String GetUserDirectory();
     void LoadUserSettings(const Urho3D::String& fileName);
     void LoadDefaults();
     void LoadFromXml(const Urho3D::XMLElement& root);

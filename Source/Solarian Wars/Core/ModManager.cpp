@@ -9,17 +9,20 @@
 #include <FileSystem.h>
 #include <File.h>
 #include <XMLFile.h>
+#include <ForEach.h>
+#include <Log.h>
+#include <ResourceCache.h>
 
 using namespace Urho3D;
 
 ModManager::ModManager(Context* context) : 
 Object(context),
-m_ActiveMods(Vector<StringHash>()),
-m_ModDescriptors(HashMap<StringHash, Mod>())
+m_ActiveMods(Vector<String>()),
+m_ModDescriptors(HashMap<String, Mod>())
 {
 }
 
-void ModManager::Initialize()
+void ModManager::Load()
 {
     Vector<String> dirList;
 
@@ -30,39 +33,103 @@ void ModManager::Initialize()
     dirList.Remove(".");
     dirList.Remove("..");
 
-    for (unsigned int i = 0; i < dirList.Size(); i++)
+    foreach (String dir, dirList)
     {
         Vector<String> descriptorFile;
-        fs->ScanDir(descriptorFile, "Mods/" + dirList[i], "mod.xml", SCAN_FILES, false);
+        fs->ScanDir(descriptorFile, "Mods/" + dir, "mod.xml", SCAN_FILES, false);
 
         if (descriptorFile.Size() > 0)
         {
-            File file(context_, "Mods/" + dirList[i] + "/" + descriptorFile[0]);
+            File file(context_, "Mods/" + dir + "/" + descriptorFile[0]);
             
             if (file.IsOpen())
             {
                 XMLFile descriptor(context_);
                 descriptor.Load(file);
 
-                Mod mod(dirList[i], descriptor);
+                Mod mod(dir, descriptor);
 
                 m_ModDescriptors[mod.GetId()] = mod;
             }
         }
     }
+
+    String orderFilename = GetSubsystem<FileSystem>()->GetUserDocumentsDir() + "My Games/Solarian Wars/modorder.xml";
+    if (fs->FileExists(orderFilename))
+    {
+        File orderFile(context_, orderFilename);
+        if (orderFile.IsOpen())
+        {
+            XMLFile orderXml(context_);
+            orderXml.Load(orderFile);
+
+            XMLElement root = orderXml.GetRoot("mods");
+            XPathResultSet mods = root.Select("mod");
+            for (unsigned int i = 0; i < mods.Size(); i++)
+            {
+                //Required due to conventions of for loops in XPathResultSet.
+                XMLElement mod = mods[i];
+                String value = mod.GetValue();
+
+                if (value != String::EMPTY && m_ModDescriptors.Contains(value))
+                {
+                    m_ActiveMods.Push(value);
+                }
+            }
+        }
+    }
 }
 
-void ModManager::ModActivated(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
+void ModManager::Save()
 {
+    /*Release unloaded resources, this should be safe in main menu as only used resources are in CoreData.pak
+     *which can not have been modified by this process
+     */
+    GetSubsystem<ResourceCache>()->ReleaseAllResources();
 
+    String orderFilename = GetSubsystem<FileSystem>()->GetUserDocumentsDir() + "My Games/Solarian Wars/modorder.xml";
+    File orderFile(context_, orderFilename, FILE_WRITE);
+    if (orderFile.IsOpen())
+    {
+        XMLFile orderXml(context_);
+        XMLElement root = orderXml.CreateRoot("mods");
+        foreach(String id, m_ActiveMods)
+        {
+            root.CreateChild("mod").SetValue(id);
+        }
+
+        if (!orderXml.Save(orderFile))
+        {
+            LOGERROR("Unable to save mod order " + orderFilename);
+        }
+    }
+    else
+    {
+        LOGERROR("Unable to open mod order " + orderFilename);
+    }
 }
 
-void ModManager::ModDeactivated(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
+bool ModManager::Activate(const Urho3D::String& id, unsigned int priorty /*= PRIORTY_LAST*/)
 {
-
+    if (!m_ActiveMods.Contains(id) && m_ModDescriptors.Contains(id))
+    {
+        if (priorty > PRIORTY_LAST && priorty < m_ActiveMods.Size())
+        {
+            m_ActiveMods.Insert(priorty, id);
+            GetSubsystem<ResourceCache>()->AddResourceDir(m_ModDescriptors[id].GetDirectory(), priorty);
+            return true;
+        }
+    }
+    return false;
 }
 
-void ModManager::ModOrderChanged(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
+bool ModManager::Deactivate(const Urho3D::String& id)
 {
-
+    if (m_ActiveMods.Contains(id))
+    {
+        m_ActiveMods.Remove(id);
+        GetSubsystem<ResourceCache>()->RemoveResourceDir(m_ModDescriptors[id].GetDirectory());
+        return true;
+    }
+    return false;
 }

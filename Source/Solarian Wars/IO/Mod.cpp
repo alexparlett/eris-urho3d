@@ -9,7 +9,7 @@
 using namespace Urho3D; 
 
 Mod::Mod() :
-m_Id(StringHash::ZERO),
+m_Id(String::EMPTY),
 m_Directory(String::EMPTY),
 m_Name(String::EMPTY),
 m_Description(String::EMPTY),
@@ -19,7 +19,7 @@ m_Version(String::EMPTY)
 }
 
 Mod::Mod(const String& dir, XMLFile& file) :
-m_Id(StringHash::ZERO),
+m_Id(String::EMPTY),
 m_Directory(String::EMPTY),
 m_Name(String::EMPTY),
 m_Description(String::EMPTY),
@@ -35,7 +35,7 @@ m_Version(String::EMPTY)
     m_Version = root.GetChild("version").GetValue();
 }
 
-const StringHash& Mod::GetId()
+const String& Mod::GetId()
 {
     return m_Id;
 }

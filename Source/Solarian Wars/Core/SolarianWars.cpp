@@ -61,7 +61,7 @@ void SolarianWars::Setup()
         audio->SetMasterGain(SoundType::SOUND_EFFECT, settings->GetSetting("effects", "0.75").GetFloat());
         audio->SetMasterGain(SoundType::SOUND_UI, settings->GetSetting("interface", "0.75").GetFloat());
 
-        mm->Initialize();
+        mm->Load();
     }
     catch (const Exception& ex)
     {

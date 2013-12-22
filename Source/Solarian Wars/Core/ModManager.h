@@ -13,6 +13,8 @@
 
 #include "IO\Mod.h"
 
+#define PRIORTY_LAST -1
+
 class ModManager : public Urho3D::Object
 {
     OBJECT(ModManager)
@@ -20,14 +22,17 @@ class ModManager : public Urho3D::Object
 public:
     ModManager(Urho3D::Context* context);
 
-    void Initialize();
+    void Load();
+    void Save();
 
-    void ModActivated(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
-    void ModDeactivated(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
-    void ModOrderChanged(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
+    bool Activate(const Urho3D::String& id, unsigned int priorty = PRIORTY_LAST);
+    bool Deactivate(const Urho3D::String& id);
+
+    const Urho3D::HashMap<Urho3D::String, Mod>& GetModDescriptors() const;
+    bool IsActive(Urho3D::String id) const;
 
 private:
-    Urho3D::Vector<Urho3D::StringHash> m_ActiveMods;
-    Urho3D::HashMap<Urho3D::StringHash,Mod> m_ModDescriptors;
+    Urho3D::Vector<Urho3D::String> m_ActiveMods;
+    Urho3D::HashMap<Urho3D::String,Mod> m_ModDescriptors;
 };
 

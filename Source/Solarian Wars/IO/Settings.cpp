@@ -13,6 +13,7 @@
 #include <FileSystem.h>
 #include <XMLElement.h>
 #include <PackageFile.h>
+#include <Log.h>
 
 using namespace Urho3D;
 
@@ -24,7 +25,7 @@ m_Settings(VariantMap())
 
 void Settings::Load(void)
 {
-    String fileName = GetUserDirectory() + "settings.xml";
+    String fileName = GetSubsystem<FileSystem>()->GetUserDocumentsDir() + "My Games/Solarian Wars/settings.xml";
 
     if (GetSubsystem<FileSystem>()->FileExists(fileName))
     {
@@ -38,53 +39,37 @@ void Settings::Load(void)
 
 void Settings::Save(void)
 {
-    String fileName = GetUserDirectory() + "settings.xml";
+    String fileName = GetSubsystem<FileSystem>()->GetUserDocumentsDir() + "My Games/Solarian Wars/settings.xml";
 
     File file = File(context_, fileName, FILE_WRITE);
-    if (!file.IsOpen())
+    if (file.IsOpen())
     {
-        throw Exception("Unable to open " + fileName);
+        XMLFile xmlFile = XMLFile(context_);
+        XMLElement root = xmlFile.CreateRoot("settings");
+
+        SaveGraphics(root);
+        SaveSound(root);
+
+        if (!xmlFile.Save(file))
+        {
+            LOGERROR("Unable to save " + fileName);
+        }
     }
-
-    XMLFile xmlFile = XMLFile(context_);
-    XMLElement root = xmlFile.CreateRoot("settings");
-
-    SaveGraphics(root);
-    SaveSound(root);
-
-    if (!xmlFile.Save(file))
+    else
     {
-        throw Exception("Unable to save " + fileName);
+        LOGERROR("Unable to open " + fileName);
     }
 }
 
-const Variant& Settings::GetSetting(const String& name, const Variant& default)
+const Variant& Settings::GetSetting(const String& name, const Variant& default) const
 {
-    VariantMap::Iterator find = m_Settings.Find(name);
-
-    if (find != m_Settings.End())
-    {
-        if (find->second_.IsEmpty())
-        {
-            find->second_ = default;
-            return default;
-        }
-
-        return find->second_;
-    }
-
-    m_Settings[name] = default;
-    return default;
+    VariantMap::ConstIterator find = m_Settings.Find(name);
+    return find != m_Settings.End() ? find->second_ : default;
 }
 
 void Settings::SetSetting(const String& name, const Variant& value)
 {
     m_Settings[name] = value;
-}
-
-const String Settings::GetUserDirectory(void)
-{
-    return GetSubsystem<FileSystem>()->GetUserDocumentsDir() + "My Games/Solarian Wars/";
 }
 
 void Settings::LoadUserSettings(const String& fileName)

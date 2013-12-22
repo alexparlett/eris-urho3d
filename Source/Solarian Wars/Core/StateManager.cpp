@@ -9,6 +9,7 @@
 #include "Events.h"
 
 #include <Log.h>
+#include <ForEach.h>
 
 using namespace Urho3D;
 
@@ -23,12 +24,10 @@ m_CurrentState(-1)
 
 StateManager::~StateManager()
 {
-    HashMap<StringHash, SharedPtr<State>>::Iterator iter = m_States.Begin();
-    while (iter != m_States.End())
+    foreach(StringHash state, m_States.Keys())
     {
-        iter->second_->Destroy();
-        iter->second_.Reset();
-        iter++;
+        m_States[state]->Destroy();
+        m_States[state].Reset();
     }
 
     m_States.Clear();
