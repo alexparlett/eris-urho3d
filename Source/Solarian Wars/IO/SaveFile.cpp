@@ -31,7 +31,7 @@ bool SaveFile::LoadHeader(const String& source)
     if (file.IsOpen())
     {
         String name = file.GetName().Split('.')[0];
-        memcpy(m_Header.name,name.CString(),name.Length());
+        strncpy_s(m_Header.name,name.CString(),name.Length());
 
         time_t t = static_cast<time_t>(fs->GetLastModifiedTime(source));
         struct tm timeinfo;
@@ -83,17 +83,17 @@ bool SaveFile::Save(const String& dest, Scene* scene, const String& character, c
 
         if (file.IsOpen())
         {
-            strncpy(m_Header.characterName, character.CString(), character.Length());
-            strncpy(m_Header.corporationName, corporation.CString(), corporation.Length());
-            strncpy(m_Header.currentSystem, system.CString(), system.Length());
+            strncpy_s(m_Header.characterName, character.CString(), character.Length());
+            strncpy_s(m_Header.corporationName, corporation.CString(), corporation.Length());
+            strncpy_s(m_Header.currentSystem, system.CString(), system.Length());
             memcpy(m_Header.thumbnail, thumbnail->GetData(), sizeof(thumbnail->GetData()));;
 
             time_t t = static_cast<time_t>(GetSubsystem<Time>()->GetElapsedTime());
             struct tm timeinfo;
             localtime_s(&timeinfo, &t);
-            char* time;
+            char* time(NULL);
             strftime(time, MAX_LENGTH, "%H:%M:%S", &timeinfo);
-            strncpy(m_Header.time, time, sizeof(time));
+            strncpy_s(m_Header.time, time, sizeof(time));
             delete time;
 
             file.Write(m_Header.time, MAX_LENGTH);
