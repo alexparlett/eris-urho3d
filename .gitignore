@@ -157,3 +157,4 @@ $RECYCLE.BIN/
 Temp/
 *.pak
 Game/
+Source/gitversion.h
