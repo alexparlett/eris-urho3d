@@ -11,6 +11,7 @@
 #include "States/LaunchState.h"
 #include "Events.h"
 #include "ModManager.h"
+#include "SaveManager.h"
 
 #include <Script.h>
 #include <FileSystem.h>
@@ -25,10 +26,11 @@ using namespace Urho3D;
 SolarianWars::SolarianWars(Context* context) :
 Application(context)
 {
-    context_->RegisterSubsystem(new Script(context_));
-    context_->RegisterSubsystem(new Settings(context_));
-    context_->RegisterSubsystem(new StateManager(context_));
-    context_->RegisterSubsystem(new ModManager(context_));
+    context_->RegisterSubsystem(new Script(context));
+    context_->RegisterSubsystem(new Settings(context));
+    context_->RegisterSubsystem(new StateManager(context));
+    context_->RegisterSubsystem(new ModManager(context));
+    context_->RegisterSubsystem(new SaveManager(context));
 }
 
 void SolarianWars::Setup()
@@ -40,6 +42,7 @@ void SolarianWars::Setup()
         ResourceCache* cache = GetSubsystem<ResourceCache>();
         Input* input = GetSubsystem<Input>();
         ModManager* mm = GetSubsystem<ModManager>();
+        SaveManager* sm = GetSubsystem<SaveManager>();
 
         cache->SetAutoReloadResources(false);
         settings->Load();
@@ -62,6 +65,7 @@ void SolarianWars::Setup()
         audio->SetMasterGain(SoundType::SOUND_UI, settings->GetSetting("interface", "0.75").GetFloat());
 
         mm->Load();
+        sm->LoadHeaders();
     }
     catch (const Exception& ex)
     {
