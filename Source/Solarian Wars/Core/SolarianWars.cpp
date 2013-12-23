@@ -74,11 +74,11 @@ void SolarianWars::Start()
     VariantMap createData;
     createData[StateCreated::P_STATE] = new LaunchState(context_);
     createData[StateCreated::P_ID] = StringHash("LaunchState");
-    SendEvent(E_STATECREATED, createData);
+    SendEvent(E_STATE_CREATED, createData);
 
     VariantMap changeData;
     changeData[StateChanged::P_ID] = StringHash("LaunchState");
-    SendEvent(E_STATECHANGED, changeData);
+    SendEvent(E_STATE_CHANGED, changeData);
 }
 
 void SolarianWars::Stop()

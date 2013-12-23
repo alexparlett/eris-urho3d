@@ -32,6 +32,10 @@ public:
     const Urho3D::HashMap<Urho3D::String, Mod>& GetModDescriptors() const;
     bool IsActive(Urho3D::String id) const;
 
+    void ModActivated(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
+    void ModDeactivated(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
+    void ModOrderSaved(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
+
 private:
     Urho3D::Vector<Urho3D::String> m_ActiveMods;
     Urho3D::HashMap<Urho3D::String,Mod> m_ModDescriptors;

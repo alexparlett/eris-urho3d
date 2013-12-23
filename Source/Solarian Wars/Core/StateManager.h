@@ -24,6 +24,7 @@ public:
 
     void StateCreated(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
     void StateChanged(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
+    void StateDestroyed(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
 
 private:
     Urho3D::HashMap<Urho3D::StringHash, Urho3D::SharedPtr<State>> m_States;

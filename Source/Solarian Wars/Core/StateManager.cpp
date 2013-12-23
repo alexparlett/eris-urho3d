@@ -18,8 +18,9 @@ Object(context),
 m_States(HashMap<StringHash, SharedPtr<State>>()),
 m_CurrentState(-1)
 {
-    SubscribeToEvent(E_STATECREATED, HANDLER(StateManager, StateCreated));
-    SubscribeToEvent(E_STATECHANGED, HANDLER(StateManager, StateChanged));
+    SubscribeToEvent(E_STATE_CREATED, HANDLER(StateManager, StateCreated));
+    SubscribeToEvent(E_STATE_CHANGED, HANDLER(StateManager, StateChanged));
+    SubscribeToEvent(E_STATE_DESTROYED, HANDLER(StateManager, StateDestroyed));
 }
 
 StateManager::~StateManager()
@@ -74,11 +75,35 @@ void StateManager::StateChanged(Urho3D::StringHash eventType, Urho3D::VariantMap
         }
         else
         {
-            LOGERROR("State with id " + eventData[P_ID].ToString() + " does not exist");
+            LOGERROR("State with id " + eventData[P_ID].ToString() + " does not exist.");
         }
     }
     else
     {
-        LOGERROR("State with id " + eventData[P_ID].ToString() + " is not a valid id");
+        LOGERROR("State with id " + eventData[P_ID].ToString() + " is not a valid id.");
+    }
+}
+
+void StateManager::StateDestroyed(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
+{
+    using namespace StateDestroyed;
+
+    StringHash id = eventData[P_ID].GetStringHash();
+    if (id != StringHash::ZERO)
+    {
+        if (m_States.Contains(id) && id != m_CurrentState)
+        {
+            m_States[id]->Destroy();
+            m_States[id].Reset();
+            m_States.Erase(id);
+        }
+        else
+        {
+            LOGERROR("Cannot destroy state " + id.ToString() + " either current or doesn't exist.");
+        }
+    }
+    else
+    {
+        LOGERROR("State with id " + id.ToString() + " is not a valid id.");
     }
 }

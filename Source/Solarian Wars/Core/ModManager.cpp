@@ -4,6 +4,7 @@
 //
 ////////////////////////////////////////////
 
+#include "Events.h"
 #include "ModManager.h"
 
 #include <FileSystem.h>
@@ -20,6 +21,9 @@ Object(context),
 m_ActiveMods(Vector<String>()),
 m_ModDescriptors(HashMap<String, Mod>())
 {
+    SubscribeToEvent(E_MOD_ACTIVATED, HANDLER(ModManager, ModActivated));
+    SubscribeToEvent(E_MOD_DEACTIVATED, HANDLER(ModManager, ModDeactivated));
+    SubscribeToEvent(E_MOD_ORDER_SAVED, HANDLER(ModManager, ModOrderSaved));
 }
 
 void ModManager::Load()
@@ -132,4 +136,36 @@ bool ModManager::Deactivate(const Urho3D::String& id)
         return true;
     }
     return false;
+}
+
+const Urho3D::HashMap<Urho3D::String, Mod>& ModManager::GetModDescriptors() const
+{
+    return m_ModDescriptors;
+}
+
+bool ModManager::IsActive(Urho3D::String id) const
+{
+    return m_ActiveMods.Contains(id);
+}
+
+void ModManager::ModActivated(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
+{
+    using namespace ModActivated;
+    String id = eventData[P_ID].ToString();
+    unsigned int priority = eventData[P_PRIORITY].GetUInt();
+
+    Activate(id, priority);
+}
+
+void ModManager::ModDeactivated(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
+{
+    using namespace ModDeactivated;
+    String id = eventData[P_ID].ToString();
+
+    Deactivate(id);
+}
+
+void ModManager::ModOrderSaved(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
+{
+    Save();
 }
