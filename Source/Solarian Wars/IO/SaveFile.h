@@ -15,15 +15,18 @@
 #define THUMBNAIL_SIZE (128 * 3) * 128
 #define MAX_LENGTH 64
 
-struct SaveHeader
+class SaveHeader
 {
-    char name[MAX_LENGTH];
-    char date[MAX_LENGTH];
-    char time[MAX_LENGTH];
-    char characterName[MAX_LENGTH];
-    char corporationName[MAX_LENGTH];
-    char currentSystem[MAX_LENGTH];
-    char thumbnail[THUMBNAIL_SIZE];
+private:
+    Urho3D::String m_Name;
+    Urho3D::String m_DateCreated;
+    Urho3D::String m_PlayedTime;
+    Urho3D::String m_CharacterName;
+    Urho3D::String m_CorporationName;
+    Urho3D::String m_CurrentSystem;
+    Urho3D::Image* m_Thumbnail;
+
+    unsigned int m_Length;
 };
 
 class SaveFile :  public Urho3D::Object
