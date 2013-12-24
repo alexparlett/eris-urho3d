@@ -210,6 +210,7 @@ xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\gitversion.h" />
     <ClInclude Include="Core\Events.h" />
     <ClInclude Include="Core\SolarianWars.h" />
     <ClInclude Include="Core\State.h" />

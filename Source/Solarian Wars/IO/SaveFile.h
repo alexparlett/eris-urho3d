@@ -6,51 +6,50 @@
 
 #pragma once
 
-#include <Object.h>
-#include <XMLFile.h>
-#include <Scene.h>
+#include <Context.h>
 #include <Str.h>
 #include <Image.h>
-
-#define THUMBNAIL_SIZE (128 * 3) * 128
-#define MAX_LENGTH 64
+#include <File.h>
+#include <Ptr.h>
 
 class SaveHeader
 {
+public:
+    SaveHeader();
+    SaveHeader(Urho3D::Context* context);
+
+    bool Load(const Urho3D::String& source);
+    bool Save(Urho3D::File& file);
+
+    const Urho3D::String& GetName() const;
+    const Urho3D::String& GetDateCreated() const;
+    const Urho3D::String& GetPlayedTime() const;
+    const Urho3D::String& GetCharacterName() const;
+    const Urho3D::String& GetCorporationName() const;
+    const Urho3D::String& GetCurrentSystem() const;
+    const Urho3D::Image* GetThumbnail() const;
+    unsigned int GetLength() const;
+
+    void SetName(const Urho3D::String& name);
+    void SetDateCreated(unsigned int dateCreated);
+    void SetPlayedTime(unsigned int playedTime);
+    void SetCharacterName(const Urho3D::String& characterName);
+    void SetCorporationName(const Urho3D::String& corporationName);
+    void SetCurrentSystem(const Urho3D::String& currentSystem);
+    void SetThumbnail(Urho3D::Image* thumbnail);
+    void SetLength(unsigned int length);
+    void SetContext(Urho3D::Context* context);
+
 private:
+    Urho3D::Context* m_Context;
+
     Urho3D::String m_Name;
     Urho3D::String m_DateCreated;
     Urho3D::String m_PlayedTime;
     Urho3D::String m_CharacterName;
     Urho3D::String m_CorporationName;
     Urho3D::String m_CurrentSystem;
-    Urho3D::Image* m_Thumbnail;
+    Urho3D::SharedPtr<Urho3D::Image> m_Thumbnail;
 
     unsigned int m_Length;
 };
-
-class SaveFile :  public Urho3D::Object
-{
-    OBJECT(SaveFile)
-
-    friend class SaveManager;
-
-public:
-    SaveFile(Urho3D::Context* context);
-
-    ///Read the Save Data
-    bool Load(const Urho3D::String& source);
-    ///Create a new Save including Header and Data
-    bool Save(const Urho3D::String& dest, Urho3D::Scene* scene, const Urho3D::String& character, const Urho3D::String& corporation, const Urho3D::String& system, Urho3D::Image* thumbnail);
-
-    ///Get The Header
-    const SaveHeader& GetHeader();
-
-protected:
-    ///Read the Save Header
-    bool LoadHeader(const Urho3D::String& source);
-
-private:
-    SaveHeader m_Header;
-};
-

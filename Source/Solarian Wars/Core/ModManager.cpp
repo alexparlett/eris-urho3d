@@ -18,8 +18,7 @@ using namespace Urho3D;
 
 ModManager::ModManager(Context* context) : 
 Object(context),
-m_ActiveMods(Vector<String>()),
-m_ModDescriptors(HashMap<String, Mod>())
+m_ActiveMods(Vector<String>())
 {
     SubscribeToEvent(E_MOD_ACTIVATED, HANDLER(ModManager, ModActivated));
     SubscribeToEvent(E_MOD_DEACTIVATED, HANDLER(ModManager, ModDeactivated));

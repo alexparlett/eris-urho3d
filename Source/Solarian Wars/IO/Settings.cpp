@@ -4,9 +4,9 @@
 //
 ////////////////////////////////////////////
 
-
 #include "Settings.h"
 #include "Exceptions/Exception.h"
+#include "../gitversion.h"
 
 #include <File.h>
 #include <XMLFile.h>
@@ -18,9 +18,9 @@
 using namespace Urho3D;
 
 Settings::Settings(Context* context) :
-Object(context),
-m_Settings(VariantMap())
+Object(context)
 {
+    m_Settings["version"] = String(version);
 }
 
 void Settings::Load(void)

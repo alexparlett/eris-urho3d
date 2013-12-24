@@ -51,6 +51,9 @@
     <ClInclude Include="IO\SaveFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\gitversion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\SolarianWars.cpp">

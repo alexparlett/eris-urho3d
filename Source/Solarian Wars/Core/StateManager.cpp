@@ -14,7 +14,6 @@ using namespace Urho3D;
 
 StateManager::StateManager(Urho3D::Context* context) :
 Object(context),
-m_States(HashMap<StringHash, SharedPtr<State>>()),
 m_CurrentState(-1)
 {
     SubscribeToEvent(E_STATE_CREATED, HANDLER(StateManager, StateCreated));

@@ -7,9 +7,7 @@
 #include "Core\Events.h"
 #include "SaveFile.h"
 
-#include <File.h>
 #include <FileSystem.h>
-#include <Scene.h>
 #include <Log.h>
 #include <Timer.h>
 
@@ -17,32 +15,53 @@
 
 using namespace Urho3D;
 
-SaveFile::SaveFile(Context* context) :
-Object(context),
-m_Header(SaveHeader())
+SaveHeader::SaveHeader() :
+m_Name(String::EMPTY),
+m_DateCreated(String::EMPTY),
+m_PlayedTime(String::EMPTY),
+m_CharacterName(String::EMPTY),
+m_CorporationName(String::EMPTY),
+m_CurrentSystem(String::EMPTY),
+m_Thumbnail(NULL),
+m_Length(0),
+m_Context(NULL)
 {
 }
 
-bool SaveFile::LoadHeader(const String& source)
+SaveHeader::SaveHeader(Context* context) :
+m_Name(String::EMPTY),
+m_DateCreated(String::EMPTY),
+m_PlayedTime(String::EMPTY),
+m_CharacterName(String::EMPTY),
+m_CorporationName(String::EMPTY),
+m_CurrentSystem(String::EMPTY),
+m_Thumbnail(NULL),
+m_Length(0),
+m_Context(context)
 {
-    FileSystem* fs = GetSubsystem<FileSystem>();
-    File file(context_, source);
+}
+
+bool SaveHeader::Load(const String& source)
+{
+    FileSystem* fs = m_Context->GetSubsystem<FileSystem>();
+    File file(m_Context, source);
 
     if (file.IsOpen())
     {
-        String name = file.GetName().Split('.')[0];
-        strncpy_s(m_Header.name,name.CString(),name.Length());
+        SetName(file.GetName().Split('.')[0]);
+        SetDateCreated(fs->GetLastModifiedTime(source));
+        SetPlayedTime(file.ReadUInt());
+        SetCharacterName(file.ReadString());
+        SetCorporationName(file.ReadString());
+        SetCurrentSystem(file.ReadString());
 
-        time_t t = static_cast<time_t>(fs->GetLastModifiedTime(source));
-        struct tm timeinfo;
-        localtime_s(&timeinfo, &t);
-        strftime(m_Header.date, MAX_LENGTH, "%Y-%m-%d %H:%M:%S", &timeinfo);
-
-        file.Read(m_Header.time, MAX_LENGTH);
-        file.Read(m_Header.characterName, MAX_LENGTH);
-        file.Read(m_Header.corporationName, MAX_LENGTH);
-        file.Read(m_Header.currentSystem, MAX_LENGTH);
-        file.Read(m_Header.thumbnail, THUMBNAIL_SIZE);
+        unsigned char* buffer = NULL;
+        m_Length += file.Read(buffer, (128 * 3) * 128);
+        Image* thumb(new Image(m_Context));
+        thumb->SetSize(128, 128, 3);
+        thumb->SetData(buffer);
+        SetThumbnail(thumb);
+        delete buffer;
 
         return true;
     }
@@ -50,77 +69,110 @@ bool SaveFile::LoadHeader(const String& source)
     return false;
 }
 
-bool SaveFile::Load(const String& source)
+bool SaveHeader::Save(File& dest)
 {
-    FileSystem* fs = GetSubsystem<FileSystem>();
-    String saveDir = fs->GetUserDocumentsDir() + "My Games/Solarian Wars/Saves/";
-
-    File file(context_, saveDir + source + ".sws");
-    if (file.IsOpen())
-    {
-        //Move past the header but need to ignore name and date as they are not persisted in the header
-        file.Seek(sizeof(SaveHeader) - (2 * MAX_LENGTH));
-
-        /* TODO: 
-         * 1. Need to display loading state
-         * 2. Start the Scene Loading Async
-         * 3. Create the GalaxyMap State
-         * 4. Loading State needs to check if scene async if completed and then hide itself and set the galaxy state active
-         */
-    }
-
     return false;
 }
 
-bool SaveFile::Save(const String& dest, Scene* scene, const String& character, const String& corporation, const String& system, Image* thumbnail)
+const Urho3D::String& SaveHeader::GetName() const
 {
-    if (scene)
-    {
-        FileSystem* fs = GetSubsystem<FileSystem>();
-        String saveDir = fs->GetUserDocumentsDir() + "My Games/Solarian Wars/Saves/";
-
-        File file(context_, saveDir + dest + ".sws", FILE_WRITE);
-
-        if (file.IsOpen())
-        {
-            strncpy_s(m_Header.characterName, character.CString(), character.Length());
-            strncpy_s(m_Header.corporationName, corporation.CString(), corporation.Length());
-            strncpy_s(m_Header.currentSystem, system.CString(), system.Length());
-            memcpy(m_Header.thumbnail, thumbnail->GetData(), sizeof(thumbnail->GetData()));;
-
-            time_t t = static_cast<time_t>(GetSubsystem<Time>()->GetElapsedTime());
-            struct tm timeinfo;
-            localtime_s(&timeinfo, &t);
-            char* time(NULL);
-            strftime(time, MAX_LENGTH, "%H:%M:%S", &timeinfo);
-            strncpy_s(m_Header.time, time, sizeof(time));
-            delete time;
-
-            file.Write(m_Header.time, MAX_LENGTH);
-            file.Write(m_Header.characterName, MAX_LENGTH);
-            file.Write(m_Header.corporationName, MAX_LENGTH);
-            file.Write(m_Header.currentSystem, MAX_LENGTH);
-            file.Write(m_Header.thumbnail, THUMBNAIL_SIZE);
-
-            bool saved = scene->Save(file);
-
-            file.Close();
-
-            if (saved)
-            {
-                SendEvent(E_GAME_SAVED);
-            }
-            else
-            {
-                LOGERROR("Unable to save file " + dest);
-            }
-        }
-    }
-
-    return false;
+    return m_Name;
 }
 
-const SaveHeader& SaveFile::GetHeader()
+const Urho3D::String& SaveHeader::GetDateCreated() const
 {
-    return m_Header;
+    return m_DateCreated;
+}
+
+const Urho3D::String& SaveHeader::GetPlayedTime() const
+{
+    return m_PlayedTime;
+}
+
+const Urho3D::String& SaveHeader::GetCharacterName() const
+{
+    return m_CharacterName;
+}
+
+const Urho3D::String& SaveHeader::GetCorporationName() const
+{
+    return m_CorporationName;
+}
+
+const Urho3D::String& SaveHeader::GetCurrentSystem() const
+{
+    return m_CurrentSystem;
+}
+
+const Urho3D::Image* SaveHeader::GetThumbnail() const
+{
+    return m_Thumbnail;
+}
+
+unsigned int SaveHeader::GetLength() const
+{
+    return m_Length;
+}
+
+void SaveHeader::SetName(const Urho3D::String& name)
+{
+    m_Name = name;
+}
+
+void SaveHeader::SetDateCreated(unsigned int dateCreated)
+{
+    char* buffer = NULL;
+    time_t t = static_cast<time_t>(dateCreated);
+    struct tm timeinfo;
+    localtime_s(&timeinfo, &t);
+    strftime(buffer, 128, "%Y-%m-%d %H:%M:%S", &timeinfo);
+    m_DateCreated = String(buffer);
+    delete buffer;
+}
+
+void SaveHeader::SetPlayedTime(unsigned int playedTime)
+{
+    char* buffer = NULL;
+    time_t t = static_cast<time_t>(playedTime);
+    struct tm timeinfo;
+    localtime_s(&timeinfo, &t);
+    strftime(buffer, 128, "%H:%M:%S", &timeinfo);
+    m_PlayedTime = String(buffer);
+    delete buffer;
+
+    m_Length += sizeof(playedTime);
+}
+
+void SaveHeader::SetCharacterName(const Urho3D::String& characterName)
+{
+    m_CharacterName = characterName;
+    m_Length += m_CharacterName.Length() + 1;
+}
+
+void SaveHeader::SetCorporationName(const Urho3D::String& corporationName)
+{
+    m_CorporationName = corporationName;
+    m_Length += m_CorporationName.Length() + 1;
+}
+
+void SaveHeader::SetCurrentSystem(const Urho3D::String& currentSystem)
+{
+    m_CurrentSystem = currentSystem;
+    m_Length += m_CurrentSystem.Length() + 1;
+}
+
+void SaveHeader::SetThumbnail(Urho3D::Image* thumbnail)
+{
+    m_Thumbnail = SharedPtr<Image>(thumbnail);
+    m_Length += sizeof(m_Thumbnail->GetData());
+}
+
+void SaveHeader::SetLength(unsigned int length)
+{
+    m_Length = length;
+}
+
+void SaveHeader::SetContext(Urho3D::Context* context)
+{
+    m_Context = context;
 }

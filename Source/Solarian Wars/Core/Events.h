@@ -38,7 +38,3 @@ EVENT(E_MOD_DEACTIVATED, ModDeactivated)
 EVENT(E_MOD_ORDER_SAVED, ModOrderSaved)
 {
 }
-
-EVENT(E_GAME_SAVED, GameSaved)
-{
-}
