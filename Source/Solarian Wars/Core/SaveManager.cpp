@@ -135,5 +135,5 @@ bool SaveManager::WriteSaveHeader(Urho3D::File& dest, const Urho3D::String& char
 
 bool SaveManager::WriteScene(Urho3D::File& dest, Urho3D::Scene* scene)
 {
-    return scene->Save(dest) && GetSubsystem<UI>()->GetRoot()->Save(dest);
+    return scene->Save(dest);
 }

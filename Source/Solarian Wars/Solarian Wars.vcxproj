@@ -99,12 +99,13 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(ProjectDir);..\ThirdParty\Urho3d;..\ThirdParty\Urho3d\Bullet;..\ThirdParty\Urho3d\Direct3D9;..\ThirdParty\Urho3d\kNet;..\ThirdParty\Urho3d\OpenGL;..\ThirdParty\Urho3d\SDL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>ENABLE_LOGGING;ENABLE_SSE;ENABLE_MINIDUMPS;ENABLE_PROFILING;ENABLE_ANGELSCRIPT;URHO3D_STATIC_DEFINE;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
       <AdditionalLibraryDirectories>$(SolutionDir)Lib\$(Platform)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Urho3d_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Urho3d_d.lib;d3d9.lib;dbghelp.lib;imm32.lib;version.lib;winmm.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>cmd.exe /c "$(SolutionDir)gitversion.bat $(SolutionDir) $(ProjectDir)"
@@ -158,6 +159,7 @@ xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D</Command>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(ProjectDir);..\ThirdParty\Urho3d;..\ThirdParty\Urho3d\Bullet;..\ThirdParty\Urho3d\Direct3D9;..\ThirdParty\Urho3d\kNet;..\ThirdParty\Urho3d\OpenGL;..\ThirdParty\Urho3d\SDL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>ENABLE_LOGGING;ENABLE_SSE;ENABLE_MINIDUMPS;ENABLE_ANGELSCRIPT;URHO3D_STATIC_DEFINE;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -165,7 +167,7 @@ xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D</Command>
       <OptimizeReferences>true</OptimizeReferences>
       <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
       <AdditionalLibraryDirectories>$(SolutionDir)Lib\$(Platform)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Urho3d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Urho3d.lib;d3d9.lib;dbghelp.lib;imm32.lib;version.lib;winmm.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>cmd.exe /c "$(SolutionDir)gitversion.bat $(SolutionDir) $(ProjectDir)"
@@ -220,6 +222,7 @@ xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D</Command>
     <ClInclude Include="Core\ModManager.h" />
     <ClInclude Include="Core\SaveManager.h" />
     <ClInclude Include="IO\SaveFile.h" />
+    <ClInclude Include="States\LoadingState.h" />
     <ClInclude Include="States\LaunchState.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Core\StateManager.h" />
@@ -233,6 +236,7 @@ xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D</Command>
     <ClCompile Include="Core\ModManager.cpp" />
     <ClCompile Include="Core\SaveManager.cpp" />
     <ClCompile Include="IO\SaveFile.cpp" />
+    <ClCompile Include="States\LoadingState.cpp" />
     <ClCompile Include="States\LaunchState.cpp" />
   </ItemGroup>
   <ItemGroup>

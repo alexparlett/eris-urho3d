@@ -107,3 +107,9 @@ void StateManager::StateDestroyed(Urho3D::StringHash eventType, Urho3D::VariantM
         LOGERROR("State with id " + id.ToString() + " is not a valid id.");
     }
 }
+
+State* StateManager::GetState(const Urho3D::StringHash& id) const
+{
+    HashMap<StringHash, SharedPtr<State>>::ConstIterator find = m_States.Find(id);
+    return find != m_States.End() ? find->second_.Get() : NULL;
+}

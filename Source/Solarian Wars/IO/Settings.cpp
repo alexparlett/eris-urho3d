@@ -49,6 +49,7 @@ void Settings::Save(void)
 
         SaveGraphics(root);
         SaveSound(root);
+        SaveGame(root);
 
         if (!xmlFile.Save(file))
         {
@@ -121,6 +122,9 @@ void Settings::LoadFromXml(const XMLElement& root)
 
     XMLElement sound = root.GetChild("sound");
     LoadSound(sound);
+
+    XMLElement game = root.GetChild("game");
+    LoadGame(game);
 }
 
 void Settings::LoadGraphics(const XMLElement& graphics)
@@ -143,6 +147,12 @@ void Settings::LoadSound(const XMLElement& sound)
     m_Settings["interface"] = sound.GetChild("interface").GetValue();
     m_Settings["ambient"] = sound.GetChild("ambient").GetValue();
     m_Settings["effects"] = sound.GetChild("effects").GetValue();
+}
+
+void Settings::LoadGame(const XMLElement& game)
+{
+    m_Settings["autosave"] = game.GetChild("autosave").GetValue();
+    m_Settings["frequency"] = game.GetChild("frequency").GetValue();
 }
 
 void Settings::SaveGraphics(XMLElement& root)
@@ -169,4 +179,12 @@ void Settings::SaveSound(XMLElement& root)
     sound.CreateChild("interface").SetValue(m_Settings["interface"].GetString());
     sound.CreateChild("ambient").SetValue(m_Settings["ambient"].GetString());
     sound.CreateChild("effects").SetValue(m_Settings["effects"].GetString());
+}
+
+void Settings::SaveGame(XMLElement& root)
+{
+    XMLElement game = root.CreateChild("game");
+
+    game.CreateChild("autosave").SetValue(m_Settings["autosave"].GetString());
+    game.CreateChild("frequency").SetValue(m_Settings["frequency"].GetString());
 }

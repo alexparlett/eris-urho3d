@@ -26,8 +26,17 @@ public:
     void StateChanged(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
     void StateDestroyed(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
 
+    template<typename T>
+    T* GetState(const Urho3D::StringHash& id) const;
+    State* GetState(const Urho3D::StringHash& id) const;
+
 private:
     Urho3D::HashMap<Urho3D::StringHash, Urho3D::SharedPtr<State>> m_States;
     Urho3D::StringHash m_CurrentState;
 };
 
+template<typename T>
+T* StateManager::GetState(const Urho3D::StringHash& id) const
+{
+    return dynamic_cast<T*>(GetState(id));
+}

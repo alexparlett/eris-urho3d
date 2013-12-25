@@ -32,9 +32,11 @@ private:
 
     void LoadGraphics(const Urho3D::XMLElement& graphics);
     void LoadSound(const Urho3D::XMLElement& sound);
+    void LoadGame(const Urho3D::XMLElement& game);
 
     void SaveGraphics(Urho3D::XMLElement& root);
     void SaveSound(Urho3D::XMLElement& root);
+    void SaveGame(Urho3D::XMLElement& root);
 
     Urho3D::VariantMap m_Settings;
 };

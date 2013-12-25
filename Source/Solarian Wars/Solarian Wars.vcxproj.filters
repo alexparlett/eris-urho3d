@@ -54,6 +54,9 @@
     <ClInclude Include="..\gitversion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="States\LoadingState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\SolarianWars.cpp">
@@ -81,6 +84,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IO\SaveFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="States\LoadingState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -9,6 +9,7 @@
 #include "Exceptions/Exception.h"
 #include "IO/Settings.h"
 #include "States/LaunchState.h"
+#include "States/LoadingState.h"
 #include "Events.h"
 #include "ModManager.h"
 #include "SaveManager.h"
@@ -66,6 +67,11 @@ void SolarianWars::Setup()
 
         mm->Load();
         sm->LoadHeaders();
+
+        VariantMap createLoadingState;
+        createLoadingState[StateCreated::P_STATE] = new LoadingState(context_);
+        createLoadingState[StateCreated::P_ID] = StringHash("LoadingState");
+        SendEvent(E_STATE_CREATED, createLoadingState);
     }
     catch (const Exception& ex)
     {
@@ -87,6 +93,7 @@ void SolarianWars::Start()
 
 void SolarianWars::Stop()
 {
+    GetSubsystem<Settings>()->Save();
 }
 
 DEFINE_APPLICATION_MAIN(SolarianWars)

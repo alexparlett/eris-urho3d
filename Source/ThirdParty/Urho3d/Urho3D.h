@@ -48,9 +48,9 @@
 #endif
 
 #ifndef URHO3D_DEPRECATED
-#  define URHO3D_DEPRECATED 
-#  define URHO3D_DEPRECATED_EXPORT URHO3D_API 
-#  define URHO3D_DEPRECATED_NO_EXPORT URHO3D_NO_EXPORT 
+#  define URHO3D_DEPRECATED __declspec(deprecated)
+#  define URHO3D_DEPRECATED_EXPORT URHO3D_API __declspec(deprecated)
+#  define URHO3D_DEPRECATED_NO_EXPORT URHO3D_NO_EXPORT __declspec(deprecated)
 #endif
 
 #define DEFINE_NO_DEPRECATED 0

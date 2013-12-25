@@ -38,7 +38,7 @@ void Launcher::Start()
     }
 }
 
-BOOL Is64BitOS()
+BOOL Launcher::Is64BitOS()
 {
     BOOL bIs64BitOS = FALSE;
 
