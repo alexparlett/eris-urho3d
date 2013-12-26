@@ -38,6 +38,6 @@ private:
     void SaveSound(Urho3D::XMLElement& root);
     void SaveGame(Urho3D::XMLElement& root);
 
-    Urho3D::VariantMap m_Settings;
+    Urho3D::VariantMap settings_;
 };
 

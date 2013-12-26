@@ -13,8 +13,8 @@
 using namespace Urho3D;
 
 StateManager::StateManager(Urho3D::Context* context) :
-Object(context),
-m_CurrentState(-1)
+    Object(context),
+    currentState_(-1)
 {
     SubscribeToEvent(E_STATE_CREATED, HANDLER(StateManager, StateCreated));
     SubscribeToEvent(E_STATE_CHANGED, HANDLER(StateManager, StateChanged));
@@ -23,15 +23,15 @@ m_CurrentState(-1)
 
 StateManager::~StateManager()
 {
-    HashMap<StringHash, SharedPtr<State>>::Iterator iter = m_States.Begin();
-    while (iter != m_States.End())
+    HashMap<StringHash, SharedPtr<State>>::Iterator iter = states_.Begin();
+    while (iter != states_.End())
     {
         iter->second_->Destroy();
         iter->second_.Reset();
         iter++;
     }
 
-    m_States.Clear();
+    states_.Clear();
 }
 
 void StateManager::StateCreated(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
@@ -42,10 +42,10 @@ void StateManager::StateCreated(Urho3D::StringHash eventType, Urho3D::VariantMap
     StringHash id = eventData[P_ID].GetStringHash();
     if (state && id != StringHash::ZERO)
     {
-        if (!m_States.Contains(id))
+        if (!states_.Contains(id))
         {
             state->Create();
-            m_States[eventData[P_ID].GetStringHash()] = state;
+            states_[eventData[P_ID].GetStringHash()] = state;
         }
         else
         {
@@ -61,17 +61,17 @@ void StateManager::StateChanged(Urho3D::StringHash eventType, Urho3D::VariantMap
     StringHash id = eventData[P_ID].GetStringHash();
     if (id != StringHash::ZERO)
     {
-        if (m_States.Contains(id))
+        if (states_.Contains(id))
         {
-            State* newActive = m_States[id];
+            State* newActive = states_[id];
 
-            if (m_CurrentState != StringHash::ZERO && m_States.Contains(m_CurrentState)) 
+            if (currentState_ != StringHash::ZERO && states_.Contains(currentState_)) 
             {
-                m_States[m_CurrentState]->Stop();
+                states_[currentState_]->Stop();
             }
 
             newActive->Start();
-            m_CurrentState = id;
+            currentState_ = id;
         }
         else
         {
@@ -91,11 +91,11 @@ void StateManager::StateDestroyed(Urho3D::StringHash eventType, Urho3D::VariantM
     StringHash id = eventData[P_ID].GetStringHash();
     if (id != StringHash::ZERO)
     {
-        if (m_States.Contains(id) && id != m_CurrentState)
+        if (states_.Contains(id) && id != currentState_)
         {
-            m_States[id]->Destroy();
-            m_States[id].Reset();
-            m_States.Erase(id);
+            states_[id]->Destroy();
+            states_[id].Reset();
+            states_.Erase(id);
         }
         else
         {
@@ -110,6 +110,6 @@ void StateManager::StateDestroyed(Urho3D::StringHash eventType, Urho3D::VariantM
 
 State* StateManager::GetState(const Urho3D::StringHash& id) const
 {
-    HashMap<StringHash, SharedPtr<State>>::ConstIterator find = m_States.Find(id);
-    return find != m_States.End() ? find->second_.Get() : NULL;
+    HashMap<StringHash, SharedPtr<State>>::ConstIterator find = states_.Find(id);
+    return find != states_.End() ? find->second_.Get() : NULL;
 }

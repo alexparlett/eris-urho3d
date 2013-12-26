@@ -33,6 +33,6 @@ private:
     bool WriteSaveHeader(Urho3D::File& dest, const Urho3D::String& character, const Urho3D::String& corporation, const Urho3D::String& system);
     bool WriteScene(Urho3D::File& dest, Urho3D::Scene* scene);
 
-    Urho3D::HashMap<Urho3D::String,SaveHeader> m_SaveHeaders;
+    Urho3D::HashMap<Urho3D::String,SaveHeader> saveHeaders_;
 };
 

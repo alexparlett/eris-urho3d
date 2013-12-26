@@ -9,7 +9,7 @@
 using namespace Urho3D;
 
 LoadingState::LoadingState(Context* context) :
-State(context)
+    State(context)
 {
 }
 

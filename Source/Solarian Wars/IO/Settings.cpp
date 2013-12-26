@@ -18,14 +18,15 @@
 using namespace Urho3D;
 
 Settings::Settings(Context* context) :
-Object(context)
+    Object(context)
 {
-    m_Settings["version"] = String(version);
+    settings_["version"] = String(version);
+    settings_["userdir"] = GetSubsystem<FileSystem>()->GetUserDocumentsDir() + "My Games/Solarian Wars/";
 }
 
 void Settings::Load(void)
 {
-    String fileName = GetSubsystem<FileSystem>()->GetUserDocumentsDir() + "My Games/Solarian Wars/settings.xml";
+    String fileName = settings_["userdir"].GetString() + "settings.xml";
 
     if (GetSubsystem<FileSystem>()->FileExists(fileName))
     {
@@ -39,7 +40,7 @@ void Settings::Load(void)
 
 void Settings::Save(void)
 {
-    String fileName = GetSubsystem<FileSystem>()->GetUserDocumentsDir() + "My Games/Solarian Wars/settings.xml";
+    String fileName = settings_["userdir"].GetString() + "settings.xml";
 
     File file = File(context_, fileName, FILE_WRITE);
     if (file.IsOpen())
@@ -64,13 +65,13 @@ void Settings::Save(void)
 
 const Variant& Settings::GetSetting(const String& name, const Variant& default) const
 {
-    VariantMap::ConstIterator find = m_Settings.Find(name);
-    return find != m_Settings.End() ? find->second_ : default;
+    VariantMap::ConstIterator find = settings_.Find(name);
+    return find != settings_.End() ? find->second_ : default;
 }
 
 void Settings::SetSetting(const String& name, const Variant& value)
 {
-    m_Settings[name] = value;
+    settings_[name] = value;
 }
 
 void Settings::LoadUserSettings(const String& fileName)
@@ -129,62 +130,62 @@ void Settings::LoadFromXml(const XMLElement& root)
 
 void Settings::LoadGraphics(const XMLElement& graphics)
 {
-    m_Settings["resolution"] = graphics.GetChild("resolution").GetValue();
-    m_Settings["fullscreen"] = graphics.GetChild("fullscreen").GetValue();
-    m_Settings["antialiasing"] = graphics.GetChild("antialiasing").GetValue();
-    m_Settings["vsync"] = graphics.GetChild("vsync").GetValue();
-    m_Settings["anisotropic"] = graphics.GetChild("anisotropic").GetValue();
-    m_Settings["shadows"] = graphics.GetChild("shadows").GetValue();
-    m_Settings["gamma"] = graphics.GetChild("gamma").GetValue();
-    m_Settings["shaders"] = graphics.GetChild("shaders").GetValue();
-    m_Settings["ssao"] = graphics.GetChild("ssao").GetValue();
+    settings_["resolution"] = graphics.GetChild("resolution").GetValue();
+    settings_["fullscreen"] = graphics.GetChild("fullscreen").GetValue();
+    settings_["antialiasing"] = graphics.GetChild("antialiasing").GetValue();
+    settings_["vsync"] = graphics.GetChild("vsync").GetValue();
+    settings_["anisotropic"] = graphics.GetChild("anisotropic").GetValue();
+    settings_["shadows"] = graphics.GetChild("shadows").GetValue();
+    settings_["gamma"] = graphics.GetChild("gamma").GetValue();
+    settings_["shaders"] = graphics.GetChild("shaders").GetValue();
+    settings_["ssao"] = graphics.GetChild("ssao").GetValue();
 }
 
 void Settings::LoadSound(const XMLElement& sound)
 {
-    m_Settings["master"] = sound.GetChild("master").GetValue();
-    m_Settings["music"] = sound.GetChild("music").GetValue();
-    m_Settings["interface"] = sound.GetChild("interface").GetValue();
-    m_Settings["ambient"] = sound.GetChild("ambient").GetValue();
-    m_Settings["effects"] = sound.GetChild("effects").GetValue();
+    settings_["master"] = sound.GetChild("master").GetValue();
+    settings_["music"] = sound.GetChild("music").GetValue();
+    settings_["interface"] = sound.GetChild("interface").GetValue();
+    settings_["ambient"] = sound.GetChild("ambient").GetValue();
+    settings_["effects"] = sound.GetChild("effects").GetValue();
 }
 
 void Settings::LoadGame(const XMLElement& game)
 {
-    m_Settings["autosave"] = game.GetChild("autosave").GetValue();
-    m_Settings["frequency"] = game.GetChild("frequency").GetValue();
+    settings_["autosave"] = game.GetChild("autosave").GetValue();
+    settings_["frequency"] = game.GetChild("frequency").GetValue();
 }
 
 void Settings::SaveGraphics(XMLElement& root)
 {
     XMLElement graphics = root.CreateChild("graphics");
 
-    graphics.CreateChild("resolution").SetValue(m_Settings["resolution"].GetString());
-    graphics.CreateChild("fullscreen").SetValue(m_Settings["fullscreen"].GetString());
-    graphics.CreateChild("antialiasing").SetValue(m_Settings["antialiasing"].GetString());
-    graphics.CreateChild("vsync").SetValue(m_Settings["vsync"].GetString());
-    graphics.CreateChild("anisotropic").SetValue(m_Settings["anisotropic"].GetString());
-    graphics.CreateChild("shadows").SetValue(m_Settings["shadows"].GetString());
-    graphics.CreateChild("gamma").SetValue(m_Settings["gamma"].GetString());
-    graphics.CreateChild("shaders").SetValue(m_Settings["shaders"].GetString());
-    graphics.CreateChild("ssao").SetValue(m_Settings["ssao"].GetString());
+    graphics.CreateChild("resolution").SetValue(settings_["resolution"].GetString());
+    graphics.CreateChild("fullscreen").SetValue(settings_["fullscreen"].GetString());
+    graphics.CreateChild("antialiasing").SetValue(settings_["antialiasing"].GetString());
+    graphics.CreateChild("vsync").SetValue(settings_["vsync"].GetString());
+    graphics.CreateChild("anisotropic").SetValue(settings_["anisotropic"].GetString());
+    graphics.CreateChild("shadows").SetValue(settings_["shadows"].GetString());
+    graphics.CreateChild("gamma").SetValue(settings_["gamma"].GetString());
+    graphics.CreateChild("shaders").SetValue(settings_["shaders"].GetString());
+    graphics.CreateChild("ssao").SetValue(settings_["ssao"].GetString());
 }
 
 void Settings::SaveSound(XMLElement& root)
 {
     XMLElement sound = root.CreateChild("sound");
 
-    sound.CreateChild("master").SetValue(m_Settings["master"].GetString());
-    sound.CreateChild("music").SetValue(m_Settings["music"].GetString());
-    sound.CreateChild("interface").SetValue(m_Settings["interface"].GetString());
-    sound.CreateChild("ambient").SetValue(m_Settings["ambient"].GetString());
-    sound.CreateChild("effects").SetValue(m_Settings["effects"].GetString());
+    sound.CreateChild("master").SetValue(settings_["master"].GetString());
+    sound.CreateChild("music").SetValue(settings_["music"].GetString());
+    sound.CreateChild("interface").SetValue(settings_["interface"].GetString());
+    sound.CreateChild("ambient").SetValue(settings_["ambient"].GetString());
+    sound.CreateChild("effects").SetValue(settings_["effects"].GetString());
 }
 
 void Settings::SaveGame(XMLElement& root)
 {
     XMLElement game = root.CreateChild("game");
 
-    game.CreateChild("autosave").SetValue(m_Settings["autosave"].GetString());
-    game.CreateChild("frequency").SetValue(m_Settings["frequency"].GetString());
+    game.CreateChild("autosave").SetValue(settings_["autosave"].GetString());
+    game.CreateChild("frequency").SetValue(settings_["frequency"].GetString());
 }

@@ -11,5 +11,5 @@ using namespace Urho3D;
 
 const String& Exception::GetCause(void) const
 {
-    return m_Cause;
+    return cause_;
 }

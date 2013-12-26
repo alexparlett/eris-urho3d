@@ -31,8 +31,8 @@ public:
     State* GetState(const Urho3D::StringHash& id) const;
 
 private:
-    Urho3D::HashMap<Urho3D::StringHash, Urho3D::SharedPtr<State>> m_States;
-    Urho3D::StringHash m_CurrentState;
+    Urho3D::HashMap<Urho3D::StringHash, Urho3D::SharedPtr<State>> states_;
+    Urho3D::StringHash currentState_;
 };
 
 template<typename T>

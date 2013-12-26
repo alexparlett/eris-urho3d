@@ -41,15 +41,15 @@ public:
     void SetContext(Urho3D::Context* context);
 
 private:
-    Urho3D::Context* m_Context;
+    Urho3D::Context* context_;
 
-    Urho3D::String m_Name;
-    Urho3D::String m_DateCreated;
-    Urho3D::String m_PlayedTime;
-    Urho3D::String m_CharacterName;
-    Urho3D::String m_CorporationName;
-    Urho3D::String m_CurrentSystem;
-    Urho3D::SharedPtr<Urho3D::Image> m_Thumbnail;
+    Urho3D::String name_;
+    Urho3D::String dateCreated_;
+    Urho3D::String playedTime_;
+    Urho3D::String characterName_;
+    Urho3D::String corporationName_;
+    Urho3D::String currentSystem_;
+    Urho3D::SharedPtr<Urho3D::Image> thumbnail_;
 
-    unsigned int m_Length;
+    unsigned int length_;
 };

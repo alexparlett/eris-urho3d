@@ -8,59 +8,43 @@
 
 using namespace Urho3D; 
 
-Mod::Mod() :
-m_Id(String::EMPTY),
-m_Directory(String::EMPTY),
-m_Name(String::EMPTY),
-m_Description(String::EMPTY),
-m_Author(String::EMPTY),
-m_Version(String::EMPTY)
-{
-}
-
-Mod::Mod(const String& dir, XMLFile& file) :
-m_Id(String::EMPTY),
-m_Directory(String::EMPTY),
-m_Name(String::EMPTY),
-m_Description(String::EMPTY),
-m_Author(String::EMPTY),
-m_Version(String::EMPTY)
+Mod::Mod(const String& dir, XMLFile& file)
 {
     XMLElement root = file.GetRoot();
-    m_Id = root.GetAttribute("id");
-    m_Directory = dir;
-    m_Name = root.GetChild("name").GetValue();
-    m_Author = root.GetChild("author").GetValue();
-    m_Description = root.GetChild("description").GetValue();
-    m_Version = root.GetChild("version").GetValue();
+    id_ = root.GetAttribute("id");
+    directory_ = dir;
+    name_ = root.GetChild("name").GetValue();
+    author_ = root.GetChild("author").GetValue();
+    description_ = root.GetChild("description").GetValue();
+    version_ = root.GetChild("version").GetValue();
 }
 
 const String& Mod::GetId()
 {
-    return m_Id;
+    return id_;
 }
 
 const String& Mod::GetName()
 {
-    return m_Name;
+    return name_;
 }
 
 const String& Mod::GetDirectory()
 {
-    return m_Directory;
+    return directory_;
 }
 
 const String& Mod::GetDescription()
 {
-    return m_Description;
+    return description_;
 }
 
 const String& Mod::GetAuthor()
 {
-    return m_Author;
+    return author_;
 }
 
 const String& Mod::GetVersion()
 {
-    return m_Version;
+    return version_;
 }

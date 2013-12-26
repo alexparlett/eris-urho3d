@@ -5,6 +5,7 @@
 ////////////////////////////////////////////
 
 #include "SaveManager.h"
+#include "IO/Settings.h"
 
 #include <FileSystem.h>
 #include <File.h>
@@ -17,25 +18,24 @@
 using namespace Urho3D;
 
 SaveManager::SaveManager(Context* context) :
-Object(context)
+    Object(context)
 {
 }
 
 void SaveManager::LoadHeaders()
 {
-    m_SaveHeaders.Clear();
+    saveHeaders_.Clear();
 
-    FileSystem* fs = GetSubsystem<FileSystem>();
-    String saveDir = fs->GetUserDocumentsDir() + "My Games/Solarian Wars/Saves/";
+    String saveDir = GetSubsystem<Settings>()->GetSetting("userdir").GetString() + "Saves/";
 
     Vector<String> saveHeaders;
-    fs->ScanDir(saveHeaders, saveDir, "*.sws", SCAN_FILES, false);
+    GetSubsystem<FileSystem>()->ScanDir(saveHeaders, saveDir, "*.sws", SCAN_FILES, false);
     foreach(String file, saveHeaders)
     {
         SaveHeader save(context_);
         if (save.Load(saveDir + file))
         {
-            m_SaveHeaders[save.GetName()] = save;
+            saveHeaders_[save.GetName()] = save;
         }
         else
         {
@@ -46,19 +46,18 @@ void SaveManager::LoadHeaders()
 
 const Urho3D::HashMap<String,SaveHeader>& SaveManager::GetHeaders()
 {
-    return m_SaveHeaders;
+    return saveHeaders_;
 }
 
 bool SaveManager::LoadGame(const Urho3D::String& source)
 {
-    FileSystem* fs = GetSubsystem<FileSystem>();
-    String saveDir = fs->GetUserDocumentsDir() + "My Games/Solarian Wars/Saves/";
+    String saveDir = GetSubsystem<Settings>()->GetSetting("userdir").GetString() + "Saves/";
     File file(context_, saveDir + source + ".sws");
 
     if (file.IsOpen())
     {
         //Move past the header
-        file.Seek(m_SaveHeaders[source].GetLength());
+        file.Seek(saveHeaders_[source].GetLength());
 
         /* TODO:
         * 1. Need to display loading state
@@ -74,8 +73,7 @@ bool SaveManager::LoadGame(const Urho3D::String& source)
 
 bool SaveManager::SaveGame(const Urho3D::String& dest, Urho3D::Scene* scene, const Urho3D::String& character, const Urho3D::String& corporation, const Urho3D::String& system)
 {
-    FileSystem* fs = GetSubsystem<FileSystem>();
-    String saveDir = fs->GetUserDocumentsDir() + "My Games/Solarian Wars/Saves/";
+    String saveDir = GetSubsystem<Settings>()->GetSetting("userdir").GetString() + "Saves/";
     File file(context_, saveDir + dest + ".sws", FILE_WRITE);
 
     if (file.IsOpen())
@@ -91,9 +89,9 @@ bool SaveManager::SaveGame(const Urho3D::String& dest, Urho3D::Scene* scene, con
 
 bool SaveManager::WriteSaveHeader(Urho3D::File& dest, const Urho3D::String& character, const Urho3D::String& corporation, const Urho3D::String& system)
 {
-    if (m_SaveHeaders.Contains(dest.GetName()))
+    if (saveHeaders_.Contains(dest.GetName()))
     {
-        SaveHeader& header = m_SaveHeaders[dest.GetName()];
+        SaveHeader& header = saveHeaders_[dest.GetName()];
         header.SetDateCreated(GetSubsystem<Time>()->GetSystemTime());
         header.SetLength(0);
         header.SetCharacterName(character);

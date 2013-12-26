@@ -98,14 +98,17 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(ProjectDir);..\ThirdParty\Urho3d;..\ThirdParty\Urho3d\Bullet;..\ThirdParty\Urho3d\Direct3D9;..\ThirdParty\Urho3d\kNet;..\ThirdParty\Urho3d\OpenGL;..\ThirdParty\Urho3d\SDL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>ENABLE_LOGGING;ENABLE_SSE;ENABLE_MINIDUMPS;ENABLE_PROFILING;ENABLE_ANGELSCRIPT;URHO3D_STATIC_DEFINE;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ENABLE_LOGGING;ENABLE_SSE;ENABLE_MINIDUMPS;ENABLE_PROFILING;ENABLE_ANGELSCRIPT;URHO3D_STATIC_DEFINE;WIN32;USE_OPENGL;GLEW_STATIC;GLEW_NO_GLU;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
       <AdditionalLibraryDirectories>$(SolutionDir)Lib\$(Platform)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Urho3d_d.lib;d3d9.lib;dbghelp.lib;imm32.lib;version.lib;winmm.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Urho3d_d.lib;opengl32.lib;dbghelp.lib;imm32.lib;version.lib;winmm.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <LargeAddressAware>true</LargeAddressAware>
     </Link>
     <PreBuildEvent>
       <Command>cmd.exe /c "$(SolutionDir)gitversion.bat $(SolutionDir) $(ProjectDir)"
@@ -124,16 +127,16 @@ xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D</Command>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(ProjectDir);..\ThirdParty;..\ThirdParty\Urho3d;..\ThirdParty\Urho3d\Bullet;..\ThirdParty\Urho3d\Direct3D9;..\ThirdParty\Urho3d\kNet;..\ThirdParty\Urho3d\OpenGL;..\ThirdParty\Urho3d\SDL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>ENABLE_LOGGING;ENABLE_SSE;ENABLE_MINIDUMPS;ENABLE_PROFILING;ENABLE_ANGELSCRIPT;URHO3D_STATIC_DEFINE;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ENABLE_LOGGING;ENABLE_SSE;ENABLE_MINIDUMPS;ENABLE_PROFILING;ENABLE_ANGELSCRIPT;URHO3D_STATIC_DEFINE;WIN32;USE_OPENGL;GLEW_STATIC;GLEW_NO_GLU;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
       <AdditionalLibraryDirectories>$(SolutionDir)Lib\$(Platform)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Urho3d_d.lib;d3d9.lib;dbghelp.lib;imm32.lib;version.lib;winmm.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Urho3d_d.lib;opengl32.lib;dbghelp.lib;imm32.lib;version.lib;winmm.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ProfileGuidedDatabase>$(IntDir)$(TargetName).pgd</ProfileGuidedDatabase>
     </Link>
     <PreBuildEvent>
@@ -158,8 +161,9 @@ xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D</Command>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(ProjectDir);..\ThirdParty\Urho3d;..\ThirdParty\Urho3d\Bullet;..\ThirdParty\Urho3d\Direct3D9;..\ThirdParty\Urho3d\kNet;..\ThirdParty\Urho3d\OpenGL;..\ThirdParty\Urho3d\SDL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>ENABLE_LOGGING;ENABLE_SSE;ENABLE_MINIDUMPS;ENABLE_ANGELSCRIPT;URHO3D_STATIC_DEFINE;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ENABLE_LOGGING;ENABLE_SSE;ENABLE_MINIDUMPS;ENABLE_ANGELSCRIPT;URHO3D_STATIC_DEFINE;WIN32;USE_OPENGL;GLEW_STATIC;GLEW_NO_GLU;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -167,7 +171,8 @@ xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D</Command>
       <OptimizeReferences>true</OptimizeReferences>
       <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
       <AdditionalLibraryDirectories>$(SolutionDir)Lib\$(Platform)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Urho3d.lib;d3d9.lib;dbghelp.lib;imm32.lib;version.lib;winmm.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Urho3d.lib;opengl32.lib;dbghelp.lib;imm32.lib;version.lib;winmm.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <LargeAddressAware>true</LargeAddressAware>
     </Link>
     <PreBuildEvent>
       <Command>cmd.exe /c "$(SolutionDir)gitversion.bat $(SolutionDir) $(ProjectDir)"
@@ -188,7 +193,7 @@ xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D</Command>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(ProjectDir);..\ThirdParty;..\ThirdParty\Urho3d;..\ThirdParty\Urho3d\Bullet;..\ThirdParty\Urho3d\Direct3D9;..\ThirdParty\Urho3d\kNet;..\ThirdParty\Urho3d\OpenGL;..\ThirdParty\Urho3d\SDL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>ENABLE_LOGGING;ENABLE_SSE;ENABLE_MINIDUMPS;ENABLE_ANGELSCRIPT;URHO3D_STATIC_DEFINE;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ENABLE_LOGGING;ENABLE_SSE;ENABLE_MINIDUMPS;ENABLE_ANGELSCRIPT;URHO3D_STATIC_DEFINE;WIN32;USE_OPENGL;GLEW_STATIC;GLEW_NO_GLU;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
     </ClCompile>
@@ -198,7 +203,7 @@ xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D</Command>
       <OptimizeReferences>true</OptimizeReferences>
       <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
       <AdditionalLibraryDirectories>$(SolutionDir)Lib\$(Platform)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Urho3d.lib;d3d9.lib;dbghelp.lib;imm32.lib;version.lib;winmm.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Urho3d.lib;opengl32.lib;dbghelp.lib;imm32.lib;version.lib;winmm.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>cmd.exe /c "$(SolutionDir)gitversion.bat $(SolutionDir) $(ProjectDir)"

@@ -3,7 +3,7 @@
 using namespace Urho3D;
 
 LaunchState::LaunchState(Context* context) :
-State(context)
+    State(context)
 {
 }
 

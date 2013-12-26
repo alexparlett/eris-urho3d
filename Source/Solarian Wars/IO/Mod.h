@@ -14,7 +14,7 @@
 class Mod
 {
 public:
-    Mod();
+    Mod() { }
     Mod(const Urho3D::String& dir, Urho3D::XMLFile& file);
     ~Mod() { }
 
@@ -26,11 +26,11 @@ public:
     const Urho3D::String& GetVersion();
 
 private:
-    Urho3D::String m_Id;
-    Urho3D::String m_Directory;
-    Urho3D::String m_Name;
-    Urho3D::String m_Description;
-    Urho3D::String m_Author;
-    Urho3D::String m_Version;
+    Urho3D::String id_;
+    Urho3D::String directory_;
+    Urho3D::String name_;
+    Urho3D::String description_;
+    Urho3D::String author_;
+    Urho3D::String version_;
 };
 

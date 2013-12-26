@@ -25,7 +25,7 @@
 using namespace Urho3D;
 
 SolarianWars::SolarianWars(Context* context) :
-Application(context)
+    Application(context)
 {
     context_->RegisterSubsystem(new Script(context));
     context_->RegisterSubsystem(new Settings(context));
@@ -50,7 +50,7 @@ void SolarianWars::Setup()
         
         engineParameters_["WindowTitle"] = "Solarian Wars";
         engineParameters_["WindowIcon"] = "Textures/Icon.png";
-        engineParameters_["LogName"] = GetSubsystem<FileSystem>()->GetUserDocumentsDir() + "My Games/Solarian Wars/sw.log";
+        engineParameters_["LogName"] = GetSubsystem<Settings>()->GetSetting("userdir").GetString() + "sw.log";
         engineParameters_["WindowWidth"] = settings->GetSetting("resolution", "1024 768").GetIntVector2().x_;
         engineParameters_["WindowHeight"] = settings->GetSetting("resolution", "1024 768").GetIntVector2().y_;
         engineParameters_["FullScreen"] = settings->GetSetting("fullscreen", "true").GetBool();
