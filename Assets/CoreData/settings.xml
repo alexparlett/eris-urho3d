@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <settings>
   <graphics>
-    <resolution>1024 768</resolution>
+    <resolution>1366 768</resolution>
     <fullscreen>false</fullscreen>
+	<borderless>false</borderless>
     <antialiasing>2</antialiasing>
     <vsync>false</vsync>
     <anisotropic>0</anisotropic>

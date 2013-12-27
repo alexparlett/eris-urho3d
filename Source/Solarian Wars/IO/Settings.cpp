@@ -14,6 +14,7 @@
 #include <XMLElement.h>
 #include <PackageFile.h>
 #include <Log.h>
+#include <StringUtils.h>
 
 using namespace Urho3D;
 
@@ -66,7 +67,15 @@ void Settings::Save(void)
 const Variant& Settings::GetSetting(const String& name, const Variant& default) const
 {
     VariantMap::ConstIterator find = settings_.Find(name);
-    return find != settings_.End() ? find->second_ : default;
+    
+    if(find != settings_.End() && !find->second_.IsZero())
+    {
+        return find->second_;
+    }
+    
+    const_cast<Settings&>(*this).SetSetting(name, default);
+
+    return default;
 }
 
 void Settings::SetSetting(const String& name, const Variant& value)
@@ -130,62 +139,62 @@ void Settings::LoadFromXml(const XMLElement& root)
 
 void Settings::LoadGraphics(const XMLElement& graphics)
 {
-    settings_["resolution"] = graphics.GetChild("resolution").GetValue();
-    settings_["fullscreen"] = graphics.GetChild("fullscreen").GetValue();
-    settings_["antialiasing"] = graphics.GetChild("antialiasing").GetValue();
-    settings_["vsync"] = graphics.GetChild("vsync").GetValue();
-    settings_["anisotropic"] = graphics.GetChild("anisotropic").GetValue();
-    settings_["shadows"] = graphics.GetChild("shadows").GetValue();
-    settings_["gamma"] = graphics.GetChild("gamma").GetValue();
-    settings_["shaders"] = graphics.GetChild("shaders").GetValue();
-    settings_["ssao"] = graphics.GetChild("ssao").GetValue();
+    settings_["resolution"] = ToIntVector2(graphics.GetChild("resolution").GetValue());
+    settings_["fullscreen"] = ToBool(graphics.GetChild("fullscreen").GetValue());
+    settings_["antialiasing"] = ToInt(graphics.GetChild("antialiasing").GetValue());
+    settings_["vsync"] = ToBool(graphics.GetChild("vsync").GetValue());
+    settings_["anisotropic"] = ToInt(graphics.GetChild("anisotropic").GetValue());
+    settings_["shadows"] = ToInt(graphics.GetChild("shadows").GetValue());
+    settings_["gamma"] = ToFloat(graphics.GetChild("gamma").GetValue());
+    settings_["shaders"] = ToInt(graphics.GetChild("shaders").GetValue());
+    settings_["ssao"] = ToInt(graphics.GetChild("ssao").GetValue());
 }
 
 void Settings::LoadSound(const XMLElement& sound)
 {
-    settings_["master"] = sound.GetChild("master").GetValue();
-    settings_["music"] = sound.GetChild("music").GetValue();
-    settings_["interface"] = sound.GetChild("interface").GetValue();
-    settings_["ambient"] = sound.GetChild("ambient").GetValue();
-    settings_["effects"] = sound.GetChild("effects").GetValue();
+    settings_["master"] = ToFloat(sound.GetChild("master").GetValue());
+    settings_["music"] = ToFloat(sound.GetChild("music").GetValue());
+    settings_["interface"] = ToFloat(sound.GetChild("interface").GetValue());
+    settings_["ambient"] = ToFloat(sound.GetChild("ambient").GetValue());
+    settings_["effects"] = ToFloat(sound.GetChild("effects").GetValue());
 }
 
 void Settings::LoadGame(const XMLElement& game)
 {
-    settings_["autosave"] = game.GetChild("autosave").GetValue();
-    settings_["frequency"] = game.GetChild("frequency").GetValue();
+    settings_["autosave"] = ToBool(game.GetChild("autosave").GetValue());
+    settings_["frequency"] = ToInt(game.GetChild("frequency").GetValue());
 }
 
 void Settings::SaveGraphics(XMLElement& root)
 {
     XMLElement graphics = root.CreateChild("graphics");
 
-    graphics.CreateChild("resolution").SetValue(settings_["resolution"].GetString());
-    graphics.CreateChild("fullscreen").SetValue(settings_["fullscreen"].GetString());
-    graphics.CreateChild("antialiasing").SetValue(settings_["antialiasing"].GetString());
-    graphics.CreateChild("vsync").SetValue(settings_["vsync"].GetString());
-    graphics.CreateChild("anisotropic").SetValue(settings_["anisotropic"].GetString());
-    graphics.CreateChild("shadows").SetValue(settings_["shadows"].GetString());
-    graphics.CreateChild("gamma").SetValue(settings_["gamma"].GetString());
-    graphics.CreateChild("shaders").SetValue(settings_["shaders"].GetString());
-    graphics.CreateChild("ssao").SetValue(settings_["ssao"].GetString());
+    graphics.CreateChild("resolution").SetValue(settings_["resolution"].ToString());
+    graphics.CreateChild("fullscreen").SetValue(settings_["fullscreen"].ToString());
+    graphics.CreateChild("antialiasing").SetValue(settings_["antialiasing"].ToString());
+    graphics.CreateChild("vsync").SetValue(settings_["vsync"].ToString());
+    graphics.CreateChild("anisotropic").SetValue(settings_["anisotropic"].ToString());
+    graphics.CreateChild("shadows").SetValue(settings_["shadows"].ToString());
+    graphics.CreateChild("gamma").SetValue(settings_["gamma"].ToString());
+    graphics.CreateChild("shaders").SetValue(settings_["shaders"].ToString());
+    graphics.CreateChild("ssao").SetValue(settings_["ssao"].ToString());
 }
 
 void Settings::SaveSound(XMLElement& root)
 {
     XMLElement sound = root.CreateChild("sound");
 
-    sound.CreateChild("master").SetValue(settings_["master"].GetString());
-    sound.CreateChild("music").SetValue(settings_["music"].GetString());
-    sound.CreateChild("interface").SetValue(settings_["interface"].GetString());
-    sound.CreateChild("ambient").SetValue(settings_["ambient"].GetString());
-    sound.CreateChild("effects").SetValue(settings_["effects"].GetString());
+    sound.CreateChild("master").SetValue(settings_["master"].ToString());
+    sound.CreateChild("music").SetValue(settings_["music"].ToString());
+    sound.CreateChild("interface").SetValue(settings_["interface"].ToString());
+    sound.CreateChild("ambient").SetValue(settings_["ambient"].ToString());
+    sound.CreateChild("effects").SetValue(settings_["effects"].ToString());
 }
 
 void Settings::SaveGame(XMLElement& root)
 {
     XMLElement game = root.CreateChild("game");
 
-    game.CreateChild("autosave").SetValue(settings_["autosave"].GetString());
-    game.CreateChild("frequency").SetValue(settings_["frequency"].GetString());
+    game.CreateChild("autosave").SetValue(settings_["autosave"].ToString());
+    game.CreateChild("frequency").SetValue(settings_["frequency"].ToString());
 }
