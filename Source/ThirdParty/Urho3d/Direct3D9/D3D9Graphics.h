@@ -403,7 +403,7 @@ private:
     /// Create the application window icon.
     void CreateWindowIcon();
     /// Adjust the window for new resolution and fullscreen mode.
-    void AdjustWindow(int& newWidth, int& newHeight, bool& newFullscreen);
+    void AdjustWindow(int& newWidth, int& newHeight, bool& newFullscreen, bool& newBorderless);
     /// Create the Direct3D interface.
     bool CreateInterface();
     /// Create the Direct3D device.

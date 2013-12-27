@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <settings>
   <graphics>
-    <resolution>1366 768</resolution>
-    <fullscreen>false</fullscreen>
-	<borderless>false</borderless>
+    <resolution>0 0</resolution>
+    <fullscreen>true</fullscreen>
+	<borderless>true</borderless>
     <antialiasing>2</antialiasing>
     <vsync>false</vsync>
     <anisotropic>0</anisotropic>
     <shadows>2</shadows>
-    <gamma>1.0</gamma>
+    <gamma>0.5</gamma>
     <shaders>1</shaders>
     <ssao>true</ssao>
   </graphics>

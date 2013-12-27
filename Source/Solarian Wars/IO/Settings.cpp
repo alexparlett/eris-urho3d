@@ -68,7 +68,7 @@ const Variant& Settings::GetSetting(const String& name, const Variant& default) 
 {
     VariantMap::ConstIterator find = settings_.Find(name);
     
-    if(find != settings_.End() && !find->second_.IsZero())
+    if(find != settings_.End())
     {
         return find->second_;
     }
@@ -141,6 +141,7 @@ void Settings::LoadGraphics(const XMLElement& graphics)
 {
     settings_["resolution"] = ToIntVector2(graphics.GetChild("resolution").GetValue());
     settings_["fullscreen"] = ToBool(graphics.GetChild("fullscreen").GetValue());
+    settings_["borderless"] = ToBool(graphics.GetChild("borderless").GetValue());
     settings_["antialiasing"] = ToInt(graphics.GetChild("antialiasing").GetValue());
     settings_["vsync"] = ToBool(graphics.GetChild("vsync").GetValue());
     settings_["anisotropic"] = ToInt(graphics.GetChild("anisotropic").GetValue());
@@ -171,6 +172,7 @@ void Settings::SaveGraphics(XMLElement& root)
 
     graphics.CreateChild("resolution").SetValue(settings_["resolution"].ToString());
     graphics.CreateChild("fullscreen").SetValue(settings_["fullscreen"].ToString());
+    graphics.CreateChild("borderless").SetValue(settings_["borderless"].ToString());
     graphics.CreateChild("antialiasing").SetValue(settings_["antialiasing"].ToString());
     graphics.CreateChild("vsync").SetValue(settings_["vsync"].ToString());
     graphics.CreateChild("anisotropic").SetValue(settings_["anisotropic"].ToString());
