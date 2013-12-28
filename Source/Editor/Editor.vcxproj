@@ -13,10 +13,7 @@
   <ItemGroup>
     <ClInclude Include="..\gitversion.h" />
     <ClInclude Include="Core\Editor.h" />
-    <ClInclude Include="Core\EditorScene.h" />
-    <ClInclude Include="Core\EditorView.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="IO\Settings.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Editor.rc" />
@@ -26,9 +23,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Editor.cpp" />
-    <ClCompile Include="Core\EditorScene.cpp" />
-    <ClCompile Include="Core\EditorView.cpp" />
-    <ClCompile Include="IO\Settings.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{36BA8E86-E495-4F07-812D-CCDD8B97DC0E}</ProjectGuid>
@@ -90,8 +84,8 @@
     </Link>
     <PreBuildEvent>
       <Command>cmd.exe /c "$(SolutionDir)gitversion.bat $(SolutionDir) $(ProjectDir)"
-$(SolutionDir)Tools\PackageTool.exe "$(SolutionDir)Assets\CoreData" "$(SolutionDir)Game\CoreData.pak"
-$(SolutionDir)Tools\PackageTool.exe "$(SolutionDir)Assets\Editor" "$(SolutionDir)Game\Editor.pak"
+$(SolutionDir)Tools\PackageTool.exe "$(SolutionDir)Assets\CoreData" "$(SolutionDir)Game\CoreData.pak" -c
+$(SolutionDir)Tools\PackageTool.exe "$(SolutionDir)Assets\Editor" "$(SolutionDir)Game\Editor.pak" -c
 xcopy "$(SolutionDir)Tools" "$(SolutionDir)Game\Tools" /Y /I /E /D
 xcopy "$(SolutionDir)Assets\Data" "$(SolutionDir)Game\Data" /Y /I /E /D
 xcopy "$(SolutionDir)Assets\Mods" "$(SolutionDir)Game\Mods" /Y /I /E /D
@@ -124,8 +118,8 @@ xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D</Command>
     </Link>
     <PreBuildEvent>
       <Command>cmd.exe /c "$(SolutionDir)gitversion.bat $(SolutionDir) $(ProjectDir)"
-$(SolutionDir)Tools\PackageTool.exe "$(SolutionDir)Assets\CoreData" "$(SolutionDir)Game\CoreData.pak"
-$(SolutionDir)Tools\PackageTool.exe "$(SolutionDir)Assets\Editor" "$(SolutionDir)Game\Editor.pak"
+$(SolutionDir)Tools\PackageTool.exe "$(SolutionDir)Assets\CoreData" "$(SolutionDir)Game\CoreData.pak" -c
+$(SolutionDir)Tools\PackageTool.exe "$(SolutionDir)Assets\Editor" "$(SolutionDir)Game\Editor.pak" -c
 xcopy "$(SolutionDir)Tools" "$(SolutionDir)Game\Tools" /Y /I /E /D
 xcopy "$(SolutionDir)Assets\Data" "$(SolutionDir)Game\Data" /Y /I /E /D
 xcopy "$(SolutionDir)Assets\Mods" "$(SolutionDir)Game\Mods" /Y /I /E /D

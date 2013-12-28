@@ -9,12 +9,9 @@
 #include <Engine.h>
 #include <Application.h>
 #include <StringHash.h>
-#include <Str.h>
 #include <Variant.h>
 #include <Ptr.h>
-#include <Vector2.h>
-
-#include "EditorScene.h"
+#include <ScriptFile.h>
 
 class Editor : public Urho3D::Application
 {
@@ -28,14 +25,13 @@ public:
     virtual void Stop();
 
 private:
-    void HandlerUpdate(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
+    void HandleScriptReloadFailed(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
+    void HandleScriptReloadFinished(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
+    void HandleScriptReloadStarted(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
+
     void ParseArguments();
-    void SaveConfig();
-    void LoadConfig();
 
-    Urho3D::String m_ConfigFile;
-    bool m_Production;
-
-    Urho3D::SharedPtr<EditorScene> m_Scene;
-    Urho3D::SharedPtr<EditorUI> m_UI;
+    /// Script file.
+    Urho3D::SharedPtr<Urho3D::ScriptFile> scriptFile_;
+    bool production_;
 };
