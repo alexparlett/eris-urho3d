@@ -58,6 +58,7 @@ void CreateUI()
     CreateCursor();
     CreateMenuBar();
     CreateToolBar();
+    CreateSecondaryToolBar();
     CreateQuickMenu();
     CreateHierarchyWindow();
     CreateAttributeInspectorWindow();

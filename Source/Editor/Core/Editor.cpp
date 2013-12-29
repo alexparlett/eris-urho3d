@@ -58,7 +58,7 @@ void Editor::Start()
     parameters.Push(version);
 
     // If script loading is successful, proceed to main loop
-    if (scriptFile_ && scriptFile_->Execute("void Start(bool,String)", parameters))
+    if (scriptFile_ && scriptFile_->Execute("void Start(bool,const String&)", parameters))
     {
         // Subscribe to script's reload event to allow live-reload of the application
         SubscribeToEvent(scriptFile_, E_RELOADSTARTED, HANDLER(Editor, HandleScriptReloadStarted));

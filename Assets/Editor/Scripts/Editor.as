@@ -10,6 +10,7 @@
 #include "Editor/EditorSettings.as"
 #include "Editor/EditorPreferences.as"
 #include "Editor/EditorToolBar.as"
+#include "Editor/EditorSecondaryToolBar.as"
 #include "Editor/EditorBottomBar.as"
 #include "Editor/EditorUI.as"
 #include "Editor/EditorImport.as"
@@ -22,7 +23,7 @@ bool production;
 // If loaded in OpenGL mode, remember the instancing setting in config instead of auto-disabling it
 bool instancingSetting = true;
 
-void Start(bool production_, String version_)
+void Start(bool production_, const String& version_)
 {
     production = production_;
 	version = version_;
