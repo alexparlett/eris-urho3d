@@ -1,6 +1,6 @@
 <element type="Window">
     <attribute name="Name" value="AttributeInspectorWindow" />
-    <attribute name="Is Movable" value="true" />
+    <attribute name="Is Movable" value="false" />
     <attribute name="Is Resizable" value="true" />
     <attribute name="Resize Border" value="6 6 6 6" />
     <attribute name="Layout Mode" value="Vertical" />
@@ -12,9 +12,6 @@
         <attribute name="Layout Mode" value="Horizontal" />
         <element type="Text">
             <attribute name="Text" value="Attribute inspector" />
-        </element>
-        <element type="Button" style="CloseButton">
-            <attribute name="Name" value="CloseButton" />
         </element>
     </element>
     <element>

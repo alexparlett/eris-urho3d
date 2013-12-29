@@ -117,7 +117,6 @@ void CreateAttributeInspectorWindow()
     attributeInspectorWindow.SetPosition(ui.root.width - attributeInspectorWindow.width, ui.root.height - attributeInspectorWindow.height - 30);
     attributeInspectorWindow.opacity = uiMaxOpacity;
     attributeInspectorWindow.BringToFront();
-	attributeInspectorWindow.movable = false;
 
     SubscribeToEvent(attributeInspectorWindow.GetChild("CloseButton", true), "Released", "HideAttributeInspectorWindow");
     SubscribeToEvent(attributeInspectorWindow, "LayoutUpdated", "HandleInspectorWindowLayoutUpdated");

@@ -7,12 +7,12 @@ void CreateSecondaryToolBar()
 
     secondaryToolBar.style = "EditorToolBar";
     secondaryToolBar.SetLayout(LM_VERTICAL);
-    secondaryToolBar.layoutSpacing = 4;
+    secondaryToolBar.layoutSpacing = 2;
     secondaryToolBar.layoutBorder = IntRect(4, 4, 4, 4);
     secondaryToolBar.opacity = uiMaxOpacity;
-    secondaryToolBar.SetFixedSize(28, graphics.height);
+    secondaryToolBar.SetFixedSize(32, ui.root.height - 90);
     secondaryToolBar.SetPosition(0, uiMenuBar.height+40);
-    secondaryToolBar.SetFixedHeight(graphics.height);
+    secondaryToolBar.SetFixedHeight(ui.root.height - 90);
 
     Button@ b = CreateSmallToolBarButton("Node", "Replicated Node");
     secondaryToolBar.AddChild(b);
@@ -121,6 +121,8 @@ void CreateSecondaryToolBar()
     b = CreateSmallToolBarButton("NetworkPriority");
     secondaryToolBar.AddChild(b);
     SubscribeToEvent(b, "Released", "SmallToolBarCreateComponent"); 
+    
+	SubscribeToEvent(hierarchyWindow, "LayoutUpdated", "HandleSecondaryToolBarLayoutUpdated");    
 }
 
 Button@ CreateSmallToolBarButton(const String&in title, String toolTipTitle = "")
@@ -128,12 +130,12 @@ Button@ CreateSmallToolBarButton(const String&in title, String toolTipTitle = ""
     Button@ button = Button(title);
     button.defaultStyle = uiStyle;
     button.style = "ToolBarButton";
-    button.SetFixedSize(20, 20);
+    button.SetFixedSize(26, 26);
     CreateSmallToolBarIcon(button);
 
     if (toolTipTitle.empty)
         toolTipTitle = title;
-    CreateToolTip(button, toolTipTitle, IntVector2(button.width + 10, button.height - 10));
+    CreateToolTip(button, toolTipTitle, IntVector2(button.width, button.height));
 
     return button;
 }
@@ -143,7 +145,7 @@ void CreateSmallToolBarIcon(UIElement@ element)
     BorderImage@ icon = BorderImage("Icon");
     icon.defaultStyle = iconStyle;
     icon.style = element.name;
-    icon.SetFixedSize(14, 14);
+    icon.SetFixedSize(20, 20);
     element.AddChild(icon);
 }
 
@@ -168,4 +170,10 @@ void SmallToolBarCreateComponent(StringHash eventType, VariantMap& eventData)
 {
     Button@ b = GetEventSender();
     CreateComponent(b.name);
+}
+
+void HandleSecondaryToolBarLayoutUpdated()
+{
+    // Resize secondary tool bar
+    secondaryToolBar.SetFixedHeight(ui.root.height - 90);
 }

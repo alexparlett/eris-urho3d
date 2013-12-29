@@ -56,7 +56,7 @@ void CreateHierarchyWindow()
     hierarchyList = hierarchyWindow.GetChild("HierarchyList");
     ui.root.AddChild(hierarchyWindow);
     hierarchyWindow.SetSize(300, ui.root.height - 90);
-    hierarchyWindow.SetPosition(0, ui.root.height - hierarchyWindow.height - 30);
+    hierarchyWindow.SetPosition(32, ui.root.height - hierarchyWindow.height - 30);
     hierarchyWindow.opacity = uiMaxOpacity;
     hierarchyWindow.BringToFront();
 
@@ -86,7 +86,7 @@ void CreateHierarchyWindow()
 void HandleHierachyWindowLayoutUpdated()
 {
 	hierarchyWindow.SetFixedHeight(ui.root.height - 90);
-	hierarchyWindow.SetPosition(0, ui.root.height - hierarchyWindow.height - 30);
+	hierarchyWindow.SetPosition(32, ui.root.height - hierarchyWindow.height - 30);
 }
 
 bool ShowHierarchyWindow()
