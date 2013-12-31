@@ -13,6 +13,9 @@
         <element type="Text">
             <attribute name="Text" value="Attribute inspector" />
         </element>
+        <element type="Button" style="CloseButton">
+            <attribute name="Name" value="CloseButton" />
+        </element>
     </element>
     <element>
         <attribute name="Name" value="ParentContainer" />

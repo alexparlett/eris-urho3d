@@ -13,6 +13,9 @@
         <element type="Text">
             <attribute name="Text" value="Hierarchy" />
         </element>
+        <element type="Button" style="CloseButton">
+            <attribute name="Name" value="CloseButton" />
+        </element>
     </element>
     <element type="BorderImage" style="EditorDivider" />
     <element>

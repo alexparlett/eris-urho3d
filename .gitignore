@@ -159,3 +159,5 @@ Temp/
 Game/
 Source/gitversion.h
 Assets/workspace
+Source/EditorAngelscript/EditorAngelscript/EditorAngelscript.cbp
+Source/EditorAngelscript/
