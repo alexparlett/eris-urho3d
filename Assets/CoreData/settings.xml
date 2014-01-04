@@ -3,14 +3,16 @@
   <graphics>
     <resolution>0 0</resolution>
     <fullscreen>true</fullscreen>
-	<borderless>true</borderless>
+	<borderless>false</borderless>
     <antialiasing>2</antialiasing>
     <vsync>false</vsync>
-    <anisotropic>0</anisotropic>
+    <anisotropic>4</anisotropic>
     <shadows>2</shadows>
     <gamma>0.5</gamma>
-    <shaders>1</shaders>
+    <shaders>2</shaders>
     <ssao>true</ssao>
+    <quality>2</quality>
+    <bloom>false</bloom>
   </graphics>
   <sound>
     <master>1.0</master>

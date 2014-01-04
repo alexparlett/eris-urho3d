@@ -106,7 +106,7 @@ void Settings::LoadUserSettings(const String& fileName)
 
 void Settings::LoadDefaults(void)
 {
-    PackageFile pak = PackageFile(context_, "CoreData.pak");
+    PackageFile pak = PackageFile(context_, "00.pak");
     File file = File(context_, &pak, "settings.xml");
 
     if (!file.IsOpen())
@@ -149,6 +149,8 @@ void Settings::LoadGraphics(const XMLElement& graphics)
     settings_["gamma"] = ToFloat(graphics.GetChild("gamma").GetValue());
     settings_["shaders"] = ToInt(graphics.GetChild("shaders").GetValue());
     settings_["ssao"] = ToInt(graphics.GetChild("ssao").GetValue());
+    settings_["quality"] = ToInt(graphics.GetChild("quality").GetValue());
+    settings_["bloom"] = ToBool(graphics.GetChild("bloom").GetValue());
 }
 
 void Settings::LoadSound(const XMLElement& sound)
@@ -180,6 +182,8 @@ void Settings::SaveGraphics(XMLElement& root)
     graphics.CreateChild("gamma").SetValue(settings_["gamma"].ToString());
     graphics.CreateChild("shaders").SetValue(settings_["shaders"].ToString());
     graphics.CreateChild("ssao").SetValue(settings_["ssao"].ToString());
+    graphics.CreateChild("quality").SetValue(settings_["quality"].ToString());
+    graphics.CreateChild("bloom").SetValue(settings_["bloom"].ToString());
 }
 
 void Settings::SaveSound(XMLElement& root)

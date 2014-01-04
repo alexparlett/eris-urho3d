@@ -16,3 +16,19 @@ MenuState::MenuState (Context* context) :
 MenuState::~MenuState ()
 {
 }
+
+void MenuState::Create()
+{
+}
+
+void MenuState::Start()
+{
+}
+
+void MenuState::Stop()
+{
+}
+
+void MenuState::Destroy()
+{
+}

@@ -22,6 +22,10 @@
 
 #pragma once
 
+#include "Object.h"
+
+class asILockableSharedBool;
+class asIScriptFunction;
 class asIScriptObject;
 
 namespace Urho3D
@@ -30,7 +34,7 @@ namespace Urho3D
 /// Delay-executed function or method call.
 struct DelayedCall
 {
-   /// Period for repeating calls.
+    /// Period for repeating calls.
     float period_;
     /// Delay time remaining until execution.
     float delay_;
@@ -42,17 +46,27 @@ struct DelayedCall
     VariantVector parameters_;
 };
 
-/// Interface class for event listeners that forward events to script.
+/// Interface class for allowing script objects or functions to subscribe to events.
 class URHO3D_API ScriptEventListener
 {
 public:
     /// Destruct
     virtual ~ScriptEventListener() {};
 
-    /// Add an event handler. Called by script exposed version of SubscribeToEvent().
-    virtual void AddEventHandler(StringHash eventType, const String& handlerName, asIScriptObject* receiver = 0) = 0;
-    /// Add an event handler for a specific sender. Called by script exposed version of SubscribeToEvent().
-    virtual void AddEventHandler(Object* sender, StringHash eventType, const String& handlerName, asIScriptObject* receiver = 0) = 0;
+    /// Add a scripted event handler.
+    virtual void AddEventHandler(StringHash eventType, const String& handlerName) = 0;
+    /// Add a scripted event handler for a specific sender.
+    virtual void AddEventHandler(Object* sender, StringHash eventType, const String& handlerName) = 0;
+    /// Remove a scripted event handler.
+    virtual void RemoveEventHandler(StringHash eventType) = 0;
+    /// Remove a scripted event handler for a specific sender.
+    virtual void RemoveEventHandler(Object* sender, StringHash eventType) = 0;
+    /// Remove all scripted event handlers for a specific sender.
+    virtual void RemoveEventHandlers(Object* sender) = 0;
+    /// Remove all scripted event handlers.
+    virtual void RemoveEventHandlers() = 0;
+    /// Remove all scripted event handlers, except those listed.
+    virtual void RemoveEventHandlersExcept(const PODVector<StringHash>& exceptions) = 0;
 };
 
 }

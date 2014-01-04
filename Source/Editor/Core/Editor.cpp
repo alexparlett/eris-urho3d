@@ -31,9 +31,10 @@ void Editor::Setup()
     ParseArguments();
 
     engineParameters_["Headless"] = false;
+    engineParameters_["LogName"] = GetSubsystem<FileSystem>()->GetUserDocumentsDir() + "My Games/Solarian Wars/editor.log";
+
     engineParameters_["WindowTitle"] = "Solarian Wars Editor";
     engineParameters_["WindowIcon"] = "Textures/Icon.png";
-    engineParameters_["LogName"] = GetSubsystem<FileSystem>()->GetUserDocumentsDir() + "My Games/Solarian Wars/editor.log";
     engineParameters_["FullScreen"] = false;
     engineParameters_["WindowResizable"] = true;
     engineParameters_["WindowWidth"] = 0;
@@ -41,11 +42,11 @@ void Editor::Setup()
 
     if (production_)
     {
-        engineParameters_["ResourcePaths"] = "CoreData;Data;../Assets/Editor";
+        engineParameters_["ResourcePaths"] = "../Assets/CoreData;Data";
     }
     else
     {
-        engineParameters_["ResourcePaths"] = "CoreData;Data;Editor";
+        engineParameters_["ResourcePaths"] = "00;Data";
     }
 }
 
@@ -53,12 +54,8 @@ void Editor::Start()
 {
     scriptFile_ = GetSubsystem<ResourceCache>()->GetResource<ScriptFile>("Scripts/Editor.as");
 
-    VariantVector parameters;
-    parameters.Push(production_);
-    parameters.Push(version);
-
     // If script loading is successful, proceed to main loop
-    if (scriptFile_ && scriptFile_->Execute("void Start(bool,const String&)", parameters))
+    if (scriptFile_ && scriptFile_->Execute("void Start()"))
     {
         // Subscribe to script's reload event to allow live-reload of the application
         SubscribeToEvent(scriptFile_, E_RELOADSTARTED, HANDLER(Editor, HandleScriptReloadStarted));
@@ -93,7 +90,7 @@ void Editor::HandleScriptReloadFinished(StringHash eventType, VariantMap& eventD
     parameters.Push(production_);
     parameters.Push(version);
 
-    if (!scriptFile_->Execute("void Start(bool,String)",parameters))
+    if (!scriptFile_->Execute("void Start()",parameters))
     {
         scriptFile_.Reset();
         ErrorExit();

@@ -53,11 +53,9 @@ public:
     /// Set cursor UI element.
     void SetCursor(Cursor* cursor);
     /// Set focused UI element.
-    void SetFocusElement(UIElement* element);
+    void SetFocusElement(UIElement* element, bool byKey = false);
     /// Set modal element. Until all the modal elements are dismissed, all the inputs and events are only sent to them. Return true when successful.
     /// Only the modal element can clear its modal status or when it is being destructed.
-    /// UI subystem auto-removes modal element when an ESC key is pressed, however if this is not desirable, setting a user-defined variable "NoAutoRemove" in the modal element would prevent this.
-    /// In that case, the modal element will only have its modal flag reset and reparented back to its original parent.
     bool SetModalElement(UIElement* modalElement, bool enable);
     /// Clear the UI (excluding the cursor.)
     void Clear();

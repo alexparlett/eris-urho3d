@@ -54,18 +54,24 @@ void SolarianWars::Setup()
         settings->Load();
 
         engineParameters_["Headless"] = false;
+        engineParameters_["ResourcePaths"] = "00;Data";
+        engineParameters_["LogName"] = GetSubsystem<Settings>()->GetSetting("userdir").GetString() + "sw.log";
+
         engineParameters_["WindowTitle"] = "Solarian Wars";
         engineParameters_["WindowIcon"] = "Textures/Icon.png";
-        engineParameters_["LogName"] = GetSubsystem<Settings>()->GetSetting("userdir").GetString() + "sw.log";
-        engineParameters_["WindowWidth"] = settings->GetSetting("resolution", IntVector2::ZERO).GetIntVector2().x_;
-        engineParameters_["WindowHeight"] = settings->GetSetting("resolution", IntVector2::ZERO).GetIntVector2().y_;
+        engineParameters_["WindowWidth"] = settings->GetSetting("resolution", 0).GetIntVector2().x_;
+        engineParameters_["WindowHeight"] = settings->GetSetting("resolution", 0).GetIntVector2().y_;
         engineParameters_["FullScreen"] = settings->GetSetting("fullscreen", true).GetBool();
         engineParameters_["Borderless"] = settings->GetSetting("borderless", false).GetBool();
         engineParameters_["WindowResizable"] = !(settings->GetSetting("fullscreen", true).GetBool() && settings->GetSetting("borderless", false).GetBool());
         engineParameters_["VSync"] = settings->GetSetting("vsync", false).GetBool();
-        engineParameters_["MultiSample"] = settings->GetSetting("antialiasing", 1).GetInt();
+        engineParameters_["MultiSample"] = settings->GetSetting("antialiasing", 2).GetInt();
+        engineParameters_["Anisotropy"] = settings->GetSetting("anisotropy", 4).GetInt();
+        engineParameters_["TextureQuality"] = settings->GetSetting("quality", 2).GetInt();
+        engineParameters_["MaterialQuality"] = settings->GetSetting("shaders", 2).GetInt();
         engineParameters_["Shadows"] = settings->GetSetting("shadows", 2).GetInt() > 0 ? true : false;
         engineParameters_["LowQualityShadows"] = settings->GetSetting("shadows", 2).GetInt() == 1 ? true : false;
+
 
         audio->SetMasterGain(SoundType::SOUND_MASTER, settings->GetSetting("master", 1.0f).GetFloat());
         audio->SetMasterGain(SoundType::SOUND_AMBIENT, settings->GetSetting("ambient", 0.75f).GetFloat());
@@ -112,7 +118,6 @@ void SolarianWars::Start()
 
 void SolarianWars::Stop()
 {
-   // GetSubsystem<Settings>()->Save();
 }
 
 DEFINE_APPLICATION_MAIN(SolarianWars)
