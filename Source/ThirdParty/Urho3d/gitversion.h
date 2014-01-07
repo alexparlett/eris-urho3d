@@ -1,1 +1,1 @@
-const char* revision="86e0600"; 
+const char* revision="6b49075-dirty"; 
