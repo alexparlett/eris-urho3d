@@ -15,5 +15,14 @@ class MenuState : public State
 public:
     MenuState (Urho3D::Context* context);
     virtual ~MenuState ();
+
+    virtual void Create();
+
+    virtual void Start();
+
+    virtual void Stop();
+
+    virtual void Destroy();
+
 };
 
