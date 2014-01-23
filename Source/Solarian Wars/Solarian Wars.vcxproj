@@ -115,7 +115,8 @@
 $(SolutionDir)Tools\PackageTool.exe "$(SolutionDir)Assets\CoreData" "$(SolutionDir)Game\00.pak" -c
 xcopy "$(SolutionDir)Assets\Data" "$(SolutionDir)Game\Data" /Y /I /E /D
 xcopy "$(SolutionDir)Assets\Mods" "$(SolutionDir)Game\Mods" /Y /I /E /D
-xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D</Command>
+xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D
+xcopy "$(SolutionDir)Assets\settings.xml" "$(SolutionDir)Game" /Y /D</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>xcopy "$(TargetPath)" "$(SolutionDir)Game" /Y /D</Command>
@@ -144,7 +145,8 @@ xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D</Command>
 $(SolutionDir)Tools\PackageTool.exe "$(SolutionDir)Assets\CoreData" "$(SolutionDir)Game\00.pak" -c
 xcopy "$(SolutionDir)Assets\Data" "$(SolutionDir)Game\Data" /Y /I /E /D
 xcopy "$(SolutionDir)Assets\Mods" "$(SolutionDir)Game\Mods" /Y /I /E /D
-xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D</Command>
+xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D
+xcopy "$(SolutionDir)Assets\settings.xml" "$(SolutionDir)Game" /Y /D</Command>
     </PreBuildEvent>
     <Bscmake>
       <OutputFile>$(IntDir)$(TargetName).bsc</OutputFile>
@@ -179,7 +181,8 @@ xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D</Command>
 $(SolutionDir)Tools\PackageTool.exe "$(SolutionDir)Assets\CoreData" "$(SolutionDir)Game\00.pak" -c
 xcopy "$(SolutionDir)Assets\Data" "$(SolutionDir)Game\Data" /Y /I /E /D
 xcopy "$(SolutionDir)Assets\Mods" "$(SolutionDir)Game\Mods" /Y /I /E /D
-xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D</Command>
+xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D
+xcopy "$(SolutionDir)Assets\settings.xml" "$(SolutionDir)Game" /Y /D</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>xcopy "$(TargetPath)" "$(SolutionDir)Game" /Y /D</Command>
@@ -210,7 +213,8 @@ xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D</Command>
 $(SolutionDir)Tools\PackageTool.exe "$(SolutionDir)Assets\CoreData" "$(SolutionDir)Game\00.pak" -c
 xcopy "$(SolutionDir)Assets\Data" "$(SolutionDir)Game\Data" /Y /I /E /D
 xcopy "$(SolutionDir)Assets\Mods" "$(SolutionDir)Game\Mods" /Y /I /E /D
-xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D</Command>
+xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D
+xcopy "$(SolutionDir)Assets\settings.xml" "$(SolutionDir)Game" /Y /D</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>xcopy "$(TargetPath)" "$(SolutionDir)Game" /Y /D</Command>
@@ -221,10 +225,10 @@ xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D</Command>
     <ClInclude Include="Core\Events.h" />
     <ClInclude Include="Core\SolarianWars.h" />
     <ClInclude Include="Core\State.h" />
+    <ClInclude Include="IO\Locale.h" />
     <ClInclude Include="States\MenuState.h" />
     <ClInclude Include="States\GameState.h" />
     <ClInclude Include="IO\Settings.h" />
-    <ClInclude Include="Exceptions\Exception.h" />
     <ClInclude Include="IO\Mod.h" />
     <ClInclude Include="Core\ModManager.h" />
     <ClInclude Include="Core\SaveManager.h" />
@@ -236,10 +240,10 @@ xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\SolarianWars.cpp" />
+    <ClCompile Include="IO\Locale.cpp" />
     <ClCompile Include="States\MenuState.cpp" />
     <ClCompile Include="States\GameState.cpp" />
     <ClCompile Include="IO\Settings.cpp" />
-    <ClCompile Include="Exceptions\Exception.cpp" />
     <ClCompile Include="Core\StateManager.cpp" />
     <ClCompile Include="IO\Mod.cpp" />
     <ClCompile Include="Core\ModManager.cpp" />

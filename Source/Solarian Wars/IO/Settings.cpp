@@ -5,7 +5,6 @@
 ////////////////////////////////////////////
 
 #include "Settings.h"
-#include "Exceptions/Exception.h"
 #include "../gitversion.h"
 
 #include <File.h>
@@ -31,11 +30,27 @@ void Settings::Load(void)
 
     if (GetSubsystem<FileSystem>()->FileExists(fileName))
     {
-        LoadUserSettings(fileName);
-    }
-    else
-    {
-        LoadDefaults();
+        File file = File(context_, fileName);
+        if (!file.IsOpen())
+        {
+            LOGERROR("Settings::Load unable to load settings file " + fileName);
+            return;
+        }
+
+        XMLFile xmlFile = XMLFile(context_);
+        if (xmlFile.Load(file))
+        {
+            XMLElement root = xmlFile.GetRoot();
+
+            XMLElement graphics = root.GetChild("graphics");
+            LoadGraphics(graphics);
+
+            XMLElement sound = root.GetChild("sound");
+            LoadSound(sound);
+
+            XMLElement game = root.GetChild("game");
+            LoadGame(game);
+        }
     }
 }
 
@@ -83,60 +98,6 @@ void Settings::SetSetting(const String& name, const Variant& value)
     settings_[name] = value;
 }
 
-void Settings::LoadUserSettings(const String& fileName)
-{
-    File file = File(context_, fileName);
-    if (!file.IsOpen())
-    {
-        throw Exception("Unable to open " + fileName);
-    }
-
-    XMLFile xmlFile = XMLFile(context_);
-    if (xmlFile.Load(file))
-    {
-        XMLElement root = xmlFile.GetRoot();
-
-        LoadFromXml(xmlFile.GetRoot("settings"));
-    }
-    else
-    {
-        throw Exception("Unable to load " + fileName);
-    }
-}
-
-void Settings::LoadDefaults(void)
-{
-    PackageFile pak = PackageFile(context_, "00.pak");
-    File file = File(context_, &pak, "settings.xml");
-
-    if (!file.IsOpen())
-    {
-        throw Exception("Unable to load settings.xml from CoreData.pak");
-    }
-
-    XMLFile xmlFile = XMLFile(context_);
-    if (xmlFile.Load(file))
-    {
-        LoadFromXml(xmlFile.GetRoot("settings"));
-    }
-    else
-    {
-        throw Exception("Unable to load settings.xml from CoreData.pak");
-    }
-}
-
-void Settings::LoadFromXml(const XMLElement& root)
-{
-    XMLElement graphics = root.GetChild("graphics");
-    LoadGraphics(graphics);
-
-    XMLElement sound = root.GetChild("sound");
-    LoadSound(sound);
-
-    XMLElement game = root.GetChild("game");
-    LoadGame(game);
-}
-
 void Settings::LoadGraphics(const XMLElement& graphics)
 {
     settings_["resolution"] = ToIntVector2(graphics.GetChild("resolution").GetValue());
@@ -164,6 +125,7 @@ void Settings::LoadSound(const XMLElement& sound)
 
 void Settings::LoadGame(const XMLElement& game)
 {
+    settings_["language"] = game.GetChild("language").GetValue();
     settings_["autosave"] = ToBool(game.GetChild("autosave").GetValue());
     settings_["frequency"] = ToInt(game.GetChild("frequency").GetValue());
 }
@@ -201,6 +163,7 @@ void Settings::SaveGame(XMLElement& root)
 {
     XMLElement game = root.CreateChild("game");
 
+    game.CreateChild("language").SetValue(settings_["language"].ToString());
     game.CreateChild("autosave").SetValue(settings_["autosave"].ToString());
     game.CreateChild("frequency").SetValue(settings_["frequency"].ToString());
 }

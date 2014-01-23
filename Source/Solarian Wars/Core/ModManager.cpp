@@ -50,7 +50,7 @@ void ModManager::Load()
                 XMLElement mod = mods[i];
                 String value = mod.GetValue();
 
-                if (value != String::EMPTY && modDescriptors_.Contains(value))
+                if (!value.Empty() && modDescriptors_.Contains(value))
                 {
                     Activate(value);
                 }
@@ -61,11 +61,6 @@ void ModManager::Load()
 
 void ModManager::Save()
 {
-    /*Release unloaded resources, this should be safe in main menu as only used resources are in CoreData.pak
-     *which can not have been modified by this process
-     */
-    GetSubsystem<ResourceCache>()->ReleaseAllResources();
-
     String orderFilename = GetSubsystem<FileSystem>()->GetUserDocumentsDir() + "My Games/Solarian Wars/modorder.xml";
     File orderFile(context_, orderFilename, FILE_WRITE);
     if (orderFile.IsOpen())
@@ -73,7 +68,7 @@ void ModManager::Save()
         XMLFile orderXml(context_);
         XMLElement root = orderXml.CreateRoot("mods");
         foreach(String id, activeMods_)
-        {
+       { 
             root.CreateChild("mod").SetValue(id);
         }
 
@@ -86,31 +81,6 @@ void ModManager::Save()
     {
         LOGERROR("Unable to open mod order " + orderFilename);
     }
-}
-
-bool ModManager::Activate(const Urho3D::String& id, unsigned int priorty)
-{
-    if (!activeMods_.Contains(id) && modDescriptors_.Contains(id))
-    {
-        if (priorty > PRIORITY_LOW && priorty < activeMods_.Size())
-        {
-            activeMods_.Insert(priorty, id);
-            GetSubsystem<ResourceCache>()->AddResourceDir(modDescriptors_[id].GetDirectory(), priorty);
-            return true;
-        }
-    }
-    return false;
-}
-
-bool ModManager::Deactivate(const Urho3D::String& id)
-{
-    if (activeMods_.Contains(id))
-    {
-        activeMods_.Remove(id);
-        GetSubsystem<ResourceCache>()->RemoveResourceDir(modDescriptors_[id].GetDirectory());
-        return true;
-    }
-    return false;
 }
 
 const Urho3D::HashMap<Urho3D::String, Mod>& ModManager::GetModDescriptors() const
@@ -137,12 +107,41 @@ void ModManager::ModDeactivated(Urho3D::StringHash eventType, Urho3D::VariantMap
     using namespace ModDeactivated;
     String id = eventData[P_ID].ToString();
 
-    Deactivate(id);
+    if (activeMods_.Contains(id))
+    {
+        // Remove it from mod order.
+        activeMods_.Remove(id);
+
+        // Remove it from the ResourceCache, don't need to release resources here as that will be done when the mod order is saved.
+        GetSubsystem<ResourceCache>()->RemoveResourceDir(modDescriptors_[id].GetDirectory() + "/Data");
+    }
 }
 
 void ModManager::ModOrderSaved(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
 {
+    ResourceCache* rc = GetSubsystem<ResourceCache>();
+    rc->ReleaseAllResources();
+
+    for (unsigned i = activeMods_.Size() - 1; i >= 0; i--)
+    {
+        HandlePatches(modDescriptors_[activeMods_[i]].GetDirectory() + "/Patch/");
+        rc->AddResourceDir(modDescriptors_[activeMods_[i]].GetDirectory() + "/Data");
+    }
+
     Save();
+}
+
+void ModManager::Activate(const Urho3D::String& id, unsigned int priorty)
+{
+    if (!activeMods_.Contains(id) && modDescriptors_.Contains(id))
+    {
+        // If low priority add to the end.
+        if (priorty == PRIORITY_LOW)
+            priorty = activeMods_.Size();
+
+        // Add it to mod order.
+        activeMods_.Insert(priorty, id);
+    }
 }
 
 void ModManager::ScanDirectory(Urho3D::String& root)
@@ -164,12 +163,9 @@ void ModManager::ScanDirectory(Urho3D::String& root)
 
     foreach(String dir, dirList)
     {
-        Vector<String> descriptorFile;
-        fs->ScanDir(descriptorFile, root + dir, "mod.xml", SCAN_FILES, false);
-
-        if (descriptorFile.Size() > 0)
+        if (fs->FileExists(root + dir + "/mod.xml"))
         {
-            File file(context_, root + dir + "/" + descriptorFile[0]);
+            File file(context_, root + dir + "/mod.xml");
 
             if (file.IsOpen())
             {
@@ -180,6 +176,28 @@ void ModManager::ScanDirectory(Urho3D::String& root)
 
                 modDescriptors_[mod.GetId()] = mod;
             }
+        }
+    }
+}
+
+void ModManager::HandlePatches(String& root)
+{
+    Vector<String> fileList;
+    FileSystem* fs = GetSubsystem<FileSystem>();
+
+    fs->ScanDir(fileList, root, "*.xml", SCAN_FILES, true);
+
+    foreach(String file, fileList)
+    {
+        File patchFile(context_, root + file);
+        if (patchFile.IsOpen())
+        {
+            XMLFile patch(context_);
+            patch.Load(patchFile);
+
+            XMLFile* res = GetSubsystem<ResourceCache>()->GetResource<XMLFile>(file);
+            if (res)
+                res->Patch(&patch);
         }
     }
 }

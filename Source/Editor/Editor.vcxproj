@@ -88,7 +88,8 @@ $(SolutionDir)Tools\PackageTool.exe "$(SolutionDir)Assets\CoreData" "$(SolutionD
 xcopy "$(SolutionDir)Tools" "$(SolutionDir)Game\Tools" /Y /I /E /D
 xcopy "$(SolutionDir)Assets\Data" "$(SolutionDir)Game\Data" /Y /I /E /D
 xcopy "$(SolutionDir)Assets\Mods" "$(SolutionDir)Game\Mods" /Y /I /E /D
-xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D</Command>
+xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D
+xcopy "$(SolutionDir)Assets\settings.xml" "$(SolutionDir)Game" /Y /D</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>xcopy "$(TargetPath)" "$(SolutionDir)Game" /Y /D</Command>
@@ -121,7 +122,8 @@ $(SolutionDir)Tools\PackageTool.exe "$(SolutionDir)Assets\CoreData" "$(SolutionD
 xcopy "$(SolutionDir)Tools" "$(SolutionDir)Game\Tools" /Y /I /E /D
 xcopy "$(SolutionDir)Assets\Data" "$(SolutionDir)Game\Data" /Y /I /E /D
 xcopy "$(SolutionDir)Assets\Mods" "$(SolutionDir)Game\Mods" /Y /I /E /D
-xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D</Command>
+xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D
+xcopy "$(SolutionDir)Assets\settings.xml" "$(SolutionDir)Game" /Y /D</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>xcopy "$(TargetPath)" "$(SolutionDir)Game" /Y /D</Command>

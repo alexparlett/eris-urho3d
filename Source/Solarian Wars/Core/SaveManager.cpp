@@ -34,13 +34,9 @@ void SaveManager::LoadHeaders()
     {
         SaveHeader save(context_);
         if (save.Load(saveDir + file))
-        {
             saveHeaders_[save.GetName()] = save;
-        }
         else
-        {
             LOGERROR("Unable to load save header for " + file);
-        }
     }
 }
 
@@ -79,9 +75,7 @@ bool SaveManager::SaveGame(const Urho3D::String& dest, Urho3D::Scene* scene, con
     if (file.IsOpen())
     {
         if (WriteSaveHeader(file, character, corporation, system))
-        {
             return WriteScene(file, scene);
-        }
     }
 
     return false;

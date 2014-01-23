@@ -48,9 +48,7 @@ void StateManager::StateCreated(Urho3D::StringHash eventType, Urho3D::VariantMap
             states_[eventData[P_ID].GetStringHash()] = state;
         }
         else
-        {
             LOGERROR("State already exists with id of " + id.ToString());
-        }
     }
 }
 
@@ -66,9 +64,7 @@ void StateManager::StateChanged(Urho3D::StringHash eventType, Urho3D::VariantMap
             State* newActive = states_[id];
 
             if (currentState_ != StringHash::ZERO && states_.Contains(currentState_)) 
-            {
                 states_[currentState_]->Stop();
-            }
 
             newActive->Start();
             currentState_ = id;
@@ -98,9 +94,7 @@ void StateManager::StateDestroyed(Urho3D::StringHash eventType, Urho3D::VariantM
             states_.Erase(id);
         }
         else
-        {
             LOGERROR("Cannot destroy state " + id.ToString() + " either current or doesn't exist.");
-        }
     }
     else
     {

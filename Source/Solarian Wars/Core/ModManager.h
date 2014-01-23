@@ -26,9 +26,6 @@ public:
     void Load();
     void Save();
 
-    bool Activate(const Urho3D::String& id, unsigned int priorty = PRIORITY_LOW);
-    bool Deactivate(const Urho3D::String& id);
-
     const Urho3D::HashMap<Urho3D::String, Mod>& GetModDescriptors() const;
     bool IsActive(Urho3D::String id) const;
 
@@ -37,9 +34,12 @@ private:
     void ModDeactivated(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
     void ModOrderSaved(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
 
-    void ScanDirectory(Urho3D::String& root);
+    void Activate(const Urho3D::String& id, unsigned int priorty = PRIORITY_LOW);
 
-    Urho3D::Vector<Urho3D::String> activeMods_;
+    void ScanDirectory(Urho3D::String& root);
+    void HandlePatches(Urho3D::String& root);
+
+    Urho3D::PODVector<Urho3D::String> activeMods_;
     Urho3D::HashMap<Urho3D::String,Mod> modDescriptors_;
 };
 

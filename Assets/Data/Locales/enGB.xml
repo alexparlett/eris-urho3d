@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<locale language="enGB">
+    <page id="0">  
+        <line id="1">Continue</line>
+        <line id="2">New Game</line>
+        <line id="3">Load Game</line>
+        <line id="4">Exit</line>
+    </page>
+</locale>

@@ -20,4 +20,7 @@ public:
     virtual void Setup();
     virtual void Start();
     virtual void Stop();
+
+private:
+    static void RegisterScriptAPI(Urho3D::Context* context);
 };
