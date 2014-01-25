@@ -125,7 +125,7 @@ void SolarianWars::RegisterScriptAPI(Urho3D::Context* context)
     asIScriptEngine* engine = context->GetSubsystem<Script>()->GetScriptEngine();
 
     engine->RegisterGlobalFunction("String& Localize(int,int) const", asMETHOD(Locale, Localize), asCALL_THISCALL_ASGLOBAL, context->GetSubsystem<Locale>());
-    engine->RegisterGlobalFunction("void Replace(String&in, const String&in, const String&in) const", asMETHODPR(Locale, Replace, (String&, const String&) const, void), asCALL_THISCALL_ASGLOBAL, context->GetSubsystem<Locale>());
+    engine->RegisterGlobalFunction("void Replace(String&in, const String&in) const", asMETHODPR(Locale, Replace, (String&, const String&) const, void), asCALL_THISCALL_ASGLOBAL, context->GetSubsystem<Locale>());
     engine->RegisterGlobalFunction("void Replace(String&in, const Array<String>@+) const", asMETHODPR(Locale, Replace, (String&, const PODVector<String>&) const, void), asCALL_THISCALL_ASGLOBAL, context->GetSubsystem<Locale>());
 }
 

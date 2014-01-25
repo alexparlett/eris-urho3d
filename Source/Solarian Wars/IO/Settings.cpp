@@ -69,14 +69,10 @@ void Settings::Save(void)
         SaveGame(root);
 
         if (!xmlFile.Save(file))
-        {
             LOGERROR("Unable to save " + fileName);
-        }
     }
     else
-    {
         LOGERROR("Unable to open " + fileName);
-    }
 }
 
 const Variant& Settings::GetSetting(const String& name, const Variant& default) const
@@ -84,9 +80,7 @@ const Variant& Settings::GetSetting(const String& name, const Variant& default) 
     VariantMap::ConstIterator find = settings_.Find(name);
     
     if(find != settings_.End())
-    {
         return find->second_;
-    }
     
     const_cast<Settings&>(*this).SetSetting(name, default);
 
