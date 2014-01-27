@@ -22,16 +22,8 @@
 
 #pragma once
 
-#include "Image.h"
-
-namespace Urho3D
-{
-
-/// Decompress a DXT compressed image to RGBA.
-URHO3D_API void DecompressImageDXT(unsigned char* dest, const void* blocks, int width, int height, int depth, CompressedFormat format);
-/// Decompress an ETC1 compressed image to RGBA.
-URHO3D_API void DecompressImageETC(unsigned char* dest, const void* blocks, int width, int height);
-/// Decompress a PVRTC compressed image to RGBA.
-URHO3D_API void DecompressImagePVRTC(unsigned char* dest, const void* blocks, int width, int height, CompressedFormat format);
-
-}
+#ifdef USE_OPENGL
+#include "OpenGL/OGLTexture3D.h"
+#else
+#include "Direct3D9/D3D9Texture3D.h"
+#endif
