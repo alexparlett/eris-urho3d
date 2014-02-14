@@ -179,7 +179,7 @@ void ModManager::ActivateMods()
     ResourceCache* rc = GetSubsystem<ResourceCache>();
     rc->ReleaseAllResources();
 
-    for (unsigned i = activeMods_.Size() - 1; i >= 0; i--)
+    for (unsigned i = activeMods_.Size() - 1; activeMods_.Size() > 0 && i >= 0; i--)
     {
         HandlePatches(modDescriptors_[activeMods_[i]].GetDirectory() + "/Patch/");
         rc->AddResourceDir(modDescriptors_[activeMods_[i]].GetDirectory() + "/Data");

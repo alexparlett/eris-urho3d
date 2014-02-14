@@ -10,7 +10,6 @@
 #include "States/LaunchState.h"
 #include "Events.h"
 #include "ModManager.h"
-#include "SaveManager.h"
 #include "IO/Locale.h"
 #include "ScriptDefs.h"
 
@@ -36,7 +35,6 @@ SolarianWars::SolarianWars(Context* context) :
     context->RegisterSubsystem(new Settings(context));
     context->RegisterSubsystem(new StateManager(context));
     context->RegisterSubsystem(new ModManager(context));
-    context->RegisterSubsystem(new SaveManager(context));
     context->RegisterSubsystem(new Locale(context));
 }
 
@@ -47,7 +45,6 @@ void SolarianWars::Setup()
     ResourceCache* cache = GetSubsystem<ResourceCache>();
     Input* input = GetSubsystem<Input>();
     ModManager* mm = GetSubsystem<ModManager>();
-    SaveManager* sm = GetSubsystem<SaveManager>();
     Locale* locale = GetSubsystem<Locale>();
 
     input->SetMouseVisible(true);
@@ -83,12 +80,12 @@ void SolarianWars::Setup()
     audio->SetMasterGain(SoundType::SOUND_UI, settings->GetSetting("interface", 0.75f).GetFloat());
 
     RegisterScriptAPI(GetSubsystem<Script>()->GetScriptEngine());
-
-    ParseArgs();
 }
 
 void SolarianWars::Start()
 {
+    ParseArgs();
+
     VariantMap createData;
     createData[StateCreated::P_STATE] = new LaunchState(context_);
     createData[StateCreated::P_ID] = StringHash("LaunchState");
@@ -111,7 +108,7 @@ void SolarianWars::ParseArgs()
 
     if (GetArguments().Contains("-api"))
     {
-        File output(context_, "api.doxy");
+        File output(context_, GetSubsystem<Settings>()->GetSetting("userdir").GetString() + "api.doxy", FILE_WRITE);
         GetSubsystem<Script>()->DumpAPI(output);
     }
 }

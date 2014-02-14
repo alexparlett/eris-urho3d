@@ -232,8 +232,6 @@ xcopy "$(SolutionDir)Assets\settings.xml" "$(SolutionDir)Game" /Y /D</Command>
     <ClInclude Include="IO\Settings.h" />
     <ClInclude Include="IO\Mod.h" />
     <ClInclude Include="Core\ModManager.h" />
-    <ClInclude Include="Core\SaveManager.h" />
-    <ClInclude Include="IO\SaveFile.h" />
     <ClInclude Include="States\LaunchState.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Core\StateManager.h" />
@@ -248,8 +246,6 @@ xcopy "$(SolutionDir)Assets\settings.xml" "$(SolutionDir)Game" /Y /D</Command>
     <ClCompile Include="Core\StateManager.cpp" />
     <ClCompile Include="IO\Mod.cpp" />
     <ClCompile Include="Core\ModManager.cpp" />
-    <ClCompile Include="Core\SaveManager.cpp" />
-    <ClCompile Include="IO\SaveFile.cpp" />
     <ClCompile Include="States\LaunchState.cpp" />
   </ItemGroup>
   <ItemGroup>
