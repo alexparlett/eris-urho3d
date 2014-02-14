@@ -37,6 +37,7 @@ private:
     void Activate(const Urho3D::String& id, unsigned int priorty = PRIORITY_LOW);
 
     void ScanDirectory(Urho3D::String& root);
+    void ActivateMods();
     void HandlePatches(Urho3D::String& root);
 
     Urho3D::PODVector<Urho3D::String> activeMods_;

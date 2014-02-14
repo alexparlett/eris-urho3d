@@ -63,12 +63,12 @@ Urho3D::String Locale::Localize(int page, int line) const
     return String::EMPTY;
 }
 
-void Locale::Replace(Urho3D::String& line, const Urho3D::String& value) const
+void Locale::Replace(Urho3D::String& line, int token, const Urho3D::String& value) const
 {
-    line.Replace("{0}", value);
+    line.Replace(ToString("{%d}", token), value);
 }
 
-void Locale::Replace(Urho3D::String& line, const Urho3D::PODVector<Urho3D::String>& values) const
+void Locale::Replace(Urho3D::String& line, const Urho3D::Vector<Urho3D::String>& values) const
 {
     for(unsigned i = 0; i < values.Size(); i++)
         line.Replace(ToString("{%d}",i), values[i]);

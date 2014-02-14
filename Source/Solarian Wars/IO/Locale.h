@@ -33,8 +33,8 @@ public:
     void Load(const Urho3D::String& fileName);
 
     Urho3D::String Localize(int page, int line) const;
-    void Replace(Urho3D::String& line, const Urho3D::String& value) const;
-    void Replace(Urho3D::String& line, const Urho3D::PODVector<Urho3D::String>& values) const;
+    void Replace(Urho3D::String& line, int token, const Urho3D::String& value) const;
+    void Replace(Urho3D::String& line, const Urho3D::Vector<Urho3D::String>& values) const;
 
 private:
     Urho3D::HashMap<int, Urho3D::SharedPtr<Page>> pages_;

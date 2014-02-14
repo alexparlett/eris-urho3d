@@ -1,0 +1,11 @@
+////////////////////////////////////////////
+//
+// Copyright (c) 2013-2014 Homonoia Studios
+//
+////////////////////////////////////////////
+
+#pragma once
+
+class asIScriptEngine;
+
+void RegisterScriptAPI(asIScriptEngine* engine);

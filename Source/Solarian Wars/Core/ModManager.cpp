@@ -57,6 +57,8 @@ void ModManager::Load()
             }
         }
     }
+
+    ActivateMods();
 }
 
 void ModManager::Save()
@@ -119,15 +121,7 @@ void ModManager::ModDeactivated(Urho3D::StringHash eventType, Urho3D::VariantMap
 
 void ModManager::ModOrderSaved(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
 {
-    ResourceCache* rc = GetSubsystem<ResourceCache>();
-    rc->ReleaseAllResources();
-
-    for (unsigned i = activeMods_.Size() - 1; i >= 0; i--)
-    {
-        HandlePatches(modDescriptors_[activeMods_[i]].GetDirectory() + "/Patch/");
-        rc->AddResourceDir(modDescriptors_[activeMods_[i]].GetDirectory() + "/Data");
-    }
-
+    ActivateMods();
     Save();
 }
 
@@ -177,6 +171,18 @@ void ModManager::ScanDirectory(Urho3D::String& root)
                 modDescriptors_[mod.GetId()] = mod;
             }
         }
+    }
+}
+
+void ModManager::ActivateMods()
+{
+    ResourceCache* rc = GetSubsystem<ResourceCache>();
+    rc->ReleaseAllResources();
+
+    for (unsigned i = activeMods_.Size() - 1; i >= 0; i--)
+    {
+        HandlePatches(modDescriptors_[activeMods_[i]].GetDirectory() + "/Patch/");
+        rc->AddResourceDir(modDescriptors_[activeMods_[i]].GetDirectory() + "/Data");
     }
 }
 

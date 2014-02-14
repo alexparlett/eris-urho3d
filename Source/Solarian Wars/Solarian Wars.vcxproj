@@ -97,7 +97,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir);..\ThirdParty\Urho3d;..\ThirdParty\Urho3d\Bullet;..\ThirdParty\Urho3d\Direct3D9;..\ThirdParty\Urho3d\kNet;..\ThirdParty\Urho3d\OpenGL;..\ThirdParty\Urho3d\SDL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);..\ThirdParty\Urho3d;..\ThirdParty\Urho3d\Bullet;..\ThirdParty\Urho3d\Direct3D9;..\ThirdParty\Urho3d\kNet;..\ThirdParty\Urho3d\OpenGL;..\ThirdParty\Urho3d\SDL;..\ThirdParty\Urho3d\Angelscript;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>ENABLE_LOGGING;ENABLE_SSE;ENABLE_MINIDUMPS;ENABLE_PROFILING;ENABLE_ANGELSCRIPT;URHO3D_STATIC_DEFINE;WIN32;USE_OPENGL;GLEW_STATIC;GLEW_NO_GLU;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -127,7 +127,7 @@ xcopy "$(SolutionDir)Assets\settings.xml" "$(SolutionDir)Game" /Y /D</Command>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir);..\ThirdParty;..\ThirdParty\Urho3d;..\ThirdParty\Urho3d\Bullet;..\ThirdParty\Urho3d\Direct3D9;..\ThirdParty\Urho3d\kNet;..\ThirdParty\Urho3d\OpenGL;..\ThirdParty\Urho3d\SDL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);..\ThirdParty\Urho3d;..\ThirdParty\Urho3d\Bullet;..\ThirdParty\Urho3d\Direct3D9;..\ThirdParty\Urho3d\kNet;..\ThirdParty\Urho3d\OpenGL;..\ThirdParty\Urho3d\SDL;..\ThirdParty\Urho3d\Angelscript;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>ENABLE_LOGGING;ENABLE_SSE;ENABLE_MINIDUMPS;ENABLE_PROFILING;ENABLE_ANGELSCRIPT;URHO3D_STATIC_DEFINE;WIN32;USE_OPENGL;GLEW_STATIC;GLEW_NO_GLU;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -162,7 +162,7 @@ xcopy "$(SolutionDir)Assets\settings.xml" "$(SolutionDir)Game" /Y /D</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir);..\ThirdParty\Urho3d;..\ThirdParty\Urho3d\Bullet;..\ThirdParty\Urho3d\Direct3D9;..\ThirdParty\Urho3d\kNet;..\ThirdParty\Urho3d\OpenGL;..\ThirdParty\Urho3d\SDL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);..\ThirdParty\Urho3d;..\ThirdParty\Urho3d\Bullet;..\ThirdParty\Urho3d\Direct3D9;..\ThirdParty\Urho3d\kNet;..\ThirdParty\Urho3d\OpenGL;..\ThirdParty\Urho3d\SDL;..\ThirdParty\Urho3d\Angelscript;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>ENABLE_LOGGING;ENABLE_SSE;ENABLE_MINIDUMPS;ENABLE_ANGELSCRIPT;URHO3D_STATIC_DEFINE;WIN32;USE_OPENGL;GLEW_STATIC;GLEW_NO_GLU;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
@@ -195,7 +195,7 @@ xcopy "$(SolutionDir)Assets\settings.xml" "$(SolutionDir)Game" /Y /D</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir);..\ThirdParty;..\ThirdParty\Urho3d;..\ThirdParty\Urho3d\Bullet;..\ThirdParty\Urho3d\Direct3D9;..\ThirdParty\Urho3d\kNet;..\ThirdParty\Urho3d\OpenGL;..\ThirdParty\Urho3d\SDL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);..\ThirdParty\Urho3d;..\ThirdParty\Urho3d\Bullet;..\ThirdParty\Urho3d\Direct3D9;..\ThirdParty\Urho3d\kNet;..\ThirdParty\Urho3d\OpenGL;..\ThirdParty\Urho3d\SDL;..\ThirdParty\Urho3d\Angelscript;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>ENABLE_LOGGING;ENABLE_SSE;ENABLE_MINIDUMPS;ENABLE_ANGELSCRIPT;URHO3D_STATIC_DEFINE;WIN32;USE_OPENGL;GLEW_STATIC;GLEW_NO_GLU;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
@@ -223,6 +223,7 @@ xcopy "$(SolutionDir)Assets\settings.xml" "$(SolutionDir)Game" /Y /D</Command>
   <ItemGroup>
     <ClInclude Include="..\gitversion.h" />
     <ClInclude Include="Core\Events.h" />
+    <ClInclude Include="Core\ScriptDefs.h" />
     <ClInclude Include="Core\SolarianWars.h" />
     <ClInclude Include="Core\State.h" />
     <ClInclude Include="IO\Locale.h" />
@@ -233,12 +234,12 @@ xcopy "$(SolutionDir)Assets\settings.xml" "$(SolutionDir)Game" /Y /D</Command>
     <ClInclude Include="Core\ModManager.h" />
     <ClInclude Include="Core\SaveManager.h" />
     <ClInclude Include="IO\SaveFile.h" />
-    <ClInclude Include="States\LoadingState.h" />
     <ClInclude Include="States\LaunchState.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Core\StateManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\ScriptDefs.cpp" />
     <ClCompile Include="Core\SolarianWars.cpp" />
     <ClCompile Include="IO\Locale.cpp" />
     <ClCompile Include="States\MenuState.cpp" />
@@ -249,7 +250,6 @@ xcopy "$(SolutionDir)Assets\settings.xml" "$(SolutionDir)Game" /Y /D</Command>
     <ClCompile Include="Core\ModManager.cpp" />
     <ClCompile Include="Core\SaveManager.cpp" />
     <ClCompile Include="IO\SaveFile.cpp" />
-    <ClCompile Include="States\LoadingState.cpp" />
     <ClCompile Include="States\LaunchState.cpp" />
   </ItemGroup>
   <ItemGroup>

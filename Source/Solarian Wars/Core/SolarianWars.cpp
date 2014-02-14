@@ -8,12 +8,13 @@
 #include "StateManager.h"
 #include "IO/Settings.h"
 #include "States/LaunchState.h"
-#include "States/LoadingState.h"
 #include "Events.h"
 #include "ModManager.h"
 #include "SaveManager.h"
 #include "IO/Locale.h"
+#include "ScriptDefs.h"
 
+#include <APITemplates.h>
 #include <Script.h>
 #include <FileSystem.h>
 #include <Input.h>
@@ -25,7 +26,6 @@
 #include <Console.h>
 
 #include <windows.h>
-#include <Angelscript/angelscript.h>
 
 using namespace Urho3D;
 
@@ -52,7 +52,10 @@ void SolarianWars::Setup()
 
     input->SetMouseVisible(true);
     cache->SetAutoReloadResources(false);
+
     settings->Load();
+    mm->Load();
+    locale->Load(settings->GetSetting("language", "enGB").GetString());
 
     engineParameters_["Headless"] = false;
     engineParameters_["ResourcePaths"] = "00;Data";
@@ -73,39 +76,19 @@ void SolarianWars::Setup()
     engineParameters_["Shadows"] = settings->GetSetting("shadows", 2).GetInt() > 0 ? true : false;
     engineParameters_["LowQualityShadows"] = settings->GetSetting("shadows", 2).GetInt() == 1 ? true : false;
 
-
     audio->SetMasterGain(SoundType::SOUND_MASTER, settings->GetSetting("master", 1.0f).GetFloat());
     audio->SetMasterGain(SoundType::SOUND_AMBIENT, settings->GetSetting("ambient", 0.75f).GetFloat());
     audio->SetMasterGain(SoundType::SOUND_MUSIC, settings->GetSetting("music", 0.75f).GetFloat());
     audio->SetMasterGain(SoundType::SOUND_EFFECT, settings->GetSetting("effects", 0.75f).GetFloat());
     audio->SetMasterGain(SoundType::SOUND_UI, settings->GetSetting("interface", 0.75f).GetFloat());
 
-    mm->Load();
-    sm->LoadHeaders();
+    RegisterScriptAPI(GetSubsystem<Script>()->GetScriptEngine());
 
-    locale->Load(settings->GetSetting("language", "enGB").GetString());
-
-    VariantMap createLoadingState;
-    createLoadingState[StateCreated::P_STATE] = new LoadingState(context_);
-    createLoadingState[StateCreated::P_ID] = StringHash("LoadingState");
-    SendEvent(E_STATE_CREATED, createLoadingState);
-
-    RegisterScriptAPI(context_);
+    ParseArgs();
 }
 
 void SolarianWars::Start()
 {
-    if(GetArguments().Contains("-debug"))
-    {
-        XMLFile* xmlFile = GetSubsystem<ResourceCache>()->GetResource<XMLFile>("UI/DebugStyle.xml");
-
-        Console* console = GetSubsystem<Engine>()->CreateConsole();
-        DebugHud* debug = GetSubsystem<Engine>()->CreateDebugHud();
-
-        debug->SetDefaultStyle(xmlFile);
-        console->SetDefaultStyle(xmlFile);
-    }
-
     VariantMap createData;
     createData[StateCreated::P_STATE] = new LaunchState(context_);
     createData[StateCreated::P_ID] = StringHash("LaunchState");
@@ -120,13 +103,17 @@ void SolarianWars::Stop()
 {
 }
 
-void SolarianWars::RegisterScriptAPI(Urho3D::Context* context)
+void SolarianWars::ParseArgs()
 {
-    asIScriptEngine* engine = context->GetSubsystem<Script>()->GetScriptEngine();
+    if (GetArguments().Contains("-debug"))
+    {
+    }
 
-    engine->RegisterGlobalFunction("String& Localize(int,int) const", asMETHOD(Locale, Localize), asCALL_THISCALL_ASGLOBAL, context->GetSubsystem<Locale>());
-    engine->RegisterGlobalFunction("void Replace(String&in, const String&in) const", asMETHODPR(Locale, Replace, (String&, const String&) const, void), asCALL_THISCALL_ASGLOBAL, context->GetSubsystem<Locale>());
-    engine->RegisterGlobalFunction("void Replace(String&in, const Array<String>@+) const", asMETHODPR(Locale, Replace, (String&, const PODVector<String>&) const, void), asCALL_THISCALL_ASGLOBAL, context->GetSubsystem<Locale>());
+    if (GetArguments().Contains("-api"))
+    {
+        File output(context_, "api.doxy");
+        GetSubsystem<Script>()->DumpAPI(output);
+    }
 }
 
 DEFINE_APPLICATION_MAIN(SolarianWars)

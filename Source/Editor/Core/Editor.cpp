@@ -52,30 +52,10 @@ void Editor::Setup()
 
 void Editor::Start()
 {
-    scriptFile_ = GetSubsystem<ResourceCache>()->GetResource<ScriptFile>("Scripts/Editor.as");
-
-    // If script loading is successful, proceed to main loop
-    if (scriptFile_ && scriptFile_->Execute("void Start()"))
-    {
-        // Subscribe to script's reload event to allow live-reload of the application
-        SubscribeToEvent(scriptFile_, E_RELOADSTARTED, HANDLER(Editor, HandleScriptReloadStarted));
-        SubscribeToEvent(scriptFile_, E_RELOADFINISHED, HANDLER(Editor, HandleScriptReloadFinished));
-        SubscribeToEvent(scriptFile_, E_RELOADFAILED, HANDLER(Editor, HandleScriptReloadFailed));
-        return;
-    }
-
-    // The script was not successfully loaded. Show the last error message and do not run the main loop
-    ErrorExit();
 }
 
 void Editor::Stop()
 {
-    if (scriptFile_)
-    {
-        // Execute the optional stop function
-        if (scriptFile_->GetFunction("void Stop()"))
-            scriptFile_->Execute("void Stop()");
-    }
 }
 
 void Editor::HandleScriptReloadStarted(StringHash eventType, VariantMap& eventData)
@@ -86,21 +66,10 @@ void Editor::HandleScriptReloadStarted(StringHash eventType, VariantMap& eventDa
 
 void Editor::HandleScriptReloadFinished(StringHash eventType, VariantMap& eventData)
 {
-    VariantVector parameters;
-    parameters.Push(production_);
-    parameters.Push(version);
-
-    if (!scriptFile_->Execute("void Start()",parameters))
-    {
-        scriptFile_.Reset();
-        ErrorExit();
-    }
 }
 
 void Editor::HandleScriptReloadFailed(StringHash eventType, VariantMap& eventData)
 {
-    scriptFile_.Reset();
-    ErrorExit();
 }
 
 void Editor::ParseArguments()

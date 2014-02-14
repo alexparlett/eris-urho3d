@@ -27,30 +27,33 @@ Settings::Settings(Context* context) :
 void Settings::Load(void)
 {
     String fileName = settings_["userdir"].GetString() + "settings.xml";
+    File file(context_);
 
     if (GetSubsystem<FileSystem>()->FileExists(fileName))
+        file.Open(fileName);
+    else
+        file.Open("settings.xml");
+
+
+    if (!file.IsOpen())
     {
-        File file = File(context_, fileName);
-        if (!file.IsOpen())
-        {
-            LOGERROR("Settings::Load unable to load settings file " + fileName);
-            return;
-        }
+        LOGERROR("Unable to open settings file " + fileName);
+        return;
+    }
 
-        XMLFile xmlFile = XMLFile(context_);
-        if (xmlFile.Load(file))
-        {
-            XMLElement root = xmlFile.GetRoot();
+    XMLFile xmlFile = XMLFile(context_);
+    if (xmlFile.Load(file))
+    {
+        XMLElement root = xmlFile.GetRoot();
 
-            XMLElement graphics = root.GetChild("graphics");
-            LoadGraphics(graphics);
+        XMLElement graphics = root.GetChild("graphics");
+        LoadGraphics(graphics);
 
-            XMLElement sound = root.GetChild("sound");
-            LoadSound(sound);
+        XMLElement sound = root.GetChild("sound");
+        LoadSound(sound);
 
-            XMLElement game = root.GetChild("game");
-            LoadGame(game);
-        }
+        XMLElement game = root.GetChild("game");
+        LoadGame(game);
     }
 }
 

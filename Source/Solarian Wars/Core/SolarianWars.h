@@ -22,5 +22,5 @@ public:
     virtual void Stop();
 
 private:
-    static void RegisterScriptAPI(Urho3D::Context* context);
+    void ParseArgs();
 };

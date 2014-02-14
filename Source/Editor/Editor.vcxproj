@@ -85,7 +85,6 @@
     <PreBuildEvent>
       <Command>cmd.exe /c "$(SolutionDir)gitversion.bat $(SolutionDir) $(ProjectDir)"
 $(SolutionDir)Tools\PackageTool.exe "$(SolutionDir)Assets\CoreData" "$(SolutionDir)Game\00.pak" -c
-xcopy "$(SolutionDir)Tools" "$(SolutionDir)Game\Tools" /Y /I /E /D
 xcopy "$(SolutionDir)Assets\Data" "$(SolutionDir)Game\Data" /Y /I /E /D
 xcopy "$(SolutionDir)Assets\Mods" "$(SolutionDir)Game\Mods" /Y /I /E /D
 xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D
@@ -119,7 +118,6 @@ xcopy "$(SolutionDir)Assets\settings.xml" "$(SolutionDir)Game" /Y /D</Command>
     <PreBuildEvent>
       <Command>cmd.exe /c "$(SolutionDir)gitversion.bat $(SolutionDir) $(ProjectDir)"
 $(SolutionDir)Tools\PackageTool.exe "$(SolutionDir)Assets\CoreData" "$(SolutionDir)Game\00.pak" -c
-xcopy "$(SolutionDir)Tools" "$(SolutionDir)Game\Tools" /Y /I /E /D
 xcopy "$(SolutionDir)Assets\Data" "$(SolutionDir)Game\Data" /Y /I /E /D
 xcopy "$(SolutionDir)Assets\Mods" "$(SolutionDir)Game\Mods" /Y /I /E /D
 xcopy "$(SolutionDir)Assets\icon.ico" "$(SolutionDir)Game" /Y /D
