@@ -36,6 +36,8 @@ SolarianWars::SolarianWars(Context* context) :
     context->RegisterSubsystem(new StateManager(context));
     context->RegisterSubsystem(new ModManager(context));
     context->RegisterSubsystem(new Locale(context));
+
+    RegisterScriptAPI(GetSubsystem<Script>()->GetScriptEngine());
 }
 
 void SolarianWars::Setup()
@@ -47,12 +49,18 @@ void SolarianWars::Setup()
     ModManager* mm = GetSubsystem<ModManager>();
     Locale* locale = GetSubsystem<Locale>();
 
+    // API Builds exit immediately after dumping the script api
+    if (GetArguments().Contains("-api"))
+    {
+        File output(context_, GetSubsystem<Settings>()->GetSetting("userdir").GetString() + "api.doxy", FILE_WRITE);
+        GetSubsystem<Script>()->DumpAPI(output);
+        exit(EXIT_SUCCESS);
+    }
+
     input->SetMouseVisible(true);
     cache->SetAutoReloadResources(false);
 
     settings->Load();
-    mm->Load();
-    locale->Load(settings->GetSetting("language", "enGB").GetString());
 
     engineParameters_["Headless"] = false;
     engineParameters_["ResourcePaths"] = "00;Data";
@@ -79,7 +87,10 @@ void SolarianWars::Setup()
     audio->SetMasterGain(SoundType::SOUND_EFFECT, settings->GetSetting("effects", 0.75f).GetFloat());
     audio->SetMasterGain(SoundType::SOUND_UI, settings->GetSetting("interface", 0.75f).GetFloat());
 
-    RegisterScriptAPI(GetSubsystem<Script>()->GetScriptEngine());
+    mm->Load();
+    locale->Load(settings->GetSetting("language", "enGB").GetString());
+
+
 }
 
 void SolarianWars::Start()
@@ -104,12 +115,6 @@ void SolarianWars::ParseArgs()
 {
     if (GetArguments().Contains("-debug"))
     {
-    }
-
-    if (GetArguments().Contains("-api"))
-    {
-        File output(context_, GetSubsystem<Settings>()->GetSetting("userdir").GetString() + "api.doxy", FILE_WRITE);
-        GetSubsystem<Script>()->DumpAPI(output);
     }
 }
 
