@@ -68,7 +68,7 @@ public:
     /// Set immediate mode scene.
     void SetDefaultScene(Scene* scene);
     /// Print the whole script API (all registered classes, methods and properties) to the log. No-ops when ENABLE_LOGGING not defined.
-    void DumpAPI(DumpMode mode= DOXYGEN);
+    void DumpAPI(File& output, DumpMode mode= DOXYGEN);
     /// Log a message from the script engine.
     void MessageCallback(const asSMessageInfo* msg);
     /// Handle a script exception.
