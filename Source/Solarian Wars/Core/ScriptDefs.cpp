@@ -6,6 +6,7 @@
 
 #include "ScriptDefs.h"
 #include "IO/Locale.h"
+#include "IO/Settings.h"
 
 #include <APITemplates.h>
 
@@ -21,6 +22,19 @@ static Locale* GetLocale()
     return GetScriptContext()->GetSubsystem<Locale>();
 }
 
+static Settings* GetSettings()
+{
+    return GetScriptContext()->GetSubsystem<Settings>();
+}
+
+static void RegisterSettings(asIScriptEngine* engine)
+{
+    RegisterObject<Settings>(engine, "Settings");
+    engine->RegisterObjectMethod("Settings", "const Variant& GetSetting(const String&in, const Variant&in = Variant()) const", asMETHOD(Settings, GetSetting), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Settings", "void SetSetting(const String&in, const Variant&in)", asMETHOD(Settings, SetSetting), asCALL_THISCALL);
+    engine->RegisterGlobalFunction("Settings@+ get_settings()", asFUNCTION(GetSettings), asCALL_CDECL);
+}
+
 static void RegisterLocale(asIScriptEngine* engine)
 {
     RegisterObject<Locale>(engine, "Locale");
@@ -33,4 +47,5 @@ static void RegisterLocale(asIScriptEngine* engine)
 void RegisterScriptAPI(asIScriptEngine* engine)
 {
     RegisterLocale(engine);
+    RegisterSettings(engine);
 }

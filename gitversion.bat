@@ -19,10 +19,10 @@ GOTO CLEANUP
 :DIRTYBUILD
 (ECHO #define FILEVER %MAJOR%,%MINOR%,%REVISION%,0)>Source/gitversion.h
 (ECHO #define PRODUCTVER %MAJOR%,%MINOR%,%REVISION%,0)>>Source/gitversion.h
-(ECHO #define FILEVERSTR "%MAJOR%.%MINOR%.%REVISION%.%BUILD%-%DIRTY%")>>Source/gitversion.h
-(ECHO #define PRODUCTVERSTR "%MAJOR%.%MINOR%.%REVISION%.%BUILD%-%DIRTY%")>>Source/gitversion.h
+(ECHO #define FILEVERSTR "%MAJOR%.%MINOR%.%REVISION%.%BUILD%M")>>Source/gitversion.h
+(ECHO #define PRODUCTVERSTR "%MAJOR%.%MINOR%.%REVISION%.%BUILD%M")>>Source/gitversion.h
 (ECHO.)>>Source/gitversion.h
-(ECHO const char* version = "%MAJOR%.%MINOR%.%REVISION%.%BUILD%-%DIRTY%";)>>Source/gitversion.h
+(ECHO const char* version = "%MAJOR%.%MINOR%.%REVISION%.%BUILD%M";)>>Source/gitversion.h
 GOTO CLEANUP
 :CLEANUP
 cd %2

@@ -23,6 +23,7 @@
 #include <StringHash.h>
 #include <DebugHud.h>
 #include <Console.h>
+#include <Log.h>
 
 #include <windows.h>
 
@@ -46,16 +47,12 @@ void SolarianWars::Setup()
     Settings* settings = GetSubsystem<Settings>();
     ResourceCache* cache = GetSubsystem<ResourceCache>();
     Input* input = GetSubsystem<Input>();
-    ModManager* mm = GetSubsystem<ModManager>();
-    Locale* locale = GetSubsystem<Locale>();
 
-    // API Builds exit immediately after dumping the script api
-    if (GetArguments().Contains("-api"))
-    {
-        File output(context_, GetSubsystem<Settings>()->GetSetting("userdir").GetString() + "api.doxy", FILE_WRITE);
-        GetSubsystem<Script>()->DumpAPI(output);
-        exit(EXIT_SUCCESS);
-    }
+    Log* log = GetSubsystem<Log>();
+    log->Open(settings->GetSetting("userdir").GetString() + "sw.log");
+    log->WriteRaw("[" + Time::GetTimeStamp() + "] Solarian Wars " + settings->GetSetting("version").GetString() + "\n");
+
+    ParseArgs();
 
     input->SetMouseVisible(true);
     cache->SetAutoReloadResources(false);
@@ -64,7 +61,6 @@ void SolarianWars::Setup()
 
     engineParameters_["Headless"] = false;
     engineParameters_["ResourcePaths"] = "00;Data";
-    engineParameters_["LogName"] = GetSubsystem<Settings>()->GetSetting("userdir").GetString() + "sw.log";
 
     engineParameters_["WindowTitle"] = "Solarian Wars";
     engineParameters_["WindowIcon"] = "Textures/Icon.png";
@@ -86,16 +82,12 @@ void SolarianWars::Setup()
     audio->SetMasterGain(SoundType::SOUND_MUSIC, settings->GetSetting("music", 0.75f).GetFloat());
     audio->SetMasterGain(SoundType::SOUND_EFFECT, settings->GetSetting("effects", 0.75f).GetFloat());
     audio->SetMasterGain(SoundType::SOUND_UI, settings->GetSetting("interface", 0.75f).GetFloat());
-
-    mm->Load();
-    locale->Load(settings->GetSetting("language", "enGB").GetString());
-
-
 }
 
 void SolarianWars::Start()
 {
-    ParseArgs();
+    GetSubsystem<ModManager>()->Load();
+    GetSubsystem<Locale>()->Load(GetSubsystem<Settings>()->GetSetting("language", "enGB").GetString());
 
     VariantMap createData;
     createData[StateCreated::P_STATE] = new LaunchState(context_);
@@ -113,8 +105,17 @@ void SolarianWars::Stop()
 
 void SolarianWars::ParseArgs()
 {
+    // API Builds exit immediately after dumping the script api
+    if (GetArguments().Contains("-api"))
+    {
+        File output(context_, GetSubsystem<Settings>()->GetSetting("userdir").GetString() + "api.doxy", FILE_WRITE);
+        GetSubsystem<Script>()->DumpAPI(output);
+        exit(EXIT_SUCCESS);
+    }
+
     if (GetArguments().Contains("-debug"))
     {
+        GetSubsystem<Log>()->SetLevel(LOG_DEBUG);
     }
 }
 
