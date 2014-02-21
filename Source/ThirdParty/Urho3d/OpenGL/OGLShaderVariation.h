@@ -54,14 +54,16 @@ public:
     /// Set defines.
     void SetDefines(const String& defines);
     
+    /// Return the owner resource.
+    Shader* GetOwner() const;
     /// Return shader type.
     ShaderType GetShaderType() const { return type_; }
-    /// Return full shader name.
+    /// Return name.
     const String& GetName() const { return name_; }
     /// Return defines.
     const String& GetDefines() const { return defines_; }
-    /// Return whether successfully compiled.
-    bool IsCompiled() const { return compiled_; }
+    /// Return full shader name.
+    String GetFullName() const { return name_ + "(" + defines_ + ")"; }
     /// Return compile error/warning string.
     const String& GetCompilerOutput() const { return compilerOutput_; }
     
@@ -70,14 +72,12 @@ private:
     WeakPtr<Shader> owner_;
     /// Shader type.
     ShaderType type_;
-    /// Full shader name.
+    /// Shader name.
     String name_;
     /// Defines to use in compiling.
     String defines_;
     /// Shader compile error string.
     String compilerOutput_;
-    /// Compiled flag.
-    bool compiled_;
 };
 
 }
