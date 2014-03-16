@@ -22,83 +22,85 @@
 
 #pragma once
 
-#include "Component.h"
+#include "Color.h"
+#include "Variant.h"
+#include "Vector2.h"
 #include "Vector3.h"
+#include "Vector4.h"
 
 namespace Urho3D
 {
-/// Interpolation Mode for a Spline.
+
 enum InterpolationMode
 {
     BEZIER_CURVE = 0
 };
 
-/// Spline for creating smooth movement based on Speed along a set of Control Points modified by the Interpolation Mode.
-class URHO3D_API Spline : public Component
+/// Spline class to get a point on it based off the interpolation mode.
+class URHO3D_API Spline
 {
-    OBJECT(Spline)
-
 public:
-    /// Construct an Empty Spline.
-    Spline(Context* context);
-    /// Register object factory.
-    static void RegisterObject(Context* context);
+    /// Default constructor.
+    Spline();
+    /// Constructor setting InterpolationMode.
+    Spline(InterpolationMode mode);
+    /// Constructor setting Knots and InterpolationMode.
+    Spline(const Vector<Variant>& knots, InterpolationMode mode = BEZIER_CURVE);
+    /// Copy constructor.
+    Spline(const Spline& rhs);
 
-    /// Set the Control Points from an already defined set.
-    void SetControlPoints(const PODVector<Vector3>& controlPoints);
-    /// Set the Interpolation Mode.
-    void SetInterpolationMode(InterpolationMode interpolationMode) { interpolationMode_ = interpolationMode; }
-    /// Set the movement Speed.
-    void SetSpeed(float speed) { speed_ = speed; }
-    /// Set the parent node's position on the Spline.
-    void SetPosition(float factor);
+    /// Copy operator.
+    void operator= (const Spline& rhs)
+    {
+        knots_ = rhs.knots_;
+        interpolationMode_ = rhs.interpolationMode_;
+    }
+    /// Equality operator.
+    bool operator== (const Spline& rhs) const
+    {
+        return (knots_ == rhs.knots_ && interpolationMode_ == rhs.interpolationMode_);
+    }
+    /// Non Equality operator.
+    bool operator!= (const Spline& rhs) const
+    {
+        return !(*this == rhs);
+    }
 
-    /// Get the Control Points.
-    const PODVector<Vector3>& GetControlPoints() const { return controlPoints_; }
-    /// Get the Interpolation Mode.
+    /// Return the ImplementationMode.
     InterpolationMode GetInterpolationMode() const { return interpolationMode_; }
-    /// Get the movement Speed.
-    float GetSpeed() const { return speed_; }
-    /// Get the parent node's last position on the spline.
-    Vector3 GetPosition() const;
-
-    /// Add a Control Point to the end.
-    void Push(const Vector3& controlPoint);
-    /// Remove a Control Point from the end.
-    void Pop();
-    /// Get a point on the spline from 0.f to 1.f where 0 is the start and 1 is the end.
-    Vector3 GetPoint(float factor) const;
-
-    /// Move the parent node to the next position along the Spline based off the Speed value.
-    void Move(float timeStep);
-    /// Reset movement along the path.
-    void Reset();
-    /// Returns whether the movement along the Spline complete.
-    bool IsFinished() const { return traveled_ >= 1.0f; }
-
-    VariantVector GetControlPointsAttr() const;
-    void SetControlPointsAttr(VariantVector value);
+    /// Return the Knots of the Spline.
+    const VariantVector& GetKnots() const { return knots_; }
+    /// Return the Knot at the specific index.
+    Variant GetKnot(unsigned index) const { return knots_[index]; }
+    /// Return the T of the point of the Spline at f from 0.f - 1.f.
+    Variant GetPoint(float f) const;
+    /// Set the InterpolationMode of the Spline.
+    void SetInterpolationMode(InterpolationMode interpolationMode) { interpolationMode_ = interpolationMode; }
+    /// Set the Knots of the Spline.
+    void SetKnots(const Vector<Variant>& knots) { knots_ = knots; }
+    /// Set the Knot value of an existing Knot.
+    void SetKnot(const Variant& knot, unsigned index);
+    /// Add a Knot to the end of the Spline.
+    void AddKnot(const Variant& knot);
+    /// Add a Knot to the Spline at a specific index.
+    void AddKnot(const Variant& knot, unsigned index);
+    /// Remove the last Knot on the Spline.
+    void RemoveKnot() { knots_.Pop(); }
+    /// Remove the Knot at the specific index.
+    void RemoveKnot(unsigned index) { knots_.Erase(index); }
+    /// Clear the Spline.
+    void Clear() { knots_.Clear(); }
 
 private:
-    /// Calculate the length of the Spline. Used for movement calculations.
-    void CalculateLength();
-    /// Move the parent node along the Spline in Bezier Mode.
-    Vector3 BezierMove(const PODVector<Vector3>& controlPoints, float t) const;
+    /// Perform Bezier Interpolation on the Spline.
+    Variant BezierInterpolation(const Vector<Variant>& knots, float t) const;
+    /// LinearInterpolation between two Variants based on underlying type.
+    Variant LinearInterpolation(const Variant& lhs, const Variant& rhs, float t) const;
 
-    /// The Control Points of the Spline.
-    PODVector<Vector3> controlPoints_;
-    /// The Interpolation Mode of the Spline.
+    /// InterpolationMode.
     InterpolationMode interpolationMode_;
-    /// The Speed of movement along the Spline.
-    float speed_;
-
-    /// Amount of time that has elapsed while moving.
-    float elapsedTime_;
-    /// The fraction of the Spline covered.
-    float traveled_;
-    /// The length of the Spline.
-    float length_;
-    /// Whether the length needs to be recalculated. Will only be true after a push or pop.
-    bool dirty_;
+    /// Knots on the Spline.
+    VariantVector knots_;
 };
+
 }

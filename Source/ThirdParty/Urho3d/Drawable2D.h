@@ -28,7 +28,11 @@
 namespace Urho3D
 {
 
+class DrawableProxy2D;
 class VertexBuffer;
+
+/// Pixel size (equal 0.01f).
+extern URHO3D_API const float PIXEL_SIZE;
 
 /// Base class for 2D visible components.
 class URHO3D_API Drawable2D : public Drawable
@@ -52,8 +56,6 @@ public:
     /// Return whether a geometry update is necessary, and if it can happen in a worker thread.
     virtual UpdateGeometryType GetUpdateGeometryType();
 
-    /// Set Unit per pixel.
-    void SetUnitPerPixel(float unitPerPixel);
     /// Set sprite.
     void SetSprite(Sprite2D* sprite);
     /// Set material.
@@ -63,10 +65,10 @@ public:
     /// Set Z value.
     void SetZValue(float zValue);
 
-    /// Return unit per pixel.
-    float GetUnitPerPixel() const { return unitPerPixel_; }
     /// Return sprite.
     Sprite2D* GetSprite() const { return sprite_; }
+    /// Return texture.
+    Texture2D* GetTexture() const { return sprite_ ? sprite_->GetTexture() : 0; }
     /// Return material.
     Material* GetMaterial() const;
     /// Return blend mode.
@@ -76,6 +78,8 @@ public:
 
     /// Return all vertices.
     const Vector<Vertex2D>& GetVertices() const { return vertices_; }
+    /// Mark vertices and geometry dirty.
+    void MarkDirty(bool markWorldBoundingBoxDirty = true);
 
     /// Set sprite attribute.
     void SetSpriteAttr(ResourceRef value);
@@ -85,31 +89,27 @@ public:
     void SetMaterialAttr(ResourceRef value);
     /// Return material attribute.
     ResourceRef GetMaterialAttr() const;
+    /// Set blend mode attribute.
+    void SetBlendModeAttr(BlendMode mode);
 
 protected:
+    /// Handle node being assigned.
+    virtual void OnNodeSet(Node* node);
     /// Recalculate the world-space bounding box.
     virtual void OnWorldBoundingBoxUpdate();
     /// Update vertices.
     virtual void UpdateVertices() = 0;
-    /// Mark vertices dirty.
-    void MarkVerticesDirty() { verticesDirty_ = true; }
-    /// Mark geometry dirty.
-    void MarkGeometryDirty() { geometryDirty_ = true; }
-    /// Create a default material when a material is not specified.
-    void CreateDefaultMaterial();
     /// Update the material's properties (blend mode and texture).
     void UpdateMaterial();
 
-    /// Unit per pixel.
-    float unitPerPixel_;
+    /// Z value.
+    float zValue_;
     /// Sprite.
     SharedPtr<Sprite2D> sprite_;
     /// Material. If null, use a default material. If non-null, use a clone of this for updating the diffuse texture.
     SharedPtr<Material> material_;
     /// Blend mode.
     BlendMode blendMode_;
-    /// Z value.
-    float zValue_;
 
     /// Vertices.
     Vector<Vertex2D> vertices_;
@@ -121,7 +121,10 @@ protected:
     bool verticesDirty_;
     /// Geometry dirty flag.
     bool geometryDirty_;
+    /// Material update pending flag.
+    bool materialUpdatePending_;
+    /// Drawable proxy.
+    WeakPtr<DrawableProxy2D> drawableProxy_;
 };
 
 }
-

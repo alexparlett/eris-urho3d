@@ -90,14 +90,16 @@ public:
     {
     }
 
-    /// Test for equality with another color.
-    bool operator == (const Color& rhs) const { return Equals(r_, rhs.r_) && Equals(g_, rhs.g_) && Equals(b_, rhs.b_) && Equals(a_, rhs.a_); }
-    /// Test for inequality with another color.
-    bool operator != (const Color& rhs) const { return !Equals(r_, rhs.r_) || !Equals(g_, rhs.g_) || !Equals(b_, rhs.b_) || !Equals(a_, rhs.a_); }
+    /// Test for equality with another color without epsilon.
+    bool operator == (const Color& rhs) const { return r_ == rhs.r_ && g_ == rhs.g_ && b_ == rhs.b_ && a_ == rhs.a_; }
+    /// Test for inequality with another color without epsilon.
+    bool operator != (const Color& rhs) const { return r_ != rhs.r_ || g_ != rhs.g_ || b_ != rhs.b_ || a_ != rhs.a_; }
     /// Multiply with a scalar.
     Color operator * (float rhs) const { return Color(r_ * rhs, g_ * rhs, b_ * rhs, a_ * rhs); }
     /// Add a color.
     Color operator + (const Color& rhs) const { return Color(r_ + rhs.r_, g_ + rhs.g_, b_ + rhs.b_, a_ + rhs.a_); }
+    /// Substract a color.
+    Color operator - (const Color& rhs) const { return Color(r_ - rhs.r_, g_ - rhs.g_, b_ - rhs.b_, a_ - rhs.a_); }
     
     /// Add-assign a color.
     Color& operator += (const Color& rhs)
@@ -127,7 +129,6 @@ public:
     Vector3 ToVector3() const { return Vector3(r_, g_, b_); }
     /// Return RGBA as a four-dimensional vector.
     Vector4 ToVector4() const { return Vector4(r_, g_, b_, a_); }
-    /// Return RGB values as a Vector3.
 
     /// Return sum of RGB components.
     float SumRGB() const { return r_ + g_ + b_; }
@@ -164,7 +165,11 @@ public:
     void Invert(bool invertAlpha = false);
     /// Return linear interpolation of this color with another color.
     Color Lerp(const Color& rhs, float t) const;
-
+    /// Return color with absolute components.
+    Color Abs() const { return Color(Urho3D::Abs(r_), Urho3D::Abs(g_), Urho3D::Abs(b_), Urho3D::Abs(a_)); }
+    /// Test for equality with another color with epsilon.
+    bool Equals(const Color& rhs) const { return Urho3D::Equals(r_, rhs.r_) && Urho3D::Equals(g_, rhs.g_) && Urho3D::Equals(b_, rhs.b_) && Urho3D::Equals(a_, rhs.a_); }
+    
     /// Return as string.
     String ToString() const;
     
