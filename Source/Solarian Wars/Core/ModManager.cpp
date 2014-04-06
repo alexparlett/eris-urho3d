@@ -121,6 +121,7 @@ void ModManager::ModDeactivated(Urho3D::StringHash eventType, Urho3D::VariantMap
 
 void ModManager::ModOrderSaved(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
 {
+    GetSubsystem<ResourceCache>()->ReleaseAllResources();
     ActivateMods();
     Save();
 }
@@ -128,14 +129,7 @@ void ModManager::ModOrderSaved(Urho3D::StringHash eventType, Urho3D::VariantMap&
 void ModManager::Activate(const Urho3D::String& id, unsigned int priorty)
 {
     if (!activeMods_.Contains(id) && modDescriptors_.Contains(id))
-    {
-        // If low priority add to the end.
-        if (priorty == PRIORITY_LOW)
-            priorty = activeMods_.Size();
-
-        // Add it to mod order.
         activeMods_.Insert(priorty, id);
-    }
 }
 
 void ModManager::ScanDirectory(Urho3D::String& root)
@@ -177,7 +171,6 @@ void ModManager::ScanDirectory(Urho3D::String& root)
 void ModManager::ActivateMods()
 {
     ResourceCache* rc = GetSubsystem<ResourceCache>();
-    rc->ReleaseAllResources();
 
     for (unsigned i = activeMods_.Size() - 1; activeMods_.Size() > 0 && i >= 0; i--)
     {

@@ -13,8 +13,8 @@
 
 #include "IO\Mod.h"
 
-#define PRIORITY_LOW -1
-#define PRIORITY_HIGH 0
+#define PRIORITY_LOW M_MAX_UNSIGNED
+#define PRIORITY_HIGH M_MIN_UNSIGNED
 
 class ModManager : public Urho3D::Object
 {

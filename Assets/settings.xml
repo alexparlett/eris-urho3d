@@ -26,4 +26,7 @@
         <autosave>true</autosave>
         <frequency>15</frequency>
     </game>
+    <interface>
+        <scale>1.0</scale>
+    </interface>
 </settings>

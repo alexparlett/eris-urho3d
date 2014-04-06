@@ -71,7 +71,7 @@ void SolarianWars::Setup()
     engineParameters_["WindowResizable"] = !(settings->GetSetting("fullscreen", true).GetBool() && settings->GetSetting("borderless", false).GetBool());
     engineParameters_["VSync"] = settings->GetSetting("vsync", false).GetBool();
     engineParameters_["MultiSample"] = settings->GetSetting("antialiasing", 2).GetInt();
-    engineParameters_["Anisotropy"] = settings->GetSetting("anisotropy", 4).GetInt();
+    engineParameters_["TextureAnisotropy"] = settings->GetSetting("anisotropy", 4).GetInt();
     engineParameters_["TextureQuality"] = settings->GetSetting("quality", 2).GetInt();
     engineParameters_["MaterialQuality"] = settings->GetSetting("shaders", 2).GetInt();
     engineParameters_["Shadows"] = settings->GetSetting("shadows", 2).GetInt() > 0 ? true : false;
@@ -89,12 +89,12 @@ void SolarianWars::Start()
     GetSubsystem<ModManager>()->Load();
     GetSubsystem<Locale>()->Load(GetSubsystem<Settings>()->GetSetting("language", "enGB").GetString());
 
-    VariantMap createData;
+    VariantMap createData = GetEventDataMap();
     createData[StateCreated::P_STATE] = new LaunchState(context_);
     createData[StateCreated::P_ID] = StringHash("LaunchState");
     SendEvent(E_STATE_CREATED, createData);
 
-    VariantMap changeData;
+    VariantMap changeData = GetEventDataMap();
     changeData[StateChanged::P_ID] = StringHash("LaunchState");
     SendEvent(E_STATE_CHANGED, changeData);
 }
