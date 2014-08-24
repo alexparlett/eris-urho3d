@@ -22,12 +22,16 @@
 
 #pragma once
 
+#include "List.h"
+#include "Mutex.h"
 #include "Object.h"
 #include "StringUtils.h"
 
 namespace Urho3D
 {
 
+/// Fictional message level to indicate a stored raw message.
+static const int LOG_RAW = -1;
 /// Debug message level. By default only shown in debug mode.
 static const int LOG_DEBUG = 0;
 /// Informative message level.
@@ -40,6 +44,30 @@ static const int LOG_ERROR = 3;
 static const int LOG_NONE = 4;
 
 class File;
+
+/// Stored log message from another thread.
+struct StoredLogMessage
+{
+    /// Construct undefined.
+    StoredLogMessage()
+    {
+    }
+    
+    /// Construct with parameters.
+    StoredLogMessage(const String& message, int level, bool error) :
+        message_(message),
+        level_(level),
+        error_(error)
+    {
+    }
+    
+    /// Message text.
+    String message_;
+    /// Message level. -1 for raw messages.
+    int level_;
+    /// Error flag for raw messages.
+    bool error_;
+};
 
 /// Logging subsystem.
 class URHO3D_API Log : public Object
@@ -80,6 +108,13 @@ public:
     static void WriteRaw(const String& message, bool error = false);
 
 private:
+    /// Handle end of frame. Process the threaded log messages.
+    void HandleEndFrame(StringHash eventType, VariantMap& eventData);
+    
+    /// Mutex for threaded operation.
+    Mutex logMutex_;
+    /// Log messages from other threads.
+    List<StoredLogMessage> threadMessages_;
     /// Log file.
     SharedPtr<File> logFile_;
     /// Last log message.
@@ -94,17 +129,17 @@ private:
     bool quiet_;
 };
 
-#ifdef ENABLE_LOGGING
-#define LOGDEBUG(message) Log::Write(LOG_DEBUG, message)
-#define LOGINFO(message) Log::Write(LOG_INFO, message)
-#define LOGWARNING(message) Log::Write(LOG_WARNING, message)
-#define LOGERROR(message) Log::Write(LOG_ERROR, message)
-#define LOGRAW(message) Log::WriteRaw(message)
-#define LOGDEBUGF(format, ...) Log::Write(LOG_DEBUG, ToString(format, ##__VA_ARGS__))
-#define LOGINFOF(format, ...) Log::Write(LOG_INFO, ToString(format, ##__VA_ARGS__))
-#define LOGWARNINGF(format, ...) Log::Write(LOG_WARNING, ToString(format, ##__VA_ARGS__))
-#define LOGERRORF(format, ...) Log::Write(LOG_ERROR, ToString(format, ##__VA_ARGS__))
-#define LOGRAWF(format, ...) Log::WriteRaw(ToString(format, ##__VA_ARGS__))
+#ifdef URHO3D_LOGGING
+#define LOGDEBUG(message) Urho3D::Log::Write(Urho3D::LOG_DEBUG, message)
+#define LOGINFO(message) Urho3D::Log::Write(Urho3D::LOG_INFO, message)
+#define LOGWARNING(message) Urho3D::Log::Write(Urho3D::LOG_WARNING, message)
+#define LOGERROR(message) Urho3D::Log::Write(Urho3D::LOG_ERROR, message)
+#define LOGRAW(message) Urho3D::Log::WriteRaw(message)
+#define LOGDEBUGF(format, ...) Urho3D::Log::Write(Urho3D::LOG_DEBUG, ToString(format, ##__VA_ARGS__))
+#define LOGINFOF(format, ...) Urho3D::Log::Write(Urho3D::LOG_INFO, ToString(format, ##__VA_ARGS__))
+#define LOGWARNINGF(format, ...) Urho3D::Log::Write(Urho3D::LOG_WARNING, ToString(format, ##__VA_ARGS__))
+#define LOGERRORF(format, ...) Urho3D::Log::Write(Urho3D::LOG_ERROR, ToString(format, ##__VA_ARGS__))
+#define LOGRAWF(format, ...) Urho3D::Log::WriteRaw(ToString(format, ##__VA_ARGS__))
 #else
 #define LOGDEBUG(message)
 #define LOGINFO(message)

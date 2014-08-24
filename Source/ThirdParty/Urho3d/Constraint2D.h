@@ -55,6 +55,8 @@ public:
     void SetOtherBody(RigidBody2D* body);
     /// Set collide connected.
     void SetCollideConnected(bool collideConnected);
+    /// Set attached constriant (for gear).
+    void SetAttachedConstraint(Constraint2D* constraint);
 
     /// Return owner body.
     RigidBody2D* GetOwnerBody() const { return ownerBody_; }
@@ -62,12 +64,17 @@ public:
     RigidBody2D* GetOtherBody() const { return otherBody_; }
     /// Return collide connected.
     bool GetCollideConnected() const { return collideConnected_; }
+    /// Return attached constraint (for gear).
+    Constraint2D* GetAttachedConstraint() const { return attachedConstraint_; }
+
+    /// Return Box2D joint.
+    b2Joint* GetJoint() const { return joint_; }
 
 protected:
     /// Handle node being assigned.
     virtual void OnNodeSet(Node* node);
-    /// Create joint def.
-    virtual b2JointDef* CreateJointDef() { return 0; };
+    /// Return joint def.
+    virtual b2JointDef* GetJointDef() { return 0; };
     /// Recreate joint.
     void RecreateJoint();
     /// Initialize joint def.
@@ -83,6 +90,8 @@ protected:
     WeakPtr<RigidBody2D> otherBody_;
     /// Collide connected.
     bool collideConnected_;
+    /// Attached constraint.
+    WeakPtr<Constraint2D> attachedConstraint_;
 };
 
 }

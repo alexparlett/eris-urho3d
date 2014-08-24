@@ -48,11 +48,13 @@ public:
     /// Register object factory.
     static void RegisterObject(Context* context);
     
-    /// Load resource. Return true if successful.
-    virtual bool Load(Deserializer& source);
+    /// Load resource from stream. May be called from a worker thread. Return true if successful.
+    virtual bool BeginLoad(Deserializer& source);
     /// Save resource. Return true if successful. Only supports saving to a File.
     virtual bool Save(Serializer& dest) const;
     
+    /// Deserialize from a string. Return true if successful.
+    bool FromString(const String& source);
     /// Clear the document and create a root element.
     XMLElement CreateRoot(const String& name);
     

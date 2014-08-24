@@ -94,6 +94,8 @@ public:
     void SetBaseIndent(int baseIndent);
     /// Enable clearing of selection on defocus.
     void SetClearSelectionOnDefocus(bool enable);
+    /// Enable reacting to click end instead of click start for item selection. Default false.
+    void SetSelectOnClickEnd(bool enable);
 
     /// Expand item at index. Only has effect in hierarchy mode.
     void Expand(unsigned index, bool enable, bool recursive = false);
@@ -112,6 +114,8 @@ public:
     unsigned GetSelection() const;
     /// Return all selected indices.
     const PODVector<unsigned>& GetSelections() const { return selections_; }
+    /// Copy selected items to system clipboard. Currently only applicable to Text items.
+    void CopySelectedItemsToClipboard() const;
     /// Return first selected item, or null if none selected.
     UIElement* GetSelectedItem() const;
     /// Return all selected items.
@@ -126,20 +130,22 @@ public:
     bool GetMultiselect() const { return multiselect_; }
     /// Return whether selection is cleared on defocus.
     bool GetClearSelectionOnDefocus() const { return clearSelectionOnDefocus_; }
+    /// Return whether reacts to click end instead of click start for item selection.
+    bool GetSelectOnClickEnd() const { return selectOnClickEnd_; }
     /// Return whether hierarchy mode enabled.
     bool GetHierarchyMode() const { return hierarchyMode_; }
     /// Return base indent.
     int GetBaseIndent() const { return baseIndent_; }
+    /// Ensure full visibility of the item.
+    void EnsureItemVisibility(unsigned index);
+    /// Ensure full visibility of the item.
+    void EnsureItemVisibility(UIElement* item);
 
 protected:
     /// Filter implicit attributes in serialization process.
     virtual bool FilterImplicitAttributes(XMLElement& dest) const;
     /// Update selection effect when selection or focus changes.
     void UpdateSelectionEffect();
-    /// Ensure full visibility of the item.
-    void EnsureItemVisibility(unsigned index);
-    /// Ensure full visibility of the item.
-    void EnsureItemVisibility(UIElement* item);
 
     /// Current selection.
     PODVector<unsigned> selections_;
@@ -155,6 +161,8 @@ protected:
     SharedPtr<UIElement> overlayContainer_;
     /// Clear selection on defocus flag.
     bool clearSelectionOnDefocus_;
+    /// React to click end instead of click start flag.
+    bool selectOnClickEnd_;
 
 private:
     /// Handle global UI mouseclick to check for selection change.
@@ -165,6 +173,8 @@ private:
     void HandleItemFocusChanged(StringHash eventType, VariantMap& eventData);
     /// Handle focus changed.
     void HandleFocusChanged(StringHash eventType, VariantMap& eventData);
+    /// Update subscription to UI click events
+    void UpdateUIClickSubscription();
 };
 
 }

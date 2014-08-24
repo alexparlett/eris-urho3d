@@ -31,8 +31,11 @@ namespace Urho3D
 class URHO3D_API Vector3
 {
 public:
-    /// Construct undefined.
-    Vector3()
+    /// Construct a zero vector.
+    Vector3() :
+        x_(0.0f),
+        y_(0.0f),
+        z_(0.0f)
     {
     }
     
@@ -51,12 +54,28 @@ public:
         z_(z)
     {
     }
+
+    /// Construct from a two-dimensional vector (for Urho2D).
+    Vector3(const Vector2& vector) :
+        x_(vector.x_),
+        y_(vector.y_),
+        z_(0.0f)
+    {
+    }
     
     /// Construct from coordinates.
     Vector3(float x, float y, float z) :
         x_(x),
         y_(y),
         z_(z)
+    {
+    }
+
+    /// Construct from two-dimensional coordinates (for Urho2D).
+    Vector3(float x, float y) :
+        x_(x),
+        y_(y),
+        z_(0.0f)
     {
     }
     

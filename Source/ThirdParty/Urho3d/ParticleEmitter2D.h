@@ -27,7 +27,7 @@
 namespace Urho3D
 {
 
-class ParticleModel2D;
+class ParticleEffect2D;
 
 /// 2D particle.
  struct Particle2D
@@ -86,20 +86,22 @@ public:
 
     /// Handle enabled/disabled state change.
     virtual void OnSetEnabled();
-    /// Calculate distance and prepare batches for rendering. May be called from worker thread(s), possibly re-entrantly.
-    virtual void UpdateBatches(const FrameInfo& frame);
     /// Update before octree reinsertion. is called from a worker thread.
     virtual void Update(const FrameInfo& frame);
 
-    /// Set particle model.
-    void SetModel(ParticleModel2D* model);
-    /// Return particle model.
-    ParticleModel2D* GetModel() const;
+    /// Set particle effect.
+    void SetEffect(ParticleEffect2D* effect);
+    /// Set max particles.
+    void SetMaxParticles(unsigned maxParticles);
+    /// Return particle effect.
+    ParticleEffect2D* GetEffect() const;
+    /// Return max particles.
+    unsigned GetMaxParticles() const { return particles_.Size(); }
 
     /// Set particle model attr.
-    void SetParticleModelAttr(ResourceRef value);
+    void SetParticleEffectAttr(ResourceRef value);
     /// Return particle model attr.
-    ResourceRef GetParticleModelAttr() const;
+    ResourceRef GetParticleEffectAttr() const;
 
 private:
     /// Handle node being assigned.
@@ -115,19 +117,20 @@ private:
     /// Update particle.
     void UpdateParticle(Particle2D& particle, float timeStep, const Vector3& worldPosition, float worldScale);
 
-    /// Particle model.
-    SharedPtr<ParticleModel2D> model_;
+    /// Particle effect.
+    SharedPtr<ParticleEffect2D> effect_;
     /// Num particles.
     int numParticles_;
     /// Emission time.
     float emissionTime_;
-    /// Emmision rate
-    float emissionRate_;
     /// Emit particle time
     float emitParticleTime_;
     /// Particles.
     Vector<Particle2D> particles_;
+    /// Bounding box min point.
+    Vector3 boundingBoxMinPoint_;
+    /// Bounding box max point.
+    Vector3 boundingBoxMaxPoint_;
 };
 
 }
-

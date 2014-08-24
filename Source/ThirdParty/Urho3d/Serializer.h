@@ -82,6 +82,12 @@ public:
     bool WriteQuaternion(const Quaternion& value);
     /// Write a quaternion with each component packed in 16 bits.
     bool WritePackedQuaternion(const Quaternion& value);
+    /// Write a Matrix3.
+    bool WriteMatrix3(const Matrix3& value);
+    /// Write a Matrix3x4.
+    bool WriteMatrix3x4(const Matrix3x4& value);
+    /// Write a Matrix4.
+    bool WriteMatrix4(const Matrix4& value);
     /// Write a color.
     bool WriteColor(const Color& value);
     /// Write a bounding box.
@@ -92,8 +98,6 @@ public:
     bool WriteFileID(const String& value);
     /// Write a 32-bit StringHash.
     bool WriteStringHash(const StringHash& value);
-    /// Write a 16-bit ShortStringHash.
-    bool WriteShortStringHash(const ShortStringHash& value);
     /// Write a buffer, with size encoded as VLE.
     bool WriteBuffer(const PODVector<unsigned char>& buffer);
     /// Write a resource reference.

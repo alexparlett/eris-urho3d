@@ -65,6 +65,13 @@ EVENT(E_TARGETROTATION, TargetRotationChanged)
 {
 }
 
+/// Scene attribute animation update.
+EVENT(E_ATTRIBUTEANIMATIONUPDATE, AttributeAnimationUpdate)
+{
+    PARAM(P_SCENE, Scene);                  // Scene pointer
+    PARAM(P_TIMESTEP, TimeStep);            // float
+}
+
 /// Variable timestep scene post-update.
 EVENT(E_SCENEPOSTUPDATE, ScenePostUpdate)
 {
@@ -79,6 +86,8 @@ EVENT(E_ASYNCLOADPROGRESS, AsyncLoadProgress)
     PARAM(P_PROGRESS, Progress);            // float
     PARAM(P_LOADEDNODES, LoadedNodes);      // int
     PARAM(P_TOTALNODES, TotalNodes);        // int
+    PARAM(P_LOADEDRESOURCES, LoadedResources); // int
+    PARAM(P_TOTALRESOURCES, TotalResources);   // int
 };
 
 /// Asynchronous scene loading finished.

@@ -59,15 +59,9 @@ enum LightVSVariation
     LVS_DIR = 0,
     LVS_SPOT,
     LVS_POINT,
-    LVS_SPEC,
-    LVS_SPOTSPEC,
-    LVS_POINTSPEC,
     LVS_SHADOW,
     LVS_SPOTSHADOW,
     LVS_POINTSHADOW,
-    LVS_DIRSPECSHADOW,
-    LVS_SPOTSPECSHADOW,
-    LVS_POINTSPECSHADOW,
     MAX_LIGHT_VS_VARIATIONS
 };
 
@@ -193,8 +187,6 @@ public:
     void SetReuseShadowMaps(bool enable);
     /// Set maximum number of shadow maps created for one resolution. Only has effect if reuse of shadow maps is disabled.
     void SetMaxShadowMaps(int shadowMaps);
-    /// Set maximum number of directional light shadow map cascades. Affects the size of directional light shadow maps.
-    void SetMaxShadowCascades(int cascades);
     /// Set dynamic instancing on/off.
     void SetDynamicInstancing(bool enable);
     /// Set minimum number of instances required in a batch group to render as instanced.
@@ -209,6 +201,10 @@ public:
     void SetOcclusionBufferSize(int size);
     /// Set required screen size (1.0 = full screen) for occluders.
     void SetOccluderSizeThreshold(float screenSize);
+    /// Set shadow depth bias multiplier for mobile platforms (OpenGL ES.) No effect on desktops. Default 2.
+    void SetMobileShadowBiasMul(float mul);
+    /// Set shadow depth bias addition for mobile platforms (OpenGL ES.)  No effect on desktops. Default 0.0001.
+    void SetMobileShadowBiasAdd(float add);
     /// Force reload of shaders.
     void ReloadShaders();
     
@@ -240,8 +236,6 @@ public:
     bool GetReuseShadowMaps() const { return reuseShadowMaps_; }
     /// Return maximum number of shadow maps per resolution.
     int GetMaxShadowMaps() const { return maxShadowMaps_; }
-    /// Return maximum number of directional light shadow map cascades.
-    int GetMaxShadowCascades() const { return maxShadowCascades_; }
     /// Return whether dynamic instancing is in use.
     bool GetDynamicInstancing() const { return dynamicInstancing_; }
     /// Return minimum number of instances required in a batch group to render as instanced.
@@ -256,6 +250,10 @@ public:
     int GetOcclusionBufferSize() const { return occlusionBufferSize_; }
     /// Return occluder screen size threshold.
     float GetOccluderSizeThreshold() const { return occluderSizeThreshold_; }
+    /// Return shadow depth bias multiplier for mobile platforms.
+    float GetMobileShadowBiasMul() const { return mobileShadowBiasMul_; }
+    /// Return shadow depth bias addition for mobile platforms.
+    float GetMobileShadowBiasAdd() const { return mobileShadowBiasAdd_; }
     /// Return number of views rendered.
     unsigned GetNumViews() const { return numViews_; }
     /// Return number of primitives rendered.
@@ -272,8 +270,6 @@ public:
     unsigned GetNumOccluders(bool allViews = false) const;
     /// Return the default zone.
     Zone* GetDefaultZone() const { return defaultZone_; }
-    /// Return the directional light for fullscreen quad rendering.
-    Light* GetQuadDirLight() const { return quadDirLight_; }
     /// Return the default material.
     Material* GetDefaultMaterial() const { return defaultMaterial_; }
     /// Return the default range attenuation texture.
@@ -302,6 +298,8 @@ public:
     
     /// Return volume geometry for a light.
     Geometry* GetLightGeometry(Light* light);
+    /// Return quad geometry used in postprocessing.
+    Geometry* GetQuadGeometry();
     /// Allocate a shadow map. If shadow map reuse is disabled, a different map is returned each time.
     Texture2D* GetShadowMap(Light* light, Camera* camera, unsigned viewWidth, unsigned viewHeight);
     /// Allocate a rendertarget or depth-stencil texture for deferred rendering or postprocessing. Should only be called during actual rendering, not before.
@@ -375,8 +373,6 @@ private:
     SharedPtr<RenderPath> defaultRenderPath_;
     /// Default zone.
     SharedPtr<Zone> defaultZone_;
-    /// Directional light for drawing fullscreen quads.
-    SharedPtr<Light> quadDirLight_;
     /// Directional light quad geometry.
     SharedPtr<Geometry> dirLightGeometry_;
     /// Spot light volume geometry.
@@ -443,8 +439,6 @@ private:
     int shadowQuality_;
     /// Maximum number of shadow maps per resolution.
     int maxShadowMaps_;
-    /// Maximum number of directional light shadow cascades.
-    int maxShadowCascades_;
     /// Minimum number of instances required in a batch group to render as instanced.
     int minInstances_;
     /// Maximum triangles per object for instancing.
@@ -457,6 +451,10 @@ private:
     int occlusionBufferSize_;
     /// Occluder screen size threshold.
     float occluderSizeThreshold_;
+    /// Mobile platform shadow depth bias multiplier.
+    float mobileShadowBiasMul_;
+    /// Mobile platform shadow depth bias addition.
+    float mobileShadowBiasAdd_;
     /// Number of views.
     unsigned numViews_;
     /// Number of occlusion buffers in use.

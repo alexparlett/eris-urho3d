@@ -1,7 +1,7 @@
 /* include/SDL_config.h.  Generated from SDL_config.h.in by configure.  */
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2013 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2014 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -316,6 +316,9 @@
 /* #undef SDL_POWER_MACOSX */
 /* #undef SDL_POWER_BEOS */
 /* #undef SDL_POWER_HARDWIRED */
+
+/* Enable filesystem support */
+#define SDL_FILESYSTEM_UNIX 1
 
 /* Enable assembly routines */
 #define SDL_ASSEMBLY_ROUTINES 1

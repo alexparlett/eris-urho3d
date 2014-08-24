@@ -89,6 +89,12 @@ public:
     Quaternion ReadQuaternion();
     /// Read a quaternion with each component packed in 16 bits.
     Quaternion ReadPackedQuaternion();
+    /// Read a Matrix3.
+    Matrix3 ReadMatrix3();
+    /// Read a Matrix3x4.
+    Matrix3x4 ReadMatrix3x4();
+    /// Read a Matrix4.
+    Matrix4 ReadMatrix4();
     /// Read a color.
     Color ReadColor();
     /// Read a bounding box.
@@ -99,8 +105,6 @@ public:
     String ReadFileID();
     /// Read a 32-bit StringHash.
     StringHash ReadStringHash();
-    /// Read a 16-bit ShortStringHash.
-    ShortStringHash ReadShortStringHash();
     /// Read a buffer with size encoded as VLE.
     PODVector<unsigned char> ReadBuffer();
     /// Read a resource reference.

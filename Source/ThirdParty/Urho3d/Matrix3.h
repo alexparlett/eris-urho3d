@@ -31,8 +31,17 @@ namespace Urho3D
 class URHO3D_API Matrix3
 {
 public:
-    /// Construct undefined.
-    Matrix3()
+    /// Construct an identity matrix.
+    Matrix3() :
+        m00_(1.0f),
+        m01_(0.0f),
+        m02_(0.0f),
+        m10_(0.0f),
+        m11_(1.0f),
+        m12_(0.0f),
+        m20_(0.0f),
+        m21_(0.0f),
+        m22_(1.0f)
     {
     }
     
@@ -265,6 +274,8 @@ public:
     
     /// Return float data.
     const float* Data() const { return &m00_; }
+    /// Return as string.
+    String ToString() const;
     
     float m00_;
     float m01_;

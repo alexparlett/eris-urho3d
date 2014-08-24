@@ -61,10 +61,10 @@ struct CompressedLevel
         rows_(0)
     {
     }
-    
+
     /// Decompress to RGBA. The destination buffer required is width * height * 4 bytes. Return true if successful.
     bool Decompress(unsigned char* dest);
-    
+
     /// Compressed image data.
     unsigned char* data_;
     /// Compression format.
@@ -89,7 +89,7 @@ struct CompressedLevel
 class URHO3D_API Image : public Resource
 {
     OBJECT(Image);
-    
+
 public:
     /// Construct empty.
     Image(Context* context);
@@ -97,10 +97,10 @@ public:
     virtual ~Image();
     /// Register object factory.
     static void RegisterObject(Context* context);
-    
-    /// Load resource. Return true if successful.
-    virtual bool Load(Deserializer& source);
-    
+
+    /// Load resource from stream. May be called from a worker thread. Return true if successful.
+    virtual bool BeginLoad(Deserializer& source);
+
     /// Set 2D size and number of color components. Old image data will be destroyed and new data is undefined. Return true if successful.
     bool SetSize(int width, int height, unsigned components);
     /// Set 3D size and number of color components. Old image data will be destroyed and new data is undefined. Return true if successful.
@@ -111,6 +111,10 @@ public:
     void SetPixel(int x, int y, const Color& color);
     /// Set a 3D pixel.
     void SetPixel(int x, int y, int z, const Color& color);
+    /// Set a 2D pixel with an integer color. R component is in the 8 lowest bits.
+    void SetPixelInt(int x, int y, unsigned uintColor);
+    /// Set a 3D pixel with an integer color. R component is in the 8 lowest bits.
+    void SetPixelInt(int x, int y, int z, unsigned uintColor);
     /// Load as color LUT. Return true if successful.
     bool LoadColorLUT(Deserializer& source);
     /// Flip image vertically.
@@ -119,6 +123,8 @@ public:
     bool Resize(int width, int height);
     /// Clear the image with a color.
     void Clear(const Color& color);
+    /// Clear the image with an integer color. R component is in the 8 lowest bits.
+    void ClearInt(unsigned uintColor);
     /// Save in BMP format. Return true if successful.
     bool SaveBMP(const String& fileName) const;
     /// Save in PNG format. Return true if successful.
@@ -127,11 +133,15 @@ public:
     bool SaveTGA(const String& fileName) const;
     /// Save in JPG format with compression quality. Return true if successful.
     bool SaveJPG(const String& fileName, int quality) const;
-    
+
     /// Return a 2D pixel color.
     Color GetPixel(int x, int y) const;
     /// Return a 3D pixel color.
     Color GetPixel(int x, int y, int z) const;
+    /// Return a 2D pixel integer color. R component is in the 8 lowest bits.
+    unsigned GetPixelInt(int x, int y) const;
+    /// Return a 3D pixel integer color. R component is in the 8 lowest bits.
+    unsigned GetPixelInt(int x, int y, int z) const;
     /// Return a bilinearly sampled 2D pixel color. X and Y have the range 0-1.
     Color GetPixelBilinear(float x, float y) const;
     /// Return a trilinearly sampled 3D pixel color. X, Y and Z have the range 0-1.
@@ -156,15 +166,19 @@ public:
     SharedPtr<Image> GetNextLevel() const;
     /// Return a compressed mip level.
     CompressedLevel GetCompressedLevel(unsigned index) const;
+    /// Return subimage from the image or null if failed. Only RGB images are supported. Specify rect to only return partial image. You must free the subimage yourself.
+    Image* GetSubimage(const IntRect& rect) const;
     /// Return an SDL surface from the image, or null if failed. Only RGB images are supported. Specify rect to only return partial image. You must free the surface yourself.
     SDL_Surface* GetSDLSurface(const IntRect& rect = IntRect::ZERO) const;
-    
+    /// Precalculate the mip levels. Used by asynchronous texture loading.
+    void PrecalculateLevels();
+
 private:
     /// Decode an image using stb_image.
     static unsigned char* GetImageData(Deserializer& source, int& width, int& height, unsigned& components);
     /// Free an image file's pixel data.
     static void FreeImageData(unsigned char* pixelData);
-    
+
     /// Width.
     int width_;
     /// Height.
@@ -179,6 +193,8 @@ private:
     CompressedFormat compressedFormat_;
     /// Pixel data.
     SharedArrayPtr<unsigned char> data_;
+    /// Precalculated mip level image.
+    SharedPtr<Image> nextLevel_;
 };
 
 }

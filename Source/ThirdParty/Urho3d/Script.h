@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include "Mutex.h"
 #include "Object.h"
 
 class asIObjectType;
@@ -67,10 +68,10 @@ public:
     void SetDefaultScriptFile(ScriptFile* file);
     /// Set immediate mode scene.
     void SetDefaultScene(Scene* scene);
-    /// Set whether to execute engine console commands as script code. Default true.
+    /// Set whether to execute engine console commands as script code.
     void SetExecuteConsoleCommands(bool enable);
-    /// Print the whole script API (all registered classes, methods and properties) to the log. No-ops when ENABLE_LOGGING not defined.
-    void DumpAPI(File& output, DumpMode mode= DOXYGEN);
+    /// Print the whole script API (all registered classes, methods and properties) to the log. No-ops when URHO3D_LOGGING not defined.
+    void DumpAPI(DumpMode mode= DOXYGEN);
     /// Log a message from the script engine.
     void MessageCallback(const asSMessageInfo* msg);
     /// Handle a script exception.
@@ -92,6 +93,8 @@ public:
     void ClearObjectTypeCache();
     /// Query for an inbuilt object type by constant declaration. Can not be used for script types.
     asIObjectType* GetObjectType(const char* declaration);
+    /// Return the script module create/delete mutex.
+    Mutex& GetModuleMutex() { return moduleMutex_; }
 
 private:
     /// Increase script nesting level.
@@ -102,8 +105,8 @@ private:
     unsigned GetScriptNestingLevel() { return scriptNestingLevel_; }
     /// Return a script function/method execution context for the current execution nesting level.
     asIScriptContext* GetScriptFileContext();
-    /// Output a sanitated row of script API. No-ops when ENABLE_LOGGING not defined.
-    void OutputAPIRow(File& output, DumpMode mode, const String& row, bool removeReference = false, String separator = ";");
+    /// Output a sanitated row of script API. No-ops when URHO3D_LOGGING not defined.
+    void OutputAPIRow(DumpMode mode, const String& row, bool removeReference = false, String separator = ";");
     /// Handle a console command event.
     void HandleConsoleCommand(StringHash eventType, VariantMap& eventData);
 
@@ -119,9 +122,11 @@ private:
     Vector<asIScriptContext*> scriptFileContexts_;
     /// Search cache for inbuilt object types.
     HashMap<const char*, asIObjectType*> objectTypes_;
+    /// Script module create/delete mutex.
+    Mutex moduleMutex_;
     /// Current script execution nesting level.
     unsigned scriptNestingLevel_;
-    /// Flag for executing engine console commands as script code.
+    /// Flag for executing engine console commands as script code. Default to true.
     bool executeConsoleCommands_;
 };
 

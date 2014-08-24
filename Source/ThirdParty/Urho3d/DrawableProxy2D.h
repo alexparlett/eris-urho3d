@@ -27,11 +27,12 @@
 namespace Urho3D
 {
 
-class Texture2D;
 class Drawable2D;
+class IndexBuffer;
+class VertexBuffer;
 
-/// 2D drawable proxy components.
-class URHO3D_API DrawableProxy2D : public Component
+/// Proxy for 2D visible components.
+class URHO3D_API DrawableProxy2D : public Drawable
 {
     OBJECT(DrawableProxy2D);
 
@@ -40,24 +41,53 @@ public:
     DrawableProxy2D(Context* context);
     /// Destruct.
     ~DrawableProxy2D();
-    /// Register object factory. Drawable must be registered first.
+    /// Register object factory.
     static void RegisterObject(Context* context);
+
+    /// Calculate distance and prepare batches for rendering. May be called from worker thread(s), possibly re-entrantly.
+    virtual void UpdateBatches(const FrameInfo& frame);
+    /// Prepare geometry for rendering. Called from a worker thread if possible (no GPU update.)
+    virtual void UpdateGeometry(const FrameInfo& frame);
+    /// Return whether a geometry update is necessary, and if it can happen in a worker thread.
+    virtual UpdateGeometryType GetUpdateGeometryType();
 
     /// Add drawable.
     void AddDrawable(Drawable2D* drawable);
     /// Remove drawable.
     void RemoveDrawable(Drawable2D* drawable);
-    /// Return material.
-    Material* GetMaterial(Drawable2D* drawable);
+    /// Mark order dirty.
+    void MarkOrderDirty() { orderDirty_ = true; }
+    /// Check visibility.
+    bool CheckVisibility(Drawable2D* drawable) const;
 
-protected:
-    /// Create material by texture and blend mode.
-    Material* CreateMaterial(Texture2D* Texture, BlendMode blendMode) const;
+private:
+    /// Recalculate the world-space bounding box.
+    virtual void OnWorldBoundingBoxUpdate();
+    /// Handle view update begin event. Determine Drawable2D's and their batches here.
+    void HandleBeginViewUpdate(StringHash eventType, VariantMap& eventData);
+    /// Add batch.
+    void AddBatch(Material* material, unsigned indexStart, unsigned indexCount, unsigned vertexStart, unsigned vertexCount);
 
-    /// Drawables.
-    Vector<WeakPtr<Drawable2D> > drawables_;
+    /// Index buffer.
+    SharedPtr<IndexBuffer> indexBuffer_;
+    /// Vertex buffer.
+    SharedPtr<VertexBuffer> vertexBuffer_;
     /// Materials.
-    HashMap<Texture2D*, HashMap<int, SharedPtr<Material> > > materials_;
+    Vector<SharedPtr<Material> > materials_;
+    /// Geometries.
+    Vector<SharedPtr<Geometry> > geometries_;
+    /// Drawables.
+    PODVector<Drawable2D*> drawables_;
+    /// Order dirty.
+    bool orderDirty_;
+    /// Frustum for current frame.
+    const Frustum* frustum_;
+    /// Frustum bounding box for current frame.
+    BoundingBox frustumBoundingBox_;
+    /// Total index count for the current frame.
+    unsigned indexCount_;
+    /// Total vertex count for the current frame.
+    unsigned vertexCount_;
 };
 
 }

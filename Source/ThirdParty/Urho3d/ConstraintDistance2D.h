@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2008-2013 the Urho3D project.
+// Copyright (c) 2008-2014 the Urho3D project.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,46 +22,51 @@
 
 #pragma once
 
-#include "ArrayPtr.h"
-#include "Resource.h"
-
-struct lua_State;
+#include "Constraint2D.h"
 
 namespace Urho3D
 {
 
-/// Lua file.
-class URHO3D_API LuaFile : public Resource
+/// 2D distance constraint component.
+class URHO3D_API ConstraintDistance2D : public Constraint2D
 {
-    OBJECT(LuaFile);
+    OBJECT(ConstraintDistance2D);
 
 public:
     /// Construct.
-    LuaFile(Context* context);
+    ConstraintDistance2D(Context* scontext);
     /// Destruct.
-    virtual ~LuaFile();
+    virtual ~ConstraintDistance2D();
     /// Register object factory.
     static void RegisterObject(Context* context);
 
-    /// Load resource. Return true if successful.
-    virtual bool Load(Deserializer& source);
-    /// Save resource. Return true if successful.
-    virtual bool Save(Serializer& dest) const;
+    /// Set owner body anchor.
+    void SetOwnerBodyAnchor(const Vector2& anchor);
+    /// Set other body anchor.
+    void SetOtherBodyAnchor(const Vector2& anchor);
+    /// Set frequency Hz.
+    void SetFrequencyHz(float frequencyHz);
+    /// Set damping ratio.
+    void SetDampingRatio(float dampingRatio);
 
-    /// Load buffer as chunk.
-    bool LoadChunk(lua_State* luaState);
-    /// Load buffer as chunk and execute.
-    bool LoadAndExecute(lua_State* luaState);
+    /// Return owner body anchor.
+    const Vector2& GetOwnerBodyAnchor() const { return ownerBodyAnchor_; }
+    /// Return other body anchor.
+    const Vector2& GetOtherBodyAnchor() const { return otherBodyAnchor_; }
+    /// Return frequency Hz.
+    float GetFrequencyHz() const { return jointDef_.frequencyHz; }
+    /// Return damping ratio.
+    float GetDampingRatio() const { return jointDef_.dampingRatio; }
 
 private:
-    /// File size.
-    unsigned size_;
-    /// File data.
-    SharedArrayPtr<char> data_;
-    /// Has loaded.
-    bool hasLoaded_;
-    /// Has executed.
-    bool hasExecuted_;
+    /// Return joint def.
+    virtual b2JointDef* GetJointDef();
+
+    b2DistanceJointDef jointDef_;
+    /// Owner body anchor.
+    Vector2 ownerBodyAnchor_;
+    /// Other body anchor.
+    Vector2 otherBodyAnchor_;
 };
 
 }

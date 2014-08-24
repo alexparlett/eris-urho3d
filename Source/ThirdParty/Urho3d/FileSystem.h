@@ -22,11 +22,14 @@
 
 #pragma once
 
-#include "Object.h"
 #include "HashSet.h"
+#include "List.h"
+#include "Object.h"
 
 namespace Urho3D
 {
+
+class AsyncExecRequest;
 
 /// Return files.
 static const unsigned SCAN_FILES = 0x1;
@@ -50,10 +53,16 @@ public:
     bool SetCurrentDir(const String& pathName);
     /// Create a directory.
     bool CreateDir(const String& pathName);
+    /// Set whether to execute engine console commands as OS-specific system command.
+    void SetExecuteConsoleCommands(bool enable);
     /// Run a program using the command interpreter, block until it exits and return the exit code. Will fail if any allowed paths are defined.
-    int SystemCommand(const String& commandLine);
+    int SystemCommand(const String& commandLine, bool redirectStdOutToLog = false);
     /// Run a specific program, block until it exits and return the exit code. Will fail if any allowed paths are defined.
     int SystemRun(const String& fileName, const Vector<String>& arguments);
+    /// Run a program using the command interpreter asynchronously. Return a request ID or M_MAX_UNSIGNED if failed. The exit code will be posted together with the request ID in an AsyncExecFinished event. Will fail if any allowed paths are defined.
+    unsigned SystemCommandAsync(const String& commandLine);
+    /// Run a specific program asynchronously. Return a request ID or M_MAX_UNSIGNED if failed. The exit code will be posted together with the request ID in an AsyncExecFinished event. Will fail if any allowed paths are defined.
+    unsigned SystemRunAsync(const String& fileName, const Vector<String>& arguments);
     /// Open a file in an external program, with mode such as "edit" optionally specified. Will fail if any allowed paths are defined.
     bool SystemOpen(const String& fileName, const String& mode = String::EMPTY);
     /// Copy a file. Return true if successful.
@@ -62,11 +71,13 @@ public:
     bool Rename(const String& srcFileName, const String& destFileName);
     /// Delete a file. Return true if successful.
     bool Delete(const String& fileName);
-    /// Register a path as allowed to access. If no paths are registered, all are allowed.
+    /// Register a path as allowed to access. If no paths are registered, all are allowed. Registering allowed paths is considered securing the Urho3D execution environment: running programs and opening files externally through the system will fail afterward.
     void RegisterPath(const String& pathName);
     
     /// Return the absolute current working directory.
     String GetCurrentDir() const;
+    /// Return whether is executing engine console commands as OS-specific system command.
+    bool GetExecuteConsoleCommands() const { return executeConsoleCommands_; }
     /// Return whether paths have been registered.
     bool HasRegisteredPaths() const { return allowedPaths_.Size() > 0; }
     /// Check if a path is allowed to be accessed. If no paths are registered, all are allowed.
@@ -83,15 +94,27 @@ public:
     String GetProgramDir() const;
     /// Return the user documents directory.
     String GetUserDocumentsDir() const;
+    /// Return the application preferences directory.
+    String GetAppPreferencesDir(const String& org, const String& app) const;
     
 private:
     /// Scan directory, called internally.
     void ScanDirInternal(Vector<String>& result, String path, const String& startPath, const String& filter, unsigned flags, bool recursive) const;
+    /// Handle begin frame event to check for completed async executions.
+    void HandleBeginFrame(StringHash eventType, VariantMap& eventData);
+    /// Handle a console command event.
+    void HandleConsoleCommand(StringHash eventType, VariantMap& eventData);
     
     /// Allowed directories.
     HashSet<String> allowedPaths_;
     /// Cached program directory.
     mutable String programDir_;
+    /// Async execution queue.
+    List<AsyncExecRequest*> asyncExecQueue_;
+    /// Next async execution ID.
+    unsigned nextAsyncExecID_;
+    /// Flag for executing engine console commands as OS-specific system command. Default to true.
+    bool executeConsoleCommands_;
 };
 
 /// Split a full path to path, filename and extension. The extension will be converted to lowercase by default.

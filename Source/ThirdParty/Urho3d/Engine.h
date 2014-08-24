@@ -67,7 +67,7 @@ public:
     /// Dump profiling information to the log.
     void DumpProfiler();
     /// Dump information of all resources to the log.
-    void DumpResources();
+    void DumpResources(bool dumpFileName = false);
     /// Dump information of all memory allocations to the log. Supported in MSVC debug mode only.
     void DumpMemory();
     
@@ -126,7 +126,7 @@ private:
     unsigned maxInactiveFps_;
     /// Pause when minimized flag.
     bool pauseMinimized_;
-#ifdef ENABLE_TESTING
+#ifdef URHO3D_TESTING
     /// Time out counter for testing.
     long long timeOut_;
 #endif
@@ -134,10 +134,6 @@ private:
     bool autoExit_;
     /// Initialized flag.
     bool initialized_;
-#ifdef ANDROID
-    /// Exit requested flag for preventing multiple finish activity requests.
-    bool exitRequested_;
-#endif
     /// Exiting flag.
     bool exiting_;
     /// Headless mode flag.

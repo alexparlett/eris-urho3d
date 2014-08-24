@@ -26,6 +26,7 @@
 #include "Color.h"
 #include "HashSet.h"
 #include "Image.h"
+#include "Mutex.h"
 #include "Object.h"
 #include "Plane.h"
 #include "Rect.h"
@@ -99,6 +100,8 @@ public:
     void SetSRGB(bool enable);
     /// Set whether to flush the GPU command buffer to prevent multiple frames being queued and uneven frame timesteps. Default off, may decrease performance if enabled.
     void SetFlushGPU(bool enable);
+    /// Set allowed screen orientations as a space-separated list of "LandscapeLeft", "LandscapeRight", "Portrait" and "PortraitUpsideDown". Affects currently only iOS platform.
+    void SetOrientations(const String& orientations);
     /// Toggle between full screen and windowed mode. Return true if successful.
     bool ToggleFullscreen();
     /// Close the window.
@@ -111,7 +114,7 @@ public:
     void EndFrame();
     /// Clear any or all of rendertarget, depth buffer and stencil buffer.
     void Clear(unsigned flags, const Color& color = Color(0.0f, 0.0f, 0.0f, 0.0f), float depth = 1.0f, unsigned stencil = 0);
-    /// Resolve multisampled backbuffer to a texture rendertarget.
+    /// Resolve multisampled backbuffer to a texture rendertarget. The texture's size should match the viewport size.
     bool ResolveToTexture(Texture2D* destination, const IntRect& viewport);
     /// Draw non-indexed geometry.
     void Draw(PrimitiveType type, unsigned vertexStart, unsigned vertexCount);
@@ -252,6 +255,8 @@ public:
     bool GetSRGB() const { return sRGB_; }
     /// Return whether the GPU command buffer is flushed each frame.
     bool GetFlushGPU() const { return flushGPU_; }
+    /// Return allowed screen orientations.
+    const String& GetOrientations() const { return orientations_; }
     /// Return whether Direct3D device is lost, and can not yet render. This happens during fullscreen resolution switching.
     bool IsDeviceLost() const { return deviceLost_; }
     /// Return number of primitives drawn this frame.
@@ -437,6 +442,8 @@ private:
     /// Initialize texture unit mappings.
     void SetTextureUnitMappings();
     
+    /// Mutex for accessing the GPU objects vector from several threads.
+    Mutex gpuObjectMutex_;
     /// Implementation.
     GraphicsImpl* impl_;
     /// Window title.
@@ -583,6 +590,8 @@ private:
     mutable String lastShaderName_;
     /// Shader precache utility.
     SharedPtr<ShaderPrecache> shaderPrecache_;
+    /// Allowed screen orientations.
+    String orientations_;
 };
 
 /// Register Graphics library objects.

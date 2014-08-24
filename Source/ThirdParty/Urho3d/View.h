@@ -135,6 +135,8 @@ public:
     Octree* GetOctree() const { return octree_; }
     /// Return camera.
     Camera* GetCamera() const { return camera_; }
+    /// Return information of the frame being rendered.
+    const FrameInfo& GetFrameInfo() const { return frame_; }
     /// Return the rendertarget. 0 if using the backbuffer.
     RenderSurface* GetRenderTarget() const { return renderTarget_; }
     /// Return geometry objects.
@@ -145,6 +147,12 @@ public:
     const PODVector<Light*>& GetLights() const { return lights_; }
     /// Return light batch queues.
     const Vector<LightBatchQueue>& GetLightQueues() const { return lightQueues_; }
+    /// Set global (per-frame) shader parameters. Called by Batch and internally by View.
+    void SetGlobalShaderParameters();
+    /// Set camera-specific shader parameters. Called by Batch and internally by View.
+    void SetCameraShaderParameters(Camera* camera, bool setProjectionMatrix, bool overrideView);
+    /// Set G-buffer offset and inverse size shader parameters. Called by Batch and internally by View.
+    void SetGBufferShaderParameters(const IntVector2& texSize, const IntRect& viewRect);
     
 private:
     /// Query the octree for drawable objects.
@@ -276,7 +284,7 @@ private:
     IntRect viewRect_;
     /// Viewport size.
     IntVector2 viewSize_;
-    /// Rendertarget size.
+    /// Destination rendertarget size.
     IntVector2 rtSize_;
     /// Information of the frame being rendered.
     FrameInfo frame_;
@@ -302,6 +310,8 @@ private:
     bool deferredAmbient_;
     /// Forward light base pass optimization flag. If in use, combine the base pass and first light for all opaque objects.
     bool useLitBase_;
+    /// Has scene passes flag. If no scene passes, view can be defined without a valid scene or camera to only perform quad rendering.
+    bool hasScenePasses_;
     /// Renderpath.
     RenderPath* renderPath_;
     /// Per-thread octree query results.

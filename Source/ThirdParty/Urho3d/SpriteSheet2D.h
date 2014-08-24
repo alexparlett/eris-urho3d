@@ -29,6 +29,7 @@ namespace Urho3D
 
 class Sprite2D;
 class Texture2D;
+class XMLFile;
 
 /// Sprite sheet.
 class URHO3D_API SpriteSheet2D : public Resource
@@ -43,19 +44,17 @@ public:
     /// Register object factory.
     static void RegisterObject(Context* context);
 
-    /// Load resource. Return true if successful.
-    virtual bool Load(Deserializer& source);
-    /// Save resource. Return true if successful.
-    virtual bool Save(Serializer& dest) const;
+    /// Load resource from stream. May be called from a worker thread. Return true if successful.
+    virtual bool BeginLoad(Deserializer& source);
+    /// Finish resource loading. Always called from the main thread. Return true if successful.
+    virtual bool EndLoad();
 
     /// Return texture.
     Texture2D* GetTexture() const { return texture_; }
     /// Return sprite.
     Sprite2D* GetSprite(const String& name) const;
     /// Define sprite.
-    void DefineSprite(const String& name, const IntRect& rectangle, const Vector2& hotSpot = Vector2(0.5f, 0.5f));
-    /// Update sprite.
-    void UpdateSprite(const String& name, const IntRect& rectangle, const Vector2& hotSpot = Vector2(0.5f, 0.5f));
+    void DefineSprite(const String& name, const IntRect& rectangle, const Vector2& hotSpot = Vector2(0.5f, 0.5f), const IntVector2& offset = IntVector2::ZERO);
 
     /// Return sprite mapping.
     const HashMap<String, SharedPtr<Sprite2D> >& GetSpriteMapping() const { return spriteMapping_; }
@@ -65,6 +64,10 @@ private:
     SharedPtr<Texture2D> texture_;
     /// Sprite mapping.
     HashMap<String, SharedPtr<Sprite2D> > spriteMapping_;
+    /// XML file used while loading.
+    SharedPtr<XMLFile> loadXMLFile_;
+    /// Texture name used while loading.
+    String loadTextureName_;
 };
 
 }

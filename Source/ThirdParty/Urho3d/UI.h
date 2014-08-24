@@ -74,7 +74,7 @@ public:
     /// Save a UI layout to an XML file. Return true if successful.
     bool SaveLayout(Serializer& dest, UIElement* element);
     /// Set clipboard text.
-    void SetClipBoardText(const String& text);
+    void SetClipboardText(const String& text);
     /// Set UI element double click interval in seconds.
     void SetDoubleClickInterval(float interval);
     /// Set UI drag event start interval in seconds.
@@ -88,14 +88,14 @@ public:
     /// Set whether mouse wheel can control also a non-focused element.
     void SetNonFocusedMouseWheel(bool nonFocusedMouseWheel);
     /// Set whether to use system clipboard. Default false.
-    void SetUseSystemClipBoard(bool enable);
+    void SetUseSystemClipboard(bool enable);
     /// Set whether to show the on-screen keyboard (if supported) when a %LineEdit is focused. Default true on mobile devices.
     void SetUseScreenKeyboard(bool enable);
     /// Set whether to use mutable (eraseable) glyphs to ensure a font face never expands to more than one texture. Default false.
     void SetUseMutableGlyphs(bool enable);
     /// Set whether to force font autohinting instead of using FreeType's TTF bytecode interpreter.
     void SetForceAutoHint(bool enable);
-    
+
     /// Return root UI element.
     UIElement* GetRoot() const { return rootElement_; }
     /// Return root modal element.
@@ -115,7 +115,7 @@ public:
     /// Return currently dragged element.
     UIElement* GetDragElement() const;
     /// Return clipboard text.
-    const String& GetClipBoardText() const;
+    const String& GetClipboardText() const;
     /// Return UI element double click interval in seconds.
     float GetDoubleClickInterval() const { return doubleClickInterval_; }
     /// Return UI drag start event interval in seconds.
@@ -129,7 +129,7 @@ public:
     /// Return whether mouse wheel can control also a non-focused element.
     bool IsNonFocusedMouseWheel() const { return nonFocusedMouseWheel_; }
     /// Return whether is using the system clipboard.
-    bool GetUseSystemClipBoard() const { return useSystemClipBoard_; }
+    bool GetUseSystemClipboard() const { return useSystemClipboard_; }
     /// Return whether focusing a %LineEdit will show the on-screen keyboard.
     bool GetUseScreenKeyboard() const { return useScreenKeyboard_; }
     /// Return whether is using mutable (eraseable) glyphs for fonts.
@@ -168,8 +168,8 @@ private:
     void ProcessClickEnd(const IntVector2& cursorPos, int button, int buttons, int qualifiers, Cursor* cursor, bool cursorVisible);
     /// Handle mouse or touch move.
     void ProcessMove(const IntVector2& cursorPos, int buttons, int qualifiers, Cursor* cursor, bool cursorVisible);
-    /// Send a UI element drag event.
-    void SendDragEvent(StringHash eventType, UIElement* element, const IntVector2& screenPos);
+    /// Send a UI element drag or hover begin event.
+    void SendDragOrHoverEvent(StringHash eventType, UIElement* element, const IntVector2& screenPos);
     /// Send a UI click or double click event.
     void SendClickEvent(StringHash eventType, UIElement* element, const IntVector2& pos, int button, int buttons, int qualifiers);
     /// Handle screen mode event.
@@ -190,8 +190,8 @@ private:
     void HandleTouchMove(StringHash eventType, VariantMap& eventData);
     /// Handle keypress event.
     void HandleKeyDown(StringHash eventType, VariantMap& eventData);
-    /// Handle character event.
-    void HandleChar(StringHash eventType, VariantMap& eventData);
+    /// Handle text input event.
+    void HandleTextInput(StringHash eventType, VariantMap& eventData);
     /// Handle frame begin event.
     void HandleBeginFrame(StringHash eventType, VariantMap& eventData);
     /// Handle logic post-update event.
@@ -211,7 +211,7 @@ private:
     SharedPtr<Cursor> cursor_;
     /// UI element being dragged.
     WeakPtr<UIElement> dragElement_;
-    /// Currently focused element
+    /// Currently focused element.
     WeakPtr<UIElement> focusElement_;
     /// UI rendering batches.
     PODVector<UIBatch> batches_;
@@ -252,7 +252,7 @@ private:
     /// Flag to switch mouse wheel event to be sent to non-focused element at cursor.
     bool nonFocusedMouseWheel_;
     /// Flag for using operating system clipboard instead of internal.
-    bool useSystemClipBoard_;
+    bool useSystemClipboard_;
     /// Flag for showing the on-screen keyboard on focusing a %LineEdit.
     bool useScreenKeyboard_;
     /// Flag for using mutable (eraseable) font glyphs.
@@ -274,6 +274,8 @@ private:
     WeakPtr<UIElement> clickElement_;
     /// UI element last clicked for tracking double clicks.
     WeakPtr<UIElement> doubleClickElement_;
+    /// Currently hovered elements.
+    HashMap<WeakPtr<UIElement>, bool> hoveredElements_;
 };
 
 /// Register UI library objects.

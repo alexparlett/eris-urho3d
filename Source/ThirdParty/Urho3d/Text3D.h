@@ -54,9 +54,9 @@ public:
     /// Return whether a geometry update is necessary, and if it can happen in a worker thread.
     virtual UpdateGeometryType GetUpdateGeometryType();
     
-    /// Set font and font size. Return true if successful.
+    /// Set font and font size and use signed distance field font. Return true if successful.
     bool SetFont(const String& fontName, int size = DEFAULT_FONT_SIZE);
-    /// Set font and font size. Return true if successful.
+    /// Set font and font size and use signed distance field font. Return true if successful.
     bool SetFont(Font* font, int size = DEFAULT_FONT_SIZE);
     /// Set material.
     void SetMaterial(Material* material);
@@ -88,8 +88,8 @@ public:
     void SetColor(Corner corner, const Color& color);
     /// Set opacity.
     void SetOpacity(float opacity);
-    /// Set whether to face the camera automatically.
-    void SetFaceCamera(bool enable);
+    /// Set how the text should rotate in relation to the camera. Default is to not rotate (FC_NONE.)
+    void SetFaceCameraMode(FaceCameraMode mode);
     
     /// Return font.
     Font* GetFont() const;
@@ -133,8 +133,8 @@ public:
     const Color& GetColor(Corner corner) const;
     /// Return opacity.
     float GetOpacity() const;
-    /// Return whether faces the camera automatically.
-    bool GetFaceCamera() const { return faceCamera_; }
+    /// Return how the text rotates in relation to the camera.
+    FaceCameraMode GetFaceCameraMode() const { return faceCameraMode_; }
     
     /// Set font attribute.
     void SetFontAttr(ResourceRef value);
@@ -177,8 +177,8 @@ private:
     PODVector<float> uiVertexData_;
     /// Custom world transform for facing the camera automatically.
     Matrix3x4 customWorldTransform_;
-    /// Face camera flag.
-    bool faceCamera_;
+    /// Text rotation mode in relation to the camera.
+    FaceCameraMode faceCameraMode_;
     /// Text needs update flag.
     bool textDirty_;
     /// Geometry dirty flag.

@@ -57,8 +57,10 @@ public:
     /// Register object factory.
     static void RegisterObject(Context* context);
 
-    /// Load resource. Return true if successful.
-    virtual bool Load(Deserializer& source);
+    /// Load resource from stream. May be called from a worker thread. Return true if successful.
+    virtual bool BeginLoad(Deserializer& source);
+    /// Finish resource loading. Always called from the main thread. Return true if successful.
+    virtual bool EndLoad();
 
     /// Set texture.
     void SetTexture(Texture2D* texture);
@@ -66,6 +68,8 @@ public:
     void SetRectangle(const IntRect& rectangle);
     /// Set hot spot.
     void SetHotSpot(const Vector2& hotSpot);
+    /// Set offset.
+    void SetOffset(const IntVector2& offset);
     /// Set sprite sheet.
     void SetSpriteSheet(SpriteSheet2D* spriteSheet);
 
@@ -75,6 +79,8 @@ public:
     const IntRect& GetRectangle() const { return rectangle_; }
     /// Return hot spot.
     const Vector2& GetHotSpot() const { return hotSpot_; }
+    /// Return offset.
+    const IntVector2& GetOffset() const { return offset_; }
     /// Return sprite sheet.
     SpriteSheet2D* GetSpriteSheet() const { return spriteSheet_; }
 
@@ -85,8 +91,12 @@ private:
     IntRect rectangle_;
     /// Hot spot.
     Vector2 hotSpot_;
+    /// Offset.
+    IntVector2 offset_;
     /// Sprite sheet.
     WeakPtr<SpriteSheet2D> spriteSheet_;
+    /// Texture used while loading.
+    SharedPtr<Texture2D> loadTexture_;
 };
 
 }

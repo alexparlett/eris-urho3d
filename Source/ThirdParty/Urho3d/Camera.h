@@ -30,6 +30,11 @@
 namespace Urho3D
 {
 
+static const float DEFAULT_NEARCLIP = 0.1f;
+static const float DEFAULT_FARCLIP = 1000.0f;
+static const float DEFAULT_CAMERA_FOV = 45.0f;
+static const float DEFAULT_ORTHOSIZE = 20.0f;
+
 static const unsigned VO_NONE = 0x0;
 static const unsigned VO_LOW_MATERIAL_QUALITY = 0x1;
 static const unsigned VO_DISABLE_SHADOWS = 0x2;
@@ -55,13 +60,13 @@ public:
     void SetNearClip(float nearClip);
     /// Set far clip distance.
     void SetFarClip(float farClip);
-    /// Set field of view.
+    /// Set vertical field of view in degrees.
     void SetFov(float fov);
     /// Set orthographic mode view uniform size.
     void SetOrthoSize(float orthoSize);
-    /// Set orthographic mode view size.
+    /// Set orthographic mode view non-uniform size. Disables the auto aspect ratio -mode.
     void SetOrthoSize(const Vector2& orthoSize);
-    /// Set aspect ratio.
+    /// Set aspect ratio manually. Disables the auto aspect ratio -mode.
     void SetAspectRatio(float aspectRatio);
     /// Set polygon fill mode to use when rendering a scene.
     void SetFillMode(FillMode mode);
@@ -75,7 +80,7 @@ public:
     void SetViewOverrideFlags(unsigned flags);
     /// Set orthographic mode enabled/disabled.
     void SetOrthographic(bool enable);
-    /// Set automatic aspect ratio based on viewport dimensions.
+    /// Set automatic aspect ratio based on viewport dimensions. Enabled by default.
     void SetAutoAspectRatio(bool enable);
     /// Set projection offset. It needs to be calculated as (offset in pixels) / (viewport dimensions.)
     void SetProjectionOffset(const Vector2& offset);
@@ -94,7 +99,7 @@ public:
     float GetFarClip() const { return farClip_; }
     /// Return near clip distance.
     float GetNearClip() const;
-    /// Return field of view.
+    /// Return vertical field of view in degrees.
     float GetFov() const { return fov_; }
     /// Return orthographic mode size.
     float GetOrthoSize() const { return orthoSize_; } 
@@ -132,7 +137,7 @@ public:
     Frustum GetViewSpaceFrustum() const;
     /// Return split frustum in view space.
     Frustum GetViewSpaceSplitFrustum(float nearClip, float farClip) const;
-    /// Return ray corresponding to normalized screen coordinates (0.0 to 1.0.)
+    /// Return ray corresponding to normalized screen coordinates (0.0 - 1.0).
     Ray GetScreenRay(float x, float y) const;
     // Convert a world space point to normalized screen coordinates (0.0 - 1.0).
     Vector2 WorldToScreenPoint(const Vector3& worldPos) const;
@@ -158,11 +163,15 @@ public:
     float GetDistanceSquared(const Vector3& worldPos) const;
     /// Return a scene node's LOD scaled distance.
     float GetLodDistance(float distance, float scale, float bias) const;
+    /// Return a world rotation for facing a camera on certain axes based on the existing world rotation.
+    Quaternion GetFaceCameraRotation(const Vector3& position, const Quaternion& rotation, FaceCameraMode mode);
     /// Get effective world transform for matrix and frustum calculations including reflection but excluding node scaling.
     Matrix3x4 GetEffectiveWorldTransform() const;
     /// Return if projection parameters are valid for rendering and raycasting.
     bool IsProjectionValid() const;
     
+    /// Set aspect ratio without disabling the "auto aspect ratio" mode. Called internally by View.
+    void SetAspectRatioInternal(float aspectRatio);
     /// Set reflection plane attribute.
     void SetReflectionPlaneAttr(Vector4 value);
     /// Return reflection plane attribute.
