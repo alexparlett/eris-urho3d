@@ -33,7 +33,7 @@ void ModManager::Load()
     ScanDirectory(String("Mods/"));
     ScanDirectory(sets->GetSetting("userdir").GetString() + "Mods/");
 
-    String orderFilename = sets->GetSetting("userdir").GetString() + "modorder.xml";
+    String orderFilename = sets->GetSetting("userdir").GetString() + "mods.xml";
     if (fs->FileExists(orderFilename))
     {
         File orderFile(context_, orderFilename);
@@ -63,7 +63,7 @@ void ModManager::Load()
 
 void ModManager::Save()
 {
-    String orderFilename = GetSubsystem<FileSystem>()->GetUserDocumentsDir() + "My Games/Solarian Wars/modorder.xml";
+    String orderFilename = sets->GetSetting("userdir").GetString() + "mods.xml";
     File orderFile(context_, orderFilename, FILE_WRITE);
     if (orderFile.IsOpen())
     {
@@ -170,8 +170,6 @@ void ModManager::ScanDirectory(Urho3D::String& root)
 
 void ModManager::ActivateMods()
 {
-    ResourceCache* rc = GetSubsystem<ResourceCache>();
-
     for (unsigned i = activeMods_.Size() - 1; activeMods_.Size() > 0 && i >= 0; i--)
     {
         HandlePatches(modDescriptors_[activeMods_[i]].GetDirectory() + "/Patch/");

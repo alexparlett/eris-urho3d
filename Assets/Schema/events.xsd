@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="events" elementFormDefault="qualified" xmlns:c="common" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="common" schemaLocation="common.xsd" />
+  <xs:element name="events">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="event">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="name" type="xs:string" />
+              <xs:element name="description" type="xs:string" />
+              <xs:element name="group" type="xs:string" />
+              <xs:element name="script" type="c:file" />
+            </xs:sequence>
+          </xs:complexType>          
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

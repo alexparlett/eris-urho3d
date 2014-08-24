@@ -8,6 +8,11 @@
 #include "IO/Locale.h"
 #include "IO/Settings.h"
 
+#include "GamePlay/Map/Types/Galaxy.h"
+#include "GamePlay/Map/Types/System.h"
+
+#include "GamePlay/Map/Properties/SystemProperties.h"
+
 #include <APITemplates.h>
 
 using namespace Urho3D;
@@ -35,6 +40,11 @@ static void RegisterSettings(asIScriptEngine* engine)
     engine->RegisterGlobalFunction("Settings@+ get_settings()", asFUNCTION(GetSettings), asCALL_CDECL);
 }
 
+static Galaxy* GetGalaxy()
+{
+	return GetScriptContext()->GetSubsystem<Scene>()->GetComponent<Galaxy>();
+}
+
 static void RegisterLocale(asIScriptEngine* engine)
 {
     RegisterObject<Locale>(engine, "Locale");
@@ -44,8 +54,27 @@ static void RegisterLocale(asIScriptEngine* engine)
     engine->RegisterGlobalFunction("Locale@+ get_locale()", asFUNCTION(GetLocale), asCALL_CDECL);
 }
 
+static void RegisterProperties(asIScriptEngine* engine)
+{
+	RegisterRefCounted<SystemProperties>(engine, "SystemProperties");
+	engine->RegisterObjectProperty("SystemProperties", "name_", sizeof(Urho3D::String));
+	engine->RegisterObjectProperty("SystemProperties", "position_", sizeof(Urho3D::Vector3));
+}
+
+static void RegisterTypes(asIScriptEngine* engine)
+{
+	RegisterComponent<Galaxy>(engine, "Galaxy");
+	engine->RegisterObjectMethod("Galaxy", "System@+ CreateSystem(const SystemProperties&in properties)", asMETHOD(Galaxy, CreateSystem), asCALL_THISCALL);
+	engine->RegisterObjectMethod("Galaxy", "System@+ GetSystem(const String&in name) const", asMETHOD(Galaxy, GetSystem), asCALL_THISCALL);
+	engine->RegisterGlobalFunction("Galaxy@+ get_galaxy()", asFUNCTION(GetGalaxy), asCALL_CDECL);
+
+	RegisterComponent<System>(engine, "System");
+}
+
 void RegisterScriptAPI(asIScriptEngine* engine)
 {
     RegisterLocale(engine);
     RegisterSettings(engine);
+	RegisterProperties(engine);
+	RegisterTypes(engine);
 }

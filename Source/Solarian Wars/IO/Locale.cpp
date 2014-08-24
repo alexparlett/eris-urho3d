@@ -7,6 +7,7 @@
 #include "Locale.h"
 #include "Settings.h"
 
+#include <APITemplates.h>
 #include <ResourceCache.h>
 #include <XMLFile.h>
 #include <Log.h>

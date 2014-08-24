@@ -8,6 +8,10 @@
 
 #include "Core\State.h"
 
+#include <Camera.h>
+#include <Scene.h>
+#include <Ptr.h>
+
 class GameState : public State
 {
     OBJECT(GameState)
@@ -21,5 +25,8 @@ public:
     virtual void Stop ();
     virtual void Destroy ();
 
+private:
+	Urho3D::SharedPtr<Urho3D::Scene> scene_;
+	Urho3D::SharedPtr<Urho3D::Node> camera_
 };
 
