@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mod id="example_mod">
+<mod id="example_mod" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../../Schema/mod.xsd">
     <name>Example Mod</name>
     <description>This is an example mod.</description>
     <author>Azalrion</author>

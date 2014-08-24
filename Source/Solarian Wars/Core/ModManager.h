@@ -14,7 +14,6 @@
 #include "IO\Mod.h"
 
 #define PRIORITY_LOW -1
-#define PRIORITY_HIGH 0
 
 class ModManager : public Urho3D::Object
 {

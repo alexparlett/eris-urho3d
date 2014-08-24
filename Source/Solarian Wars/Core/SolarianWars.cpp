@@ -49,14 +49,6 @@ void SolarianWars::Setup()
     ModManager* mm = GetSubsystem<ModManager>();
     Locale* locale = GetSubsystem<Locale>();
 
-    // API Builds exit immediately after dumping the script api
-    if (GetArguments().Contains("-api"))
-    {
-        File output(context_, GetSubsystem<Settings>()->GetSetting("userdir").GetString() + "api.doxy", FILE_WRITE);
-        GetSubsystem<Script>()->DumpAPI(output);
-        exit(EXIT_SUCCESS);
-    }
-
     input->SetMouseVisible(true);
     cache->SetAutoReloadResources(false);
 
@@ -82,15 +74,13 @@ void SolarianWars::Setup()
     engineParameters_["LowQualityShadows"] = settings->GetSetting("shadows", 2).GetInt() == 1 ? true : false;
 
     audio->SetMasterGain(SoundType::SOUND_MASTER, settings->GetSetting("master", 1.0f).GetFloat());
-    audio->SetMasterGain(SoundType::SOUND_AMBIENT, settings->GetSetting("ambient", 0.75f).GetFloat());
-    audio->SetMasterGain(SoundType::SOUND_MUSIC, settings->GetSetting("music", 0.75f).GetFloat());
-    audio->SetMasterGain(SoundType::SOUND_EFFECT, settings->GetSetting("effects", 0.75f).GetFloat());
-    audio->SetMasterGain(SoundType::SOUND_UI, settings->GetSetting("interface", 0.75f).GetFloat());
+    audio->SetMasterGain(SoundType::SOUND_AMBIENT, settings->GetSetting("ambient", 0.6f).GetFloat());
+    audio->SetMasterGain(SoundType::SOUND_MUSIC, settings->GetSetting("music", 0.4f).GetFloat());
+    audio->SetMasterGain(SoundType::SOUND_EFFECT, settings->GetSetting("effects", 0.6f).GetFloat());
+    audio->SetMasterGain(SoundType::SOUND_UI, settings->GetSetting("interface", 0.6f).GetFloat());
 
     mm->Load();
     locale->Load(settings->GetSetting("language", "enGB").GetString());
-
-
 }
 
 void SolarianWars::Start()
