@@ -1,8 +1,10 @@
 #include "Galaxy.h"
 
 #include <Context.h>
+#include <ScriptFile.h>
 #include <ScriptInstance.h>
 #include <ResourceCache.h>
+#include <Log.h>
 
 using namespace Urho3D;
 
@@ -20,16 +22,20 @@ System* Galaxy::CreateSystem(const SystemProperties& properties)
 {
 	Scene* scene = GetScene();
 
-	Node* systemNode = scene->CreateChild(properties.GetName());
-	systemNode->SetPosition(properties.GetPosition());
+	Node* systemNode = scene->CreateChild(properties.name_);
+	systemNode->SetPosition(properties.position_);
 
 	System* system = systemNode->CreateComponent<System>();
-	systems_[properties.GetName()] = SharedPtr<System>(system);
+	systems_[properties.name_] = SharedPtr<System>(system);
 
 	ScriptInstance* script = systemNode->CreateComponent<ScriptInstance>();
-	script->CreateObject(GetSubsystem<ResourceCache>()->GetResource<ScriptFile>("Scripts/Controllers/SystemController.as"), "SystemController");
+    ScriptFile* file = GetSubsystem<ResourceCache>()->GetResource<ScriptFile>("Scripts/Controllers/SystemController.as");
+    if (file)
+        script->CreateObject(file, "SystemController");
+    else
+        LOGERRORF("SystemController ScriptFile[%s] does not exists.", "Scripts/Controllers/SystemController.as");    
 
-	return system;
+    return system;
 }
 
 System* Galaxy::GetSystem(const String& name) const

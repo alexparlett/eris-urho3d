@@ -17,6 +17,7 @@ MapGenerator::MapGenerator(ScriptFile* scriptFile) :
 
 MapGenerator::~MapGenerator()
 {
+    scriptFile_->ReleaseRef();
 }
 
 void MapGenerator::Generate()
@@ -24,10 +25,10 @@ void MapGenerator::Generate()
 	asIScriptObject* obj = scriptFile_->CreateObject("MapGenerator");
 	if (obj)
 	{
-		asIScriptFunction* execute = scriptFile_->GetMethod(obj, "void generate()");
+		asIScriptFunction* execute = scriptFile_->GetMethod(obj, "void run()");
 		if (execute)
 		{
-			scriptFile_->Execute(execute);
+            scriptFile_->Execute(obj, execute);
 		}
 	}
 }

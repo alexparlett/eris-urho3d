@@ -63,7 +63,7 @@ void ModManager::Load()
 
 void ModManager::Save()
 {
-    String orderFilename = sets->GetSetting("userdir").GetString() + "mods.xml";
+    String orderFilename = GetSubsystem<Settings>()->GetSetting("userdir").GetString() + "mods.xml";
     File orderFile(context_, orderFilename, FILE_WRITE);
     if (orderFile.IsOpen())
     {
@@ -136,9 +136,7 @@ void ModManager::ScanDirectory(Urho3D::String& root)
 {
     unsigned int slashPos = root.FindLast('/');
     if (slashPos == String::NPOS || slashPos < root.Length() - 1)
-    {
         root.Append('/');
-    }
 
     Vector<String> dirList;
 
@@ -173,7 +171,7 @@ void ModManager::ActivateMods()
     for (unsigned i = activeMods_.Size() - 1; activeMods_.Size() > 0 && i >= 0; i--)
     {
         HandlePatches(modDescriptors_[activeMods_[i]].GetDirectory() + "/Patch/");
-        rc->AddResourceDir(modDescriptors_[activeMods_[i]].GetDirectory() + "/Data");
+        GetSubsystem<ResourceCache>()->AddResourceDir(modDescriptors_[activeMods_[i]].GetDirectory() + "/Data");
     }
 }
 

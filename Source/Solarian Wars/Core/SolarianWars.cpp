@@ -48,6 +48,8 @@ void SolarianWars::Setup()
     ResourceCache* cache = GetSubsystem<ResourceCache>();
     Input* input = GetSubsystem<Input>();
     Log* log = GetSubsystem<Log>();
+    ModManager* mm = GetSubsystem<ModManager>();
+    Locale* locale = GetSubsystem<Locale>();
 
     log->Open(settings->GetSetting("userdir").GetString() + "sw.log");
     log->WriteRaw("[" + Time::GetTimeStamp() + "] Solarian Wars " + settings->GetSetting("version").GetString() + "\n");
@@ -82,9 +84,6 @@ void SolarianWars::Setup()
     audio->SetMasterGain(SoundType::SOUND_MUSIC, settings->GetSetting("music", 0.4f).GetFloat());
     audio->SetMasterGain(SoundType::SOUND_EFFECT, settings->GetSetting("effects", 0.6f).GetFloat());
     audio->SetMasterGain(SoundType::SOUND_UI, settings->GetSetting("interface", 0.6f).GetFloat());
-
-    mm->Load();
-    locale->Load(settings->GetSetting("language", "enGB").GetString());
 }
 
 void SolarianWars::Start()
@@ -108,14 +107,6 @@ void SolarianWars::Stop()
 
 void SolarianWars::ParseArgs()
 {
-    // API Builds exit immediately after dumping the script api
-    if (GetArguments().Contains("-api"))
-    {
-        File output(context_, GetSubsystem<Settings>()->GetSetting("userdir").GetString() + "api.doxy", FILE_WRITE);
-        GetSubsystem<Script>()->DumpAPI(output);
-        exit(EXIT_SUCCESS);
-    }
-
     if (GetArguments().Contains("-debug"))
     {
         GetSubsystem<Log>()->SetLevel(LOG_DEBUG);

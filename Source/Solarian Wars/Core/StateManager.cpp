@@ -97,9 +97,7 @@ void StateManager::StateDestroyed(Urho3D::StringHash eventType, Urho3D::VariantM
             LOGERROR("Cannot destroy state " + id.ToString() + " either current or doesn't exist.");
     }
     else
-    {
         LOGERROR("State with id " + id.ToString() + " is not a valid id.");
-    }
 }
 
 State* StateManager::GetState(const Urho3D::StringHash& id) const

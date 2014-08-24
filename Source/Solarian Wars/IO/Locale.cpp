@@ -14,7 +14,8 @@
 
 using namespace Urho3D;
 
-Page::Page(Urho3D::XMLElement& page)
+Page::Page(Urho3D::XMLElement& page) :
+    RefCounted()
 {
     for (XMLElement line = page.GetChild("line"); line; line = line.GetNext("line"))
     {

@@ -4,12 +4,12 @@ class MapGenerator : ScriptObject
 	{
 	}
 	
-	void generate()
+	void run()
 	{
-		SystemProperties& props = SystemProperties();
-		props.name_ = "Solarian";
-		props.position_ = Vector3(0,0,0
+		SystemProperties props;
+		props.name = String("Solari");
+		props.position = Vector3(0,0,0);
 		
-		System@ solarian = galaxy.CreateSystem(props);
+		System@ solari = galaxy.CreateSystem(props);
 	}
 }

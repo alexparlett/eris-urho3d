@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <MathDefs.h>
 #include <Object.h>
 #include <HashMap.h>
 #include <StringHash.h>
@@ -13,8 +14,8 @@
 
 #include "IO\Mod.h"
 
-#define PRIORITY_LOW M_MAX_UNSIGNED
-#define PRIORITY_HIGH M_MIN_UNSIGNED
+#define PRIORITY_LOW Urho3D::M_MAX_UNSIGNED
+#define PRIORITY_HIGH Urho3D::M_MIN_UNSIGNED
 
 class ModManager : public Urho3D::Object
 {

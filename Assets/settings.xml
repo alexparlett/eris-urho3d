@@ -2,8 +2,8 @@
 <settings>
     <graphics>
         <resolution>0 0</resolution>
-        <fullscreen>true</fullscreen>
-        <borderless>false</borderless>
+        <fullscreen>false</fullscreen>
+        <borderless>true</borderless>
         <antialiasing>2</antialiasing>
         <vsync>false</vsync>
         <anisotropic>4</anisotropic>

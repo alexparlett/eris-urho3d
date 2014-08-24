@@ -9,16 +9,22 @@
 #include "GamePlay/Map/Types/Galaxy.h"
 #include "GamePlay/Map/MapGenerator.h"
 
+#include <ResourceCache.h>
+#include <Scene.h>
 #include <Script.h>
+#include <ScriptFile.h>
 #include <PhysicsWorld.h>
 #include <Octree.h>
 #include <NavigationMesh.h>
 #include <Navigable.h>
+#include <Log.h>
 
 using namespace Urho3D;
 
 GameState::GameState(Context* context) :
-    State(context)
+    State(context),
+    scene_(NULL),
+    camera_(NULL)
 {
 }
 
@@ -31,9 +37,9 @@ void GameState::Create ()
 	if (scene_)
 		scene_->ResetScene();
 	else
-		scene_ = new Scene(context_);
+		scene_ = SharedPtr<Scene>(new Scene(context_));
 
-	scene_->SetEnabled(false);
+	scene_->SetUpdateEnabled(false);
 	scene_->CreateComponent<Galaxy>();
 	scene_->CreateComponent<PhysicsWorld>();
 	scene_->CreateComponent<Octree>();
@@ -41,23 +47,27 @@ void GameState::Create ()
 	scene_->CreateComponent<Navigable>();
 
 	GetSubsystem<Script>()->SetDefaultScene(scene_);
+
+    ScriptFile* file = GetSubsystem<ResourceCache>()->GetResource<ScriptFile>("Scripts/Maps/CampaignMap.as");
+    if (file)
+    {
+        MapGenerator gen(file);
+        gen.Generate();
+    }
 }
 
 void GameState::Start ()
 {
-	ScriptFile* file = GetSubsystem<ResourceCache>()->GetResource<ScriptFile>("Scripts/Map/CampaignMap.as");
-	MapGenerator gen(file);
-
-	gen.Generate();
-
-	scene_->GetComponent<NavigationMesh>()->Build();
-	scene_->SetEnabled(true);
+    scene_->GetComponent<NavigationMesh>()->Build();
+    scene_->SetUpdateEnabled(true);
 }
 
 void GameState::Stop ()
 {
+    scene_->SetUpdateEnabled(false);
 }
 
 void GameState::Destroy ()
 {
+    scene_->ReleaseRef();
 }

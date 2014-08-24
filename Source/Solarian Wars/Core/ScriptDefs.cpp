@@ -14,6 +14,8 @@
 #include "GamePlay/Map/Properties/SystemProperties.h"
 
 #include <APITemplates.h>
+#include <angelscript.h>
+#include <stddef.h>
 
 using namespace Urho3D;
 
@@ -47,28 +49,28 @@ static Galaxy* GetGalaxy()
 
 static void RegisterLocale(asIScriptEngine* engine)
 {
-    RegisterObject<Locale>(engine, "Locale");
-    engine->RegisterObjectMethod("Locale", "String Localize(int page,int line) const", asMETHOD(Locale, Localize), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Locale", "void Replace(String&in line, int token, const String&in value) const", asMETHODPR(Locale, Replace, (Urho3D::String& line, int token, const Urho3D::String& value) const, void), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Locale", "void Replace(String&in line, Array<String>@+ values) const", asFUNCTION(LocaleReplacePODVector), asCALL_CDECL_OBJLAST);
+    RegisterRefCounted<Locale>(engine, "Locale");
+    engine->RegisterObjectMethod("Locale", "String Localize(int,int) const", asMETHOD(Locale, Localize), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Locale", "void Replace(String&in, int, const String&in) const", asMETHODPR(Locale, Replace, (Urho3D::String& line, int token, const Urho3D::String& value) const, void), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Locale", "void Replace(String&in, Array<String>@+) const", asFUNCTION(LocaleReplacePODVector), asCALL_CDECL_OBJLAST);
     engine->RegisterGlobalFunction("Locale@+ get_locale()", asFUNCTION(GetLocale), asCALL_CDECL);
 }
 
 static void RegisterProperties(asIScriptEngine* engine)
 {
-	RegisterRefCounted<SystemProperties>(engine, "SystemProperties");
-	engine->RegisterObjectProperty("SystemProperties", "name_", sizeof(Urho3D::String));
-	engine->RegisterObjectProperty("SystemProperties", "position_", sizeof(Urho3D::Vector3));
+    engine->RegisterObjectType("SystemProperties", sizeof(SystemProperties), asOBJ_VALUE | asOBJ_POD);
+    engine->RegisterObjectProperty("SystemProperties", "String name", offsetof(SystemProperties, name_));
+    engine->RegisterObjectProperty("SystemProperties", "Vector3 position", offsetof(SystemProperties, position_));
 }
 
 static void RegisterTypes(asIScriptEngine* engine)
 {
-	RegisterComponent<Galaxy>(engine, "Galaxy");
-	engine->RegisterObjectMethod("Galaxy", "System@+ CreateSystem(const SystemProperties&in properties)", asMETHOD(Galaxy, CreateSystem), asCALL_THISCALL);
-	engine->RegisterObjectMethod("Galaxy", "System@+ GetSystem(const String&in name) const", asMETHOD(Galaxy, GetSystem), asCALL_THISCALL);
-	engine->RegisterGlobalFunction("Galaxy@+ get_galaxy()", asFUNCTION(GetGalaxy), asCALL_CDECL);
+    RegisterComponent<System>(engine, "System");
 
-	RegisterComponent<System>(engine, "System");
+	RegisterComponent<Galaxy>(engine, "Galaxy");
+	engine->RegisterObjectMethod("Galaxy", "System@+ CreateSystem(const SystemProperties&in)", asMETHOD(Galaxy, CreateSystem), asCALL_THISCALL);
+	engine->RegisterObjectMethod("Galaxy", "System@+ GetSystem(const String&in) const", asMETHOD(Galaxy, GetSystem), asCALL_THISCALL);
+	engine->RegisterGlobalFunction("Galaxy@+ get_galaxy()", asFUNCTION(GetGalaxy), asCALL_CDECL);
 }
 
 void RegisterScriptAPI(asIScriptEngine* engine)
@@ -76,5 +78,5 @@ void RegisterScriptAPI(asIScriptEngine* engine)
     RegisterLocale(engine);
     RegisterSettings(engine);
 	RegisterProperties(engine);
-	RegisterTypes(engine);
+    RegisterTypes(engine);
 }

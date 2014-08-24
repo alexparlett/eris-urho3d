@@ -73,6 +73,7 @@ void Settings::Save(void)
 
         if (!xmlFile.Save(file))
             LOGERROR("Unable to save " + fileName);
+        
     }
     else
         LOGERROR("Unable to open " + fileName);

@@ -9,12 +9,13 @@
 #include "Core\State.h"
 
 #include <Camera.h>
-#include <Scene.h>
+#include <Node.h>
 #include <Ptr.h>
 
 class GameState : public State
 {
     OBJECT(GameState)
+    BASEOBJECT(State)
 
 public:
     GameState(Urho3D::Context* context);
@@ -27,6 +28,6 @@ public:
 
 private:
 	Urho3D::SharedPtr<Urho3D::Scene> scene_;
-	Urho3D::SharedPtr<Urho3D::Node> camera_
+    Urho3D::SharedPtr<Urho3D::Node> camera_;
 };
 

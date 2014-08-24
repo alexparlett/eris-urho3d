@@ -8,17 +8,16 @@
 
 #include <Ptr.h>
 #include <ScriptFile.h>
-#include <ResourceCache.h>
 
 class MapGenerator
 {
 public:
 	MapGenerator(Urho3D::ScriptFile* scriptFile);
-	virtual ~MapGenerator();
+	~MapGenerator();
 
 	void Generate();
 
 private:
-	Urho3D::SharedPtr<ScriptFile> scriptFile_;
+    Urho3D::SharedPtr<Urho3D::ScriptFile> scriptFile_;
 };
 

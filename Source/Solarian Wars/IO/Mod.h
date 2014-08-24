@@ -16,7 +16,7 @@ class Mod
 public:
     Mod() { }
     Mod(const Urho3D::String& dir, Urho3D::XMLFile& file);
-    ~Mod() { }
+    virtual ~Mod() { }
 
     const Urho3D::String& GetId();
     const Urho3D::String& GetName();

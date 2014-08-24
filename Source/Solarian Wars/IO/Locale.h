@@ -14,7 +14,7 @@
 class Page : public Urho3D::RefCounted
 {
 public:
-    Page() {}
+    Page() : RefCounted() {}
     Page(Urho3D::XMLElement& page);
 
     Urho3D::String GetLine(int line) const;
