@@ -20,20 +20,21 @@ Galaxy::~Galaxy()
 
 System* Galaxy::CreateSystem(const SystemProperties& properties)
 {
-	Scene* scene = GetScene();
-
-	Node* systemNode = scene->CreateChild(properties.name_);
+	Node* systemNode = GetNode()->CreateChild(properties.name_);
 	systemNode->SetPosition(properties.position_);
+
+	ScriptInstance* script = systemNode->CreateComponent<ScriptInstance>();
+    ScriptFile* file = GetSubsystem<ResourceCache>()->GetResource<ScriptFile>(properties.controller_);
+	if (file)
+		script->CreateObject(file, "SystemController");
+	else
+	{
+		systemNode->Remove();
+		return NULL;
+	}
 
 	System* system = systemNode->CreateComponent<System>();
 	systems_[properties.name_] = SharedPtr<System>(system);
-
-	ScriptInstance* script = systemNode->CreateComponent<ScriptInstance>();
-    ScriptFile* file = GetSubsystem<ResourceCache>()->GetResource<ScriptFile>("Scripts/Controllers/SystemController.as");
-    if (file)
-        script->CreateObject(file, "SystemController");
-    else
-        LOGERRORF("SystemController ScriptFile[%s] does not exists.", "Scripts/Controllers/SystemController.as");    
 
     return system;
 }
@@ -41,7 +42,5 @@ System* Galaxy::CreateSystem(const SystemProperties& properties)
 System* Galaxy::GetSystem(const String& name) const
 {
 	HashMap<String, SharedPtr<System> >::ConstIterator find = systems_.Find(name);
-	if (find != systems_.End())
-		return find->second_;
-	return NULL;
+	return find != systems_.End() ? find->second_ : NULL;
 }

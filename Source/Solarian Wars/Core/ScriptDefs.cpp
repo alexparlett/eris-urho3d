@@ -61,6 +61,7 @@ static void RegisterProperties(asIScriptEngine* engine)
     engine->RegisterObjectType("SystemProperties", sizeof(SystemProperties), asOBJ_VALUE | asOBJ_POD);
     engine->RegisterObjectProperty("SystemProperties", "String name", offsetof(SystemProperties, name_));
     engine->RegisterObjectProperty("SystemProperties", "Vector3 position", offsetof(SystemProperties, position_));
+	engine->RegisterObjectProperty("SystemProperties", "String controller", offsetof(SystemProperties,  controller_));
 }
 
 static void RegisterTypes(asIScriptEngine* engine)

@@ -34,10 +34,7 @@ GameState::~GameState()
 
 void GameState::Create ()
 {
-	if (scene_)
-		scene_->ResetScene();
-	else
-		scene_ = SharedPtr<Scene>(new Scene(context_));
+	scene_ = SharedPtr<Scene>(new Scene(context_));
 
 	scene_->SetUpdateEnabled(false);
 	scene_->CreateComponent<Galaxy>();
