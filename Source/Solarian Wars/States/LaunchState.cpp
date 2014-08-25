@@ -12,7 +12,7 @@
 
 #include "IO/Settings.h"
 #include "Core/Events.h"
-#include "GameState.h"
+#include "GalaxyState.h"
 
 using namespace Urho3D;
 
@@ -84,7 +84,7 @@ void LaunchState::HandleTimer(Urho3D::StringHash eventType, Urho3D::VariantMap& 
     if (timer_.GetMSec(false) > 3000)
     {
         VariantMap createData = GetEventDataMap();
-        createData[StateCreated::P_STATE] = new GameState(context_);
+        createData[StateCreated::P_STATE] = new GalaxyState(context_);
         createData[StateCreated::P_ID] = StringHash("GameState");
         SendEvent(E_STATE_CREATED, createData);
 
@@ -103,7 +103,7 @@ void LaunchState::HandleKey(Urho3D::StringHash eventType, Urho3D::VariantMap& ev
     if (scanCode == SCANCODE_SPACE || scanCode == SCANCODE_ESCAPE)
     {
         VariantMap createData = GetEventDataMap();
-        createData[StateCreated::P_STATE] = new GameState(context_);
+        createData[StateCreated::P_STATE] = new GalaxyState(context_);
         createData[StateCreated::P_ID] = StringHash("GameState");
         SendEvent(E_STATE_CREATED, createData);
 

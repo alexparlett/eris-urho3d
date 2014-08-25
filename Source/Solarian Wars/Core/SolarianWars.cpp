@@ -12,6 +12,7 @@
 #include "ModManager.h"
 #include "IO/Locale.h"
 #include "ScriptDefs.h"
+#include "GamePlay/TypeDefs.h"
 
 #include <APITemplates.h>
 #include <Script.h>
@@ -24,6 +25,7 @@
 #include <DebugHud.h>
 #include <Console.h>
 #include <Log.h>
+#include <Renderer.h>
 
 #include <windows.h>
 
@@ -91,6 +93,7 @@ void SolarianWars::Start()
 {
     GetSubsystem<ModManager>()->Load();
     GetSubsystem<Locale>()->Load(GetSubsystem<Settings>()->GetSetting("language", "enGB").GetString());
+	GetSubsystem<Renderer>()->SetViewport(0, new Viewport(context_));
 
     VariantMap createData = GetEventDataMap();
     createData[StateCreated::P_STATE] = new LaunchState(context_);

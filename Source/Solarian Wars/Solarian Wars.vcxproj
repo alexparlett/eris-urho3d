@@ -235,7 +235,7 @@ xcopy "$(SolutionDir)Assets\settings.xml" "$(SolutionDir)Game" /Y /D</Command>
     <ClInclude Include="GamePlay\TypeDefs.h" />
     <ClInclude Include="IO\Locale.h" />
     <ClInclude Include="States\MenuState.h" />
-    <ClInclude Include="States\GameState.h" />
+    <ClInclude Include="States\GalaxyState.h" />
     <ClInclude Include="IO\Settings.h" />
     <ClInclude Include="IO\Mod.h" />
     <ClInclude Include="Core\ModManager.h" />
@@ -252,7 +252,7 @@ xcopy "$(SolutionDir)Assets\settings.xml" "$(SolutionDir)Game" /Y /D</Command>
     <ClCompile Include="GamePlay\TypeDefs.cpp" />
     <ClCompile Include="IO\Locale.cpp" />
     <ClCompile Include="States\MenuState.cpp" />
-    <ClCompile Include="States\GameState.cpp" />
+    <ClCompile Include="States\GalaxyState.cpp" />
     <ClCompile Include="IO\Settings.cpp" />
     <ClCompile Include="Core\StateManager.cpp" />
     <ClCompile Include="IO\Mod.cpp" />

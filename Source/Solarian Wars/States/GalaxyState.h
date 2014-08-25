@@ -12,14 +12,14 @@
 #include <Node.h>
 #include <Ptr.h>
 
-class GameState : public State
+class GalaxyState : public State
 {
-    OBJECT(GameState)
+    OBJECT(GalaxyState)
     BASEOBJECT(State)
 
 public:
-    GameState(Urho3D::Context* context);
-    virtual ~GameState();
+    GalaxyState(Urho3D::Context* context);
+    virtual ~GalaxyState();
 
     virtual void Create ();
     virtual void Start ();
