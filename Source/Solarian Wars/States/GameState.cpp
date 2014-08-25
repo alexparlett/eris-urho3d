@@ -18,6 +18,8 @@
 #include <NavigationMesh.h>
 #include <Navigable.h>
 #include <Log.h>
+#include <Renderer.h>
+#include <Viewport.h>
 
 using namespace Urho3D;
 
@@ -55,6 +57,10 @@ void GameState::Create ()
 
 void GameState::Start ()
 {
+    Renderer* rdr = GetSubsystem<Renderer>();
+    rdr->GetViewport(0)->SetScene(scene_);
+    rdr->GetViewport(0)->SetCamera(camera_->GetComponent<Camera>());
+
     scene_->GetComponent<NavigationMesh>()->Build();
     scene_->SetUpdateEnabled(true);
 }
