@@ -14,7 +14,8 @@ using namespace Urho3D;
 
 StateManager::StateManager(Urho3D::Context* context) :
     Object(context),
-    currentState_(-1)
+    currentState_(-1),
+    states_(HashMap<StringHash, SharedPtr<State>>())
 {
     SubscribeToEvent(E_STATE_CREATED, HANDLER(StateManager, StateCreated));
     SubscribeToEvent(E_STATE_CHANGED, HANDLER(StateManager, StateChanged));
@@ -45,7 +46,7 @@ void StateManager::StateCreated(Urho3D::StringHash eventType, Urho3D::VariantMap
         if (!states_.Contains(id))
         {
             state->Create();
-            states_[eventData[P_ID].GetStringHash()] = state;
+            states_[id] = state;
         }
         else
             LOGERROR("State already exists with id of " + id.ToString());
@@ -66,8 +67,8 @@ void StateManager::StateChanged(Urho3D::StringHash eventType, Urho3D::VariantMap
             if (currentState_ != StringHash::ZERO && states_.Contains(currentState_)) 
                 states_[currentState_]->Stop();
 
-            newActive->Start();
             currentState_ = id;
+            newActive->Start();
         }
         else
         {

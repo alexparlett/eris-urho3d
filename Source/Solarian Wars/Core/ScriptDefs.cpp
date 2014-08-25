@@ -44,7 +44,7 @@ static void RegisterSettings(asIScriptEngine* engine)
 
 static Galaxy* GetGalaxy()
 {
-	return GetScriptContext()->GetSubsystem<Scene>()->GetComponent<Galaxy>();
+    return GetScriptContext()->GetSubsystem<Script>()->GetDefaultScene()->GetComponent<Galaxy>();
 }
 
 static void RegisterLocale(asIScriptEngine* engine)
@@ -56,12 +56,22 @@ static void RegisterLocale(asIScriptEngine* engine)
     engine->RegisterGlobalFunction("Locale@+ get_locale()", asFUNCTION(GetLocale), asCALL_CDECL);
 }
 
+static void ConstructSystemProperties(SystemProperties* ptr)
+{
+    new(ptr) SystemProperties();
+}
+
+
 static void RegisterProperties(asIScriptEngine* engine)
 {
-    engine->RegisterObjectType("SystemProperties", sizeof(SystemProperties), asOBJ_VALUE | asOBJ_POD);
-    engine->RegisterObjectProperty("SystemProperties", "String name", offsetof(SystemProperties, name_));
-    engine->RegisterObjectProperty("SystemProperties", "Vector3 position", offsetof(SystemProperties, position_));
-	engine->RegisterObjectProperty("SystemProperties", "String controller", offsetof(SystemProperties,  controller_));
+    engine->RegisterObjectType("SystemProperties", sizeof(SystemProperties), asOBJ_VALUE | asOBJ_POD | asOBJ_APP_CLASS_C);
+    engine->RegisterObjectBehaviour("SystemProperties", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(ConstructSystemProperties), asCALL_CDECL_OBJLAST);
+    engine->RegisterObjectMethod("SystemProperties", "String get_name() const", asMETHOD(SystemProperties, GetName), asCALL_THISCALL);
+    engine->RegisterObjectMethod("SystemProperties", "void set_name(const String&in)", asMETHOD(SystemProperties, SetName), asCALL_THISCALL);
+    engine->RegisterObjectMethod("SystemProperties", "Vector3 get_position() const", asMETHOD(SystemProperties, SetPosition), asCALL_THISCALL);
+    engine->RegisterObjectMethod("SystemProperties", "void set_position(const Vector3&in)", asMETHOD(SystemProperties, GetPosition), asCALL_THISCALL);
+    engine->RegisterObjectMethod("SystemProperties", "String get_controller() const", asMETHOD(SystemProperties, GetController), asCALL_THISCALL);
+    engine->RegisterObjectMethod("SystemProperties", "void set_controller(const String&in)", asMETHOD(SystemProperties, SetController), asCALL_THISCALL);
 }
 
 static void RegisterTypes(asIScriptEngine* engine)

@@ -9,6 +9,7 @@
 #include "Core\State.h"
 
 #include <UIElement.h>
+#include <Timer.h>
 #include <Ptr.h>
 
 class LaunchState : public State
@@ -25,7 +26,11 @@ public:
     virtual void Stop();
     virtual void Destroy();
 
+    void HandleTimer(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
+    void HandleKey(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
+
 private:
     Urho3D::SharedPtr<Urho3D::UIElement> loading_;
+    Urho3D::Timer timer_;
 };
 

@@ -6,6 +6,8 @@
 
 #include "System.h"
 
+#include <Context.h>
+
 using namespace Urho3D;
 
 System::System(Context* context) :
@@ -15,4 +17,9 @@ System::System(Context* context) :
 
 System::~System()
 {
+}
+
+void System::RegisterObject(Context* context)
+{
+    context->RegisterFactory<System>("GAME_CATEGORY");
 }

@@ -39,6 +39,7 @@ SolarianWars::SolarianWars(Context* context) :
     context->RegisterSubsystem(new Locale(context));
 
     RegisterScriptAPI(GetSubsystem<Script>()->GetScriptEngine());
+    RegisterTypeLibrary(context);
 }
 
 void SolarianWars::Setup()

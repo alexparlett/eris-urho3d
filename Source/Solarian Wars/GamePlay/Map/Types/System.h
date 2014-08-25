@@ -11,10 +11,10 @@
 class System : public Urho3D::Component
 {
 	OBJECT(System)
-	BASEOBJECT(Component)
 
 public:
 	System(Urho3D::Context* context);
 	virtual ~System();
+    static void RegisterObject(Urho3D::Context* context);
 };
 

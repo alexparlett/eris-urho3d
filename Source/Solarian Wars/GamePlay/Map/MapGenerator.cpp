@@ -27,7 +27,7 @@ void MapGenerator::Generate()
 	{
 		asIScriptFunction* execute = scriptFile_->GetMethod(obj, "void run()");
 		if (execute)
-		{
+        {
             scriptFile_->Execute(obj, execute);
 		}
 	}

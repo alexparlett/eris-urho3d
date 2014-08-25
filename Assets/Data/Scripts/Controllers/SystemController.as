@@ -1,0 +1,6 @@
+class SystemController : ScriptObject
+{
+    SystemController()
+    {
+    }
+}

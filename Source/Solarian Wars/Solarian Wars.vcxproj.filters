@@ -69,6 +69,9 @@
     <ClInclude Include="GamePlay\Map\MapGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GamePlay\TypeDefs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\SolarianWars.cpp">
@@ -108,6 +111,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GamePlay\Map\MapGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePlay\TypeDefs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
