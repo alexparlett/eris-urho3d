@@ -38,6 +38,11 @@ Locale::Locale(Urho3D::Context* context) :
 {
 }
 
+Locale::~Locale()
+{
+}
+
+
 void Locale::Load(const Urho3D::String& fileName)
 {
     pages_.Clear();
@@ -50,7 +55,7 @@ void Locale::Load(const Urho3D::String& fileName)
         {
             int id = page.GetInt("id");
 
-            if (id > 0)
+            if (id >= 0)
                 pages_[id] = SharedPtr<Page>(new Page(page));
         }
     }
@@ -59,10 +64,7 @@ void Locale::Load(const Urho3D::String& fileName)
 Urho3D::String Locale::Localize(int page, int line) const
 {
     HashMap<int, SharedPtr<Page>>::ConstIterator findIt = pages_.Find(page);
-    if (findIt != pages_.End())
-        return findIt->second_->GetLine(line);
-
-    return String::EMPTY;
+    return findIt != pages_.End() ? findIt->second_->GetLine(line) : String::EMPTY;
 }
 
 void Locale::Replace(Urho3D::String& line, int token, const Urho3D::String& value) const

@@ -25,6 +25,11 @@ LaunchState::LaunchState(Context* context) :
 
 LaunchState::~LaunchState()
 {
+    if (version_)
+        version_.Reset();
+
+    if (loading_)
+        loading_.Reset();
 }
 
 void LaunchState::Create()
@@ -35,15 +40,15 @@ void LaunchState::Create()
 
     UIElement* root = ui->GetRoot();
 
-    Text* version = root->CreateChild<Text>("Version");
-    version->SetAlignment(HorizontalAlignment::HA_LEFT, VerticalAlignment::VA_TOP);
-    version->SetTextAlignment(HorizontalAlignment::HA_LEFT);
-    version->SetText("Rev: " + GetSubsystem<Settings>()->GetSetting("version").GetString().ToUpper());
-    version->SetFocusMode(FocusMode::FM_NOTFOCUSABLE);
-    version->SetPosition(0, 0);
-    version->SetSize(100, 50);
-    version->SetColor(Color::WHITE);
-    version->SetFont(rc->GetResource<Font>("Fonts/BlueHighway.ttf"), 10);
+    version_ = root->CreateChild<Text>("Version");
+    version_->SetAlignment(HorizontalAlignment::HA_LEFT, VerticalAlignment::VA_TOP);
+    version_->SetTextAlignment(HorizontalAlignment::HA_LEFT);
+    version_->SetText("Rev: " + GetSubsystem<Settings>()->GetSetting("version").GetString().ToUpper());
+    version_->SetFocusMode(FocusMode::FM_NOTFOCUSABLE);
+    version_->SetPosition(0, 0);
+    version_->SetSize(100, 50);
+    version_->SetColor(Color::WHITE);
+    version_->SetFont(rc->GetResource<Font>("Fonts/BlueHighway.ttf"), 10);
 
     loading_ = root->CreateChild<UIElement>("LoadingScreen");
 
@@ -76,7 +81,17 @@ void LaunchState::Stop()
 
 void LaunchState::Destroy()
 {
-    loading_->Remove();
+    if (version_)
+    {
+        version_->Remove();
+        version_.Reset();    
+    }
+
+    if (loading_)
+    {
+        loading_->Remove();
+        loading_.Reset();
+    }
 }
 
 void LaunchState::HandleTimer(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)

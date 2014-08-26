@@ -51,9 +51,7 @@ void ModManager::Load()
                 String value = mod.GetValue();
 
                 if (!value.Empty() && modDescriptors_.Contains(value))
-                {
                     Activate(value);
-                }
             }
         }
     }
@@ -69,20 +67,15 @@ void ModManager::Save()
     {
         XMLFile orderXml(context_);
         XMLElement root = orderXml.CreateRoot("mods");
+
         foreach(String id, activeMods_)
-       { 
             root.CreateChild("mod").SetValue(id);
-        }
 
         if (!orderXml.Save(orderFile))
-        {
             LOGERROR("Unable to save mod order " + orderFilename);
-        }
     }
     else
-    {
         LOGERROR("Unable to open mod order " + orderFilename);
-    }
 }
 
 const Urho3D::HashMap<Urho3D::String, Mod>& ModManager::GetModDescriptors() const

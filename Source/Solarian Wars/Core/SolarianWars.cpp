@@ -105,14 +105,18 @@ void SolarianWars::Start()
 
 void SolarianWars::Stop()
 {
+    context_->RemoveSubsystem<StateManager>();
+    context_->RemoveSubsystem<Locale>();
+    context_->RemoveSubsystem<ModManager>();
+    context_->RemoveSubsystem<Settings>();
+
+    GetSubsystem<ResourceCache>()->ReleaseAllResources();
 }
 
 void SolarianWars::ParseArgs()
 {
     if (GetArguments().Contains("-debug"))
-    {
         GetSubsystem<Log>()->SetLevel(LOG_DEBUG);
-    }
 }
 
 DEFINE_APPLICATION_MAIN(SolarianWars)

@@ -28,7 +28,6 @@ StateManager::~StateManager()
     while (iter != states_.End())
     {
         iter->second_->Destroy();
-        iter->second_.Reset();
         iter++;
     }
 

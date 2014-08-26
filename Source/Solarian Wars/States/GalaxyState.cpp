@@ -82,5 +82,15 @@ void GalaxyState::Stop ()
 
 void GalaxyState::Destroy ()
 {
-    scene_->ReleaseRef();
+    if (camera_)
+    {
+        camera_->Remove();
+        camera_.Reset();
+    }
+
+    if (scene_)
+    {
+        scene_->ResetScene();
+        scene_.Reset();
+    }
 }

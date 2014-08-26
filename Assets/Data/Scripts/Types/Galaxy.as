@@ -1,12 +1,11 @@
-#include "System.as"
+#include "Scripts/Types/System.as"
 
-class Galaxy : ScriptObject
+class Galaxy
 {
 	Array<System@> systems;
 
 	Galaxy()
 	{
-		systems = Array<System@>();
 	}
 	
 	System@ CreateSystem(const String& name, const Vector3& position)
@@ -16,7 +15,7 @@ class Galaxy : ScriptObject
 		ScriptObject@ object = sysNode.CreateScriptObject("Scripts/Types/System.as", "System");
 		if (object !is null)
 		{
-			System@ system cast<System>(object);
+			System@ system = cast<System@>(object);
 			systems.Push(system);
 			return system;
 		}

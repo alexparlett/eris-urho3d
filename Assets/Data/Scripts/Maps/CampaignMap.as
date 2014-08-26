@@ -1,16 +1,16 @@
-#include "../Types/Galaxy.as"
-#include "../Types/System.as"
+#include "Scripts/Types/Galaxy.as"
+#include "Scripts/Types/System.as"
 
-Galaxy@ galaxy;
-
-class MapGenerator : ScriptObject
+class Map : ScriptObject
 {
-	MapGenerator()
+    Galaxy@ galaxy;
+
+	Map()
 	{
-		galaxy = Galaxy();
+        @galaxy = Galaxy();
 	}
-	
-	void run()
+    
+    void run()
 	{	
 		System@ solari = galaxy.CreateSystem("Solari", Vector3(0,0,0));
 	}

@@ -29,6 +29,7 @@ class Locale : public Urho3D::Object
 
 public:
     Locale(Urho3D::Context* context);
+    virtual ~Locale();
 
     void Load(const Urho3D::String& fileName);
 

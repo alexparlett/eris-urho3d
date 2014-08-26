@@ -11,6 +11,7 @@
 #include <UIElement.h>
 #include <Timer.h>
 #include <Ptr.h>
+#include <Text.h>
 
 class LaunchState : public State
 {
@@ -31,6 +32,7 @@ public:
 
 private:
     Urho3D::SharedPtr<Urho3D::UIElement> loading_;
+    Urho3D::SharedPtr<Urho3D::Text> version_;
     Urho3D::Timer timer_;
 };
 
