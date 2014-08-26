@@ -6,8 +6,7 @@
 
 #include "GalaxyState.h"
 
-#include "GamePlay/Map/Types/Galaxy.h"
-#include "GamePlay/Map/MapGenerator.h"
+#include "GamePlay/MapGenerator.h"
 
 #include <ResourceCache.h>
 #include <Scene.h>
@@ -44,11 +43,9 @@ void GalaxyState::Create ()
 	scene_ = SharedPtr<Scene>(new Scene(context_));
 
 	scene_->SetUpdateEnabled(false);
-	scene_->CreateComponent<Galaxy>();
 	scene_->CreateComponent<PhysicsWorld>();
 	scene_->CreateComponent<Octree>();
 	scene_->CreateComponent<NavigationMesh>();
-	scene_->CreateComponent<Navigable>();
 
 	camera_ = scene_->CreateChild("Camera");
 	camera_->CreateComponent<Camera>();

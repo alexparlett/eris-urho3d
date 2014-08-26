@@ -12,7 +12,6 @@
 #include "ModManager.h"
 #include "IO/Locale.h"
 #include "ScriptDefs.h"
-#include "GamePlay/TypeDefs.h"
 
 #include <APITemplates.h>
 #include <Script.h>
@@ -41,7 +40,6 @@ SolarianWars::SolarianWars(Context* context) :
     context->RegisterSubsystem(new Locale(context));
 
     RegisterScriptAPI(GetSubsystem<Script>()->GetScriptEngine());
-    RegisterTypeLibrary(context);
 }
 
 void SolarianWars::Setup()

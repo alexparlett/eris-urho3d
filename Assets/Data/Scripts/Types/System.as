@@ -1,0 +1,6 @@
+class System : ScriptObject
+{
+	System()
+	{
+	}
+}

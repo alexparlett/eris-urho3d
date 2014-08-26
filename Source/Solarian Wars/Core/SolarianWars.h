@@ -8,7 +8,6 @@
 
 #include <Engine.h>
 #include <Application.h>
-#include <Vector2.h>
 
 class SolarianWars : public Urho3D::Application
 {

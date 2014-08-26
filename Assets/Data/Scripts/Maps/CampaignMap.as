@@ -1,16 +1,17 @@
+#include "../Types/Galaxy.as"
+#include "../Types/System.as"
+
+Galaxy@ galaxy;
+
 class MapGenerator : ScriptObject
 {
 	MapGenerator()
 	{
+		galaxy = Galaxy();
 	}
 	
 	void run()
-	{
-		SystemProperties props;
-		props.name = "Solari";
-		props.position = Vector3(0,0,0);
-		props.controller = "Scripts/Controllers/SystemController.as";
-		
-		System@ solari = galaxy.CreateSystem(props);
+	{	
+		System@ solari = galaxy.CreateSystem("Solari", Vector3(0,0,0));
 	}
 }

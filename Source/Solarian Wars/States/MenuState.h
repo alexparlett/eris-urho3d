@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "Core\State.h"
+#include "State.h"
 
 class MenuState : public State
 {
