@@ -227,12 +227,8 @@ xcopy "$(SolutionDir)Assets\settings.xml" "$(SolutionDir)Game" /Y /D</Command>
     <ClInclude Include="Core\Events.h" />
     <ClInclude Include="Core\ScriptDefs.h" />
     <ClInclude Include="Core\SolarianWars.h" />
-    <ClInclude Include="Core\State.h" />
-    <ClInclude Include="GamePlay\Map\MapGenerator.h" />
-    <ClInclude Include="GamePlay\Map\Properties\SystemProperties.h" />
-    <ClInclude Include="GamePlay\Map\Types\Galaxy.h" />
-    <ClInclude Include="GamePlay\Map\Types\System.h" />
-    <ClInclude Include="GamePlay\TypeDefs.h" />
+    <ClInclude Include="States\State.h" />
+    <ClInclude Include="GamePlay\MapGenerator.h" />
     <ClInclude Include="IO\Locale.h" />
     <ClInclude Include="States\MenuState.h" />
     <ClInclude Include="States\GalaxyState.h" />
@@ -246,10 +242,7 @@ xcopy "$(SolutionDir)Assets\settings.xml" "$(SolutionDir)Game" /Y /D</Command>
   <ItemGroup>
     <ClCompile Include="Core\ScriptDefs.cpp" />
     <ClCompile Include="Core\SolarianWars.cpp" />
-    <ClCompile Include="GamePlay\Map\MapGenerator.cpp" />
-    <ClCompile Include="GamePlay\Map\Types\Galaxy.cpp" />
-    <ClCompile Include="GamePlay\Map\Types\System.cpp" />
-    <ClCompile Include="GamePlay\TypeDefs.cpp" />
+    <ClCompile Include="GamePlay\MapGenerator.cpp" />
     <ClCompile Include="IO\Locale.cpp" />
     <ClCompile Include="States\MenuState.cpp" />
     <ClCompile Include="States\GalaxyState.cpp" />
