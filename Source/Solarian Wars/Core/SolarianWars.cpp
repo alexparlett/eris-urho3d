@@ -25,6 +25,7 @@
 #include <Console.h>
 #include <Log.h>
 #include <Renderer.h>
+#include <Viewport.h>
 
 #include <windows.h>
 
@@ -91,7 +92,10 @@ void SolarianWars::Start()
 {
     GetSubsystem<ModManager>()->Load();
     GetSubsystem<Locale>()->Load(GetSubsystem<Settings>()->GetSetting("language", "enGB").GetString());
-	GetSubsystem<Renderer>()->SetViewport(0, new Viewport(context_));
+
+	Viewport* port = new Viewport(context_);
+	port->SetRenderPath(GetSubsystem<ResourceCache>()->GetResource<XMLFile>("RenderPaths/Deferred.xml"));
+	GetSubsystem<Renderer>()->SetViewport(0, port);
 
     VariantMap createData = GetEventDataMap();
     createData[StateCreated::P_STATE] = new LaunchState(context_);
@@ -109,8 +113,6 @@ void SolarianWars::Stop()
     context_->RemoveSubsystem<Locale>();
     context_->RemoveSubsystem<ModManager>();
     context_->RemoveSubsystem<Settings>();
-
-    GetSubsystem<ResourceCache>()->ReleaseAllResources();
 }
 
 void SolarianWars::ParseArgs()

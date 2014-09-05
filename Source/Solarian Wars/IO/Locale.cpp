@@ -14,7 +14,7 @@
 
 using namespace Urho3D;
 
-Page::Page(Urho3D::XMLElement& page) :
+Page::Page(XMLElement& page) :
     RefCounted()
 {
     for (XMLElement line = page.GetChild("line"); line; line = line.GetNext("line"))
@@ -27,13 +27,13 @@ Page::Page(Urho3D::XMLElement& page) :
     }
 }
 
-Urho3D::String Page::GetLine(int line) const
+String Page::GetLine(int line) const
 {
     HashMap<int, String>::ConstIterator findIt = lines_.Find(line);
     return findIt != lines_.End() ? findIt->second_ : String::EMPTY;
 }
 
-Locale::Locale(Urho3D::Context* context) :
+Locale::Locale(Context* context) :
     Object(context)
 {
 }
@@ -43,7 +43,7 @@ Locale::~Locale()
 }
 
 
-void Locale::Load(const Urho3D::String& fileName)
+void Locale::Load(const String& fileName)
 {
     pages_.Clear();
 
@@ -56,23 +56,23 @@ void Locale::Load(const Urho3D::String& fileName)
             int id = page.GetInt("id");
 
             if (id >= 0)
-                pages_[id] = SharedPtr<Page>(new Page(page));
+                pages_[id] = new Page(page);
         }
     }
 }
 
-Urho3D::String Locale::Localize(int page, int line) const
+String Locale::Localize(int page, int line) const
 {
     HashMap<int, SharedPtr<Page>>::ConstIterator findIt = pages_.Find(page);
     return findIt != pages_.End() ? findIt->second_->GetLine(line) : String::EMPTY;
 }
 
-void Locale::Replace(Urho3D::String& line, int token, const Urho3D::String& value) const
+void Locale::Replace(String& line, int token, const String& value) const
 {
     line.Replace(ToString("{%d}", token), value);
 }
 
-void Locale::Replace(Urho3D::String& line, const Urho3D::Vector<Urho3D::String>& values) const
+void Locale::Replace(String& line, const Vector<String>& values) const
 {
     for(unsigned i = 0; i < values.Size(); i++)
         line.Replace(ToString("{%d}",i), values[i]);

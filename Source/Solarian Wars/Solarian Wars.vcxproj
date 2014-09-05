@@ -227,8 +227,9 @@ xcopy "$(SolutionDir)Assets\settings.xml" "$(SolutionDir)Game" /Y /D</Command>
     <ClInclude Include="Core\Events.h" />
     <ClInclude Include="Core\ScriptDefs.h" />
     <ClInclude Include="Core\SolarianWars.h" />
+    <ClInclude Include="GamePlay\Scene\Components\TurnResolver.h" />
     <ClInclude Include="States\State.h" />
-    <ClInclude Include="GamePlay\MapGenerator.h" />
+    <ClInclude Include="GamePlay\Scene\MapGenerator.h" />
     <ClInclude Include="IO\Locale.h" />
     <ClInclude Include="States\MenuState.h" />
     <ClInclude Include="States\GalaxyState.h" />
@@ -242,7 +243,8 @@ xcopy "$(SolutionDir)Assets\settings.xml" "$(SolutionDir)Game" /Y /D</Command>
   <ItemGroup>
     <ClCompile Include="Core\ScriptDefs.cpp" />
     <ClCompile Include="Core\SolarianWars.cpp" />
-    <ClCompile Include="GamePlay\MapGenerator.cpp" />
+    <ClCompile Include="GamePlay\Scene\MapGenerator.cpp" />
+    <ClCompile Include="GamePlay\Scene\Components\TurnResolver.cpp" />
     <ClCompile Include="IO\Locale.cpp" />
     <ClCompile Include="States\MenuState.cpp" />
     <ClCompile Include="States\GalaxyState.cpp" />

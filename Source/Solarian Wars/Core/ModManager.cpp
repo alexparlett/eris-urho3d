@@ -78,17 +78,17 @@ void ModManager::Save()
         LOGERROR("Unable to open mod order " + orderFilename);
 }
 
-const Urho3D::HashMap<Urho3D::String, Mod>& ModManager::GetModDescriptors() const
+const HashMap<String, Mod>& ModManager::GetModDescriptors() const
 {
     return modDescriptors_;
 }
 
-bool ModManager::IsActive(Urho3D::String id) const
+bool ModManager::IsActive(String id) const
 {
     return activeMods_.Contains(id);
 }
 
-void ModManager::ModActivated(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
+void ModManager::ModActivated(StringHash eventType, VariantMap& eventData)
 {
     using namespace ModActivated;
     String id = eventData[P_ID].ToString();
@@ -97,7 +97,7 @@ void ModManager::ModActivated(Urho3D::StringHash eventType, Urho3D::VariantMap& 
     Activate(id, priority);
 }
 
-void ModManager::ModDeactivated(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
+void ModManager::ModDeactivated(StringHash eventType, VariantMap& eventData)
 {
     using namespace ModDeactivated;
     String id = eventData[P_ID].ToString();
@@ -112,20 +112,20 @@ void ModManager::ModDeactivated(Urho3D::StringHash eventType, Urho3D::VariantMap
     }
 }
 
-void ModManager::ModOrderSaved(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
+void ModManager::ModOrderSaved(StringHash eventType, VariantMap& eventData)
 {
     GetSubsystem<ResourceCache>()->ReleaseAllResources();
     ActivateMods();
     Save();
 }
 
-void ModManager::Activate(const Urho3D::String& id, unsigned int priorty)
+void ModManager::Activate(const String& id, unsigned int priorty)
 {
     if (!activeMods_.Contains(id) && modDescriptors_.Contains(id))
         activeMods_.Insert(priorty, id);
 }
 
-void ModManager::ScanDirectory(Urho3D::String& root)
+void ModManager::ScanDirectory(String& root)
 {
     unsigned int slashPos = root.FindLast('/');
     if (slashPos == String::NPOS || slashPos < root.Length() - 1)

@@ -57,7 +57,10 @@
     <ClInclude Include="States\State.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GamePlay\MapGenerator.h">
+    <ClInclude Include="GamePlay\Scene\MapGenerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePlay\Scene\Components\TurnResolver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -92,7 +95,10 @@
     <ClCompile Include="States\GalaxyState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GamePlay\MapGenerator.cpp">
+    <ClCompile Include="GamePlay\Scene\MapGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePlay\Scene\Components\TurnResolver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

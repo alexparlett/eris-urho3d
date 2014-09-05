@@ -25,6 +25,7 @@ public:
     void StateCreated(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
     void StateChanged(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
     void StateDestroyed(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
+	void StateSwitched(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
 
     template<typename T>
     T* GetState(const Urho3D::StringHash& id) const;
@@ -33,6 +34,7 @@ public:
 private:
     Urho3D::HashMap<Urho3D::StringHash, Urho3D::SharedPtr<State>> states_;
     Urho3D::StringHash currentState_;
+	Urho3D::StringHash nextState_;
 };
 
 template<typename T>

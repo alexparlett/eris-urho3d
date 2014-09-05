@@ -6,7 +6,9 @@
 
 #include "GalaxyState.h"
 
-#include "GamePlay/MapGenerator.h"
+#include "Core/Events.h"
+#include "GamePlay/Scene/MapGenerator.h"
+#include "GamePlay/Scene/Components/TurnResolver.h"
 
 #include <ResourceCache.h>
 #include <Scene.h>
@@ -40,12 +42,12 @@ void GalaxyState::Create ()
 {
 	ResourceCache* rc = GetSubsystem<ResourceCache>();
 
-	scene_ = SharedPtr<Scene>(new Scene(context_));
-
+	scene_ = new Scene(context_);
 	scene_->SetUpdateEnabled(false);
 	scene_->CreateComponent<PhysicsWorld>();
 	scene_->CreateComponent<Octree>();
 	scene_->CreateComponent<NavigationMesh>();
+	scene_->CreateComponent<TurnResolver>();
 
 	camera_ = scene_->CreateChild("Camera");
 	camera_->CreateComponent<Camera>();
@@ -73,10 +75,14 @@ void GalaxyState::Start ()
 
     scene_->GetComponent<NavigationMesh>()->Build();
     scene_->SetUpdateEnabled(true);
+
+	SendEvent(E_GAME_STARTED);
 }
 
 void GalaxyState::Stop ()
 {
+	SendEvent(E_GAME_FINISHED);
+
     scene_->SetUpdateEnabled(false);
 }
 

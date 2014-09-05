@@ -47,3 +47,7 @@ EVENT(E_GAME_STARTED, GameStarted)
 EVENT(E_GAME_FINISHED, GameFinished)
 {
 }
+
+EVENT(E_GAME_TURN, GameTurn)
+{
+}

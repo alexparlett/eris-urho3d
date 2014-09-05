@@ -48,11 +48,6 @@ static void RegisterLocale(asIScriptEngine* engine)
     engine->RegisterGlobalFunction("Locale@+ get_locale()", asFUNCTION(GetLocale), asCALL_CDECL);
 }
 
-static void RegisterStates(asIScriptEngine* engine)
-{
-	RegisterObject<GalaxyState>(engine, "GalaxyState");
-}
-
 template<typename T>
 static void ConstructObject(T* ptr)
 {
@@ -63,5 +58,4 @@ void RegisterScriptAPI(asIScriptEngine* engine)
 {
     RegisterLocale(engine);
     RegisterSettings(engine);
-	RegisterStates(engine);
 }

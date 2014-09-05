@@ -9,21 +9,26 @@
 #include "Events.h"
 
 #include <Log.h>
+#include <CoreEvents.h>
 
 using namespace Urho3D;
 
-StateManager::StateManager(Urho3D::Context* context) :
+StateManager::StateManager(Context* context) :
     Object(context),
-    currentState_(-1),
+	currentState_(StringHash::ZERO),
+	nextState_(StringHash::ZERO),
     states_(HashMap<StringHash, SharedPtr<State>>())
 {
     SubscribeToEvent(E_STATE_CREATED, HANDLER(StateManager, StateCreated));
     SubscribeToEvent(E_STATE_CHANGED, HANDLER(StateManager, StateChanged));
     SubscribeToEvent(E_STATE_DESTROYED, HANDLER(StateManager, StateDestroyed));
+	SubscribeToEvent(E_BEGINFRAME, HANDLER(StateManager, StateSwitched));
 }
 
 StateManager::~StateManager()
 {
+	UnsubscribeFromAllEvents();
+
     HashMap<StringHash, SharedPtr<State>>::Iterator iter = states_.Begin();
     while (iter != states_.End())
     {
@@ -34,7 +39,7 @@ StateManager::~StateManager()
     states_.Clear();
 }
 
-void StateManager::StateCreated(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
+void StateManager::StateCreated(StringHash eventType, VariantMap& eventData)
 {
     using namespace StateCreated;
 
@@ -52,7 +57,7 @@ void StateManager::StateCreated(Urho3D::StringHash eventType, Urho3D::VariantMap
     }
 }
 
-void StateManager::StateChanged(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
+void StateManager::StateChanged(StringHash eventType, VariantMap& eventData)
 {
     using namespace StateChanged;
 
@@ -61,13 +66,7 @@ void StateManager::StateChanged(Urho3D::StringHash eventType, Urho3D::VariantMap
     {
         if (states_.Contains(id))
         {
-            State* newActive = states_[id];
-
-            if (currentState_ != StringHash::ZERO && states_.Contains(currentState_)) 
-                states_[currentState_]->Stop();
-
-            currentState_ = id;
-            newActive->Start();
+			nextState_ = id;
         }
         else
         {
@@ -80,27 +79,42 @@ void StateManager::StateChanged(Urho3D::StringHash eventType, Urho3D::VariantMap
     }
 }
 
-void StateManager::StateDestroyed(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
+void StateManager::StateDestroyed(StringHash eventType, VariantMap& eventData)
 {
-    using namespace StateDestroyed;
+	using namespace StateDestroyed;
 
-    StringHash id = eventData[P_ID].GetStringHash();
-    if (id != StringHash::ZERO)
-    {
-        if (states_.Contains(id) && id != currentState_)
-        {
-            states_[id]->Destroy();
-            states_[id].Reset();
-            states_.Erase(id);
-        }
-        else
-            LOGERROR("Cannot destroy state " + id.ToString() + " either current or doesn't exist.");
-    }
-    else
-        LOGERROR("State with id " + id.ToString() + " is not a valid id.");
+	StringHash id = eventData[P_ID].GetStringHash();
+	if (id != StringHash::ZERO)
+	{
+		if (states_.Contains(id) && id != currentState_ && id != nextState_)
+		{
+			states_[id]->Destroy();
+			states_[id].Reset();
+			states_.Erase(id);
+		}
+		else
+			LOGERROR("Cannot destroy state " + id.ToString() + " either current, next or doesn't exist.");
+	}
+	else
+		LOGERROR("State with id " + id.ToString() + " is not a valid id.");
 }
 
-State* StateManager::GetState(const Urho3D::StringHash& id) const
+void StateManager::StateSwitched(StringHash eventType, VariantMap& eventData)
+{
+	if (nextState_ != StringHash::ZERO)
+	{
+		State* newActive = states_[nextState_];
+
+		if (currentState_ != StringHash::ZERO && states_.Contains(currentState_))
+			states_[currentState_]->Stop();
+
+		currentState_ = nextState_;
+		nextState_ = StringHash::ZERO;
+		newActive->Start();
+	}
+}
+
+State* StateManager::GetState(const StringHash& id) const
 {
     HashMap<StringHash, SharedPtr<State>>::ConstIterator find = states_.Find(id);
     return find != states_.End() ? find->second_.Get() : NULL;
