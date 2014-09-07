@@ -1,8 +1,0 @@
-<cubemap>
-    <face name="BasicStarsFront.png" />
-    <face name="BasicStarsBack.png" />
-    <face name="BasicStarsRight.png" />
-    <face name="BasicStarsLeft.png" />
-    <face name="BasicStarsTop.png" />
-    <face name="BasicStarsBottom.png" />
-</cubemap>

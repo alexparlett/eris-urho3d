@@ -96,16 +96,16 @@ void LaunchState::Destroy()
 
 void LaunchState::HandleTimer(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
 {
-    if (timer_.GetMSec(false) > 3000)
+    if (timer_.GetMSec(false) > 5000)
     {
         VariantMap createData = GetEventDataMap();
-        createData[StateCreated::P_STATE] = new GalaxyState(context_);
-        createData[StateCreated::P_ID] = StringHash("GameState");
-        SendEvent(E_STATE_CREATED, createData);
+        createData[StateCreate::P_STATE] = new GalaxyState(context_);
+        createData[StateCreate::P_ID] = StringHash("GameState");
+        SendEvent(E_STATE_CREATE, createData);
 
         VariantMap changeData = GetEventDataMap();
-        changeData[StateChanged::P_ID] = StringHash("GameState");
-        SendEvent(E_STATE_CHANGED, changeData);
+        changeData[StateChange::P_ID] = StringHash("GameState");
+        SendEvent(E_STATE_CHANGE, changeData);
     }
 }
 
@@ -118,12 +118,12 @@ void LaunchState::HandleKey(Urho3D::StringHash eventType, Urho3D::VariantMap& ev
     if (scanCode == SCANCODE_SPACE || scanCode == SCANCODE_ESCAPE)
     {
         VariantMap createData = GetEventDataMap();
-        createData[StateCreated::P_STATE] = new GalaxyState(context_);
-        createData[StateCreated::P_ID] = StringHash("GameState");
-        SendEvent(E_STATE_CREATED, createData);
+        createData[StateCreate::P_STATE] = new GalaxyState(context_);
+        createData[StateCreate::P_ID] = StringHash("GameState");
+        SendEvent(E_STATE_CREATE, createData);
 
         VariantMap changeData = GetEventDataMap();
-        changeData[StateChanged::P_ID] = StringHash("GameState");
-        SendEvent(E_STATE_CHANGED, changeData);
+        changeData[StateChange::P_ID] = StringHash("GameState");
+        SendEvent(E_STATE_CHANGE, changeData);
     }
 }

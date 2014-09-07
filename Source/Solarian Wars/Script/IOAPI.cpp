@@ -4,15 +4,12 @@
 //
 ////////////////////////////////////////////
 
-#include "ScriptDefs.h"
+#include "ScriptAPI.h"
 #include "IO/Locale.h"
 #include "IO/Settings.h"
-#include "States/State.h"
-#include "States/GalaxyState.h"
 
 #include <APITemplates.h>
 #include <angelscript.h>
-#include <stddef.h>
 
 using namespace Urho3D;
 
@@ -48,13 +45,7 @@ static void RegisterLocale(asIScriptEngine* engine)
     engine->RegisterGlobalFunction("Locale@+ get_locale()", asFUNCTION(GetLocale), asCALL_CDECL);
 }
 
-template<typename T>
-static void ConstructObject(T* ptr)
-{
-    new(ptr) T();
-}
-
-void RegisterScriptAPI(asIScriptEngine* engine)
+void RegisterIOAPI(asIScriptEngine* engine)
 {
     RegisterLocale(engine);
     RegisterSettings(engine);

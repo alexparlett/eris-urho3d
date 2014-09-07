@@ -24,6 +24,8 @@
 #include <Material.h>
 #include <TextureCube.h>
 #include <Skybox.h>
+#include <Model.h>
+#include <SoundListener.h>
 
 using namespace Urho3D;
 
@@ -32,6 +34,7 @@ GalaxyState::GalaxyState(Context* context) :
     scene_(NULL),
     camera_(NULL)
 {
+    TurnResolver::RegisterObject(context);
 }
 
 GalaxyState::~GalaxyState()
@@ -40,24 +43,8 @@ GalaxyState::~GalaxyState()
 
 void GalaxyState::Create ()
 {
-	ResourceCache* rc = GetSubsystem<ResourceCache>();
-
-	scene_ = new Scene(context_);
-	scene_->SetUpdateEnabled(false);
-	scene_->CreateComponent<PhysicsWorld>();
-	scene_->CreateComponent<Octree>();
-	scene_->CreateComponent<NavigationMesh>();
-	scene_->CreateComponent<TurnResolver>();
-
-	camera_ = scene_->CreateChild("Camera");
-	camera_->CreateComponent<Camera>();
-	camera_->SetPosition(Vector3(0, 20.f, 0));
-
-	Node* skyboxNode =  scene_->CreateChild("Skybox");
-	Skybox* skybox = skyboxNode->CreateComponent<Skybox>();
-	skybox->SetMaterial(rc->GetResource<Material>("Materials/Skybox.xml"));
-
-	GetSubsystem<Script>()->SetDefaultScene(scene_);
+    CreateScene();
+    CreateCamera();
 
     ScriptFile* file = GetSubsystem<ResourceCache>()->GetResource<ScriptFile>("Scripts/Maps/CampaignMap.as");
     if (file)
@@ -69,9 +56,9 @@ void GalaxyState::Create ()
 
 void GalaxyState::Start ()
 {
-    Renderer* rdr = GetSubsystem<Renderer>();
-    rdr->GetViewport(0)->SetScene(scene_);
-    rdr->GetViewport(0)->SetCamera(camera_->GetComponent<Camera>());
+    Viewport* viewport = GetSubsystem<Renderer>()->GetViewport(0);
+    viewport->SetScene(scene_);
+    viewport->SetCamera(camera_->GetChild("CameraNode")->GetComponent<Camera>());
 
     scene_->GetComponent<NavigationMesh>()->Build();
     scene_->SetUpdateEnabled(true);
@@ -99,4 +86,35 @@ void GalaxyState::Destroy ()
         scene_->ResetScene();
         scene_.Reset();
     }
+}
+
+void GalaxyState::CreateScene()
+{
+    ResourceCache* rc = GetSubsystem<ResourceCache>();
+
+    scene_ = new Scene(context_);
+    scene_->SetUpdateEnabled(false);
+    scene_->CreateComponent<PhysicsWorld>();
+    scene_->CreateComponent<Octree>();
+    scene_->CreateComponent<NavigationMesh>();
+    scene_->CreateComponent<TurnResolver>();
+
+    Node* skyboxNode = scene_->CreateChild("Skybox");
+    skyboxNode->SetScale(0.25f);
+
+    Skybox* skybox = skyboxNode->CreateComponent<Skybox>();
+    skybox->SetModel(rc->GetResource<Model>("Models/Box.mdl"));
+    skybox->SetMaterial(rc->GetResource<Material>("Materials/Skybox.xml"));
+
+    GetSubsystem<Script>()->SetDefaultScene(scene_);
+}
+
+void GalaxyState::CreateCamera()
+{
+    camera_ = scene_->CreateChild("CameraPivot");
+    camera_->SetPosition(Vector3(0.0f, 5.0f, 0.0f));
+    camera_->CreateComponent<SoundListener>();
+
+    Node* camNode = camera_->CreateChild("CameraNode");
+    camNode->CreateComponent<Camera>();
 }

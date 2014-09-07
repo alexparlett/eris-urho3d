@@ -19,10 +19,10 @@ StateManager::StateManager(Context* context) :
 	nextState_(StringHash::ZERO),
     states_(HashMap<StringHash, SharedPtr<State>>())
 {
-    SubscribeToEvent(E_STATE_CREATED, HANDLER(StateManager, StateCreated));
-    SubscribeToEvent(E_STATE_CHANGED, HANDLER(StateManager, StateChanged));
-    SubscribeToEvent(E_STATE_DESTROYED, HANDLER(StateManager, StateDestroyed));
-	SubscribeToEvent(E_BEGINFRAME, HANDLER(StateManager, StateSwitched));
+    SubscribeToEvent(E_STATE_CREATE, HANDLER(StateManager, HandleCreate));
+    SubscribeToEvent(E_STATE_CHANGE, HANDLER(StateManager, HandleChange));
+    SubscribeToEvent(E_STATE_DESTROY, HANDLER(StateManager, HandleDestroy));
+	SubscribeToEvent(E_BEGINFRAME, HANDLER(StateManager, HandleFrame));
 }
 
 StateManager::~StateManager()
@@ -39,9 +39,9 @@ StateManager::~StateManager()
     states_.Clear();
 }
 
-void StateManager::StateCreated(StringHash eventType, VariantMap& eventData)
+void StateManager::HandleCreate(StringHash eventType, VariantMap& eventData)
 {
-    using namespace StateCreated;
+    using namespace StateCreate;
 
     State* state = reinterpret_cast<State*>(eventData[P_STATE].GetPtr());
     StringHash id = eventData[P_ID].GetStringHash();
@@ -57,9 +57,9 @@ void StateManager::StateCreated(StringHash eventType, VariantMap& eventData)
     }
 }
 
-void StateManager::StateChanged(StringHash eventType, VariantMap& eventData)
+void StateManager::HandleChange(StringHash eventType, VariantMap& eventData)
 {
-    using namespace StateChanged;
+    using namespace StateChange;
 
     StringHash id = eventData[P_ID].GetStringHash();
     if (id != StringHash::ZERO)
@@ -79,9 +79,9 @@ void StateManager::StateChanged(StringHash eventType, VariantMap& eventData)
     }
 }
 
-void StateManager::StateDestroyed(StringHash eventType, VariantMap& eventData)
+void StateManager::HandleDestroy(StringHash eventType, VariantMap& eventData)
 {
-	using namespace StateDestroyed;
+	using namespace StateDestroy;
 
 	StringHash id = eventData[P_ID].GetStringHash();
 	if (id != StringHash::ZERO)
@@ -99,7 +99,7 @@ void StateManager::StateDestroyed(StringHash eventType, VariantMap& eventData)
 		LOGERROR("State with id " + id.ToString() + " is not a valid id.");
 }
 
-void StateManager::StateSwitched(StringHash eventType, VariantMap& eventData)
+void StateManager::HandleFrame(StringHash eventType, VariantMap& eventData)
 {
 	if (nextState_ != StringHash::ZERO)
 	{

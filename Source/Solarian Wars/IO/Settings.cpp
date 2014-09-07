@@ -20,7 +20,7 @@ using namespace Urho3D;
 Settings::Settings(Context* context) :
     Object(context)
 {
-    settings_["version"] = String(version);
+    settings_["version"] = String(version).ToUpper();
     settings_["userdir"] = GetSubsystem<FileSystem>()->GetUserDocumentsDir() + "My Games/Solarian Wars/";
 }
 

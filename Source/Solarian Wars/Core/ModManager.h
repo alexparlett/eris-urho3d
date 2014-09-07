@@ -31,9 +31,9 @@ public:
     bool IsActive(Urho3D::String id) const;
 
 private:
-    void ModActivated(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
-    void ModDeactivated(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
-    void ModOrderSaved(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
+    void HandleActivate(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
+    void HandleDeactivate(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
+    void HandleSave(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
 
     void Activate(const Urho3D::String& id, unsigned int priorty = PRIORITY_LOW);
 

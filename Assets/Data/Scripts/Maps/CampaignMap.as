@@ -2,14 +2,14 @@
 #include "Scripts/Types/Galaxy.as"
 #include "Scripts/Types/System.as"
 
-class Map : ScriptObject
+class CampaignMap : Map, ScriptObject
 {
-	Map()
+	CampaignMap()
 	{
         @galaxy = Galaxy();
 	}
     
-    void run()
+    void generate()
 	{	
 		System@ solari = galaxy.CreateSystem("Solari", Vector3(0,0,0));
 	}

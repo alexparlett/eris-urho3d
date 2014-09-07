@@ -22,10 +22,10 @@ public:
     StateManager(Urho3D::Context* context);
     virtual ~StateManager();
 
-    void StateCreated(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
-    void StateChanged(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
-    void StateDestroyed(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
-	void StateSwitched(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
+    void HandleCreate(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
+    void HandleChange(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
+    void HandleDestroy(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
+	void HandleFrame(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
 
     template<typename T>
     T* GetState(const Urho3D::StringHash& id) const;

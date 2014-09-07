@@ -20,9 +20,9 @@ using namespace Urho3D;
 ModManager::ModManager(Context* context) : 
     Object(context)
 {
-    SubscribeToEvent(E_MOD_ACTIVATED, HANDLER(ModManager, ModActivated));
-    SubscribeToEvent(E_MOD_DEACTIVATED, HANDLER(ModManager, ModDeactivated));
-    SubscribeToEvent(E_MOD_ORDER_SAVED, HANDLER(ModManager, ModOrderSaved));
+    SubscribeToEvent(E_MOD_ACTIVATE, HANDLER(ModManager, HandleActivate));
+    SubscribeToEvent(E_MOD_DEACTIVATE, HANDLER(ModManager, HandleDeactivate));
+    SubscribeToEvent(E_MOD_ORDER_SAVE, HANDLER(ModManager, HandleSave));
 }
 
 void ModManager::Load()
@@ -88,18 +88,20 @@ bool ModManager::IsActive(String id) const
     return activeMods_.Contains(id);
 }
 
-void ModManager::ModActivated(StringHash eventType, VariantMap& eventData)
+void ModManager::HandleActivate(StringHash eventType, VariantMap& eventData)
 {
-    using namespace ModActivated;
+    using namespace ModActivate;
+
     String id = eventData[P_ID].ToString();
     unsigned int priority = eventData[P_PRIORITY].GetUInt();
 
     Activate(id, priority);
 }
 
-void ModManager::ModDeactivated(StringHash eventType, VariantMap& eventData)
+void ModManager::HandleDeactivate(StringHash eventType, VariantMap& eventData)
 {
-    using namespace ModDeactivated;
+    using namespace ModDeactivate;
+
     String id = eventData[P_ID].ToString();
 
     if (activeMods_.Contains(id))
@@ -112,7 +114,7 @@ void ModManager::ModDeactivated(StringHash eventType, VariantMap& eventData)
     }
 }
 
-void ModManager::ModOrderSaved(StringHash eventType, VariantMap& eventData)
+void ModManager::HandleSave(StringHash eventType, VariantMap& eventData)
 {
     GetSubsystem<ResourceCache>()->ReleaseAllResources();
     ActivateMods();

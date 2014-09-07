@@ -11,7 +11,7 @@
 #include "Events.h"
 #include "ModManager.h"
 #include "IO/Locale.h"
-#include "ScriptDefs.h"
+#include "Script/ScriptAPI.h"
 
 #include <APITemplates.h>
 #include <Script.h>
@@ -58,7 +58,6 @@ void SolarianWars::Setup()
 
     ParseArgs();
 
-    input->SetMouseVisible(true);
     cache->SetAutoReloadResources(false);
 
     settings->Load();
@@ -92,19 +91,16 @@ void SolarianWars::Start()
 {
     GetSubsystem<ModManager>()->Load();
     GetSubsystem<Locale>()->Load(GetSubsystem<Settings>()->GetSetting("language", "enGB").GetString());
-
-	Viewport* port = new Viewport(context_);
-	port->SetRenderPath(GetSubsystem<ResourceCache>()->GetResource<XMLFile>("RenderPaths/Deferred.xml"));
-	GetSubsystem<Renderer>()->SetViewport(0, port);
+    GetSubsystem<Renderer>()->SetViewport(0, new Viewport(context_));
 
     VariantMap createData = GetEventDataMap();
-    createData[StateCreated::P_STATE] = new LaunchState(context_);
-    createData[StateCreated::P_ID] = StringHash("LaunchState");
-    SendEvent(E_STATE_CREATED, createData);
+    createData[StateCreate::P_STATE] = new LaunchState(context_);
+    createData[StateCreate::P_ID] = StringHash("LaunchState");
+    SendEvent(E_STATE_CREATE, createData);
 
     VariantMap changeData = GetEventDataMap();
-    changeData[StateChanged::P_ID] = StringHash("LaunchState");
-    SendEvent(E_STATE_CHANGED, changeData);
+    changeData[StateChange::P_ID] = StringHash("LaunchState");
+    SendEvent(E_STATE_CHANGE, changeData);
 }
 
 void SolarianWars::Stop()

@@ -27,6 +27,9 @@ public:
     virtual void Destroy ();
 
 private:
+    void CreateScene();
+    void CreateCamera();
+
 	Urho3D::SharedPtr<Urho3D::Scene> scene_;
     Urho3D::SharedPtr<Urho3D::Node> camera_;
 };

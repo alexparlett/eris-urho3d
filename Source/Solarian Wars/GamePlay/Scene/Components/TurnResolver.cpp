@@ -2,6 +2,8 @@
 
 #include "Core/Events.h"
 
+#include <Context.h>
+
 using namespace Urho3D;
 
 TurnResolver::TurnResolver(Context* context) :
