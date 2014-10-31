@@ -225,6 +225,7 @@ xcopy "$(SolutionDir)Assets\settings.xml" "$(SolutionDir)Game" /Y /D</Command>
   <ItemGroup>
     <ClInclude Include="..\gitversion.h" />
     <ClInclude Include="Core\Events.h" />
+    <ClInclude Include="IO\Bindings.h" />
     <ClInclude Include="Script\ScriptAPI.h" />
     <ClInclude Include="Core\SolarianWars.h" />
     <ClInclude Include="GamePlay\Scene\Components\TurnResolver.h" />
@@ -241,6 +242,7 @@ xcopy "$(SolutionDir)Assets\settings.xml" "$(SolutionDir)Game" /Y /D</Command>
     <ClInclude Include="Core\StateManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="IO\Bindings.cpp" />
     <ClCompile Include="Script\GameAPI.cpp" />
     <ClCompile Include="Script\IOAPI.cpp" />
     <ClCompile Include="Core\SolarianWars.cpp" />

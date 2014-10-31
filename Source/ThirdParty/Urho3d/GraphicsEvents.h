@@ -27,16 +27,6 @@
 namespace Urho3D
 {
 
-/// Operating system window message.
-EVENT(E_WINDOWMESSAGE, WindowMessage)
-{
-    PARAM(P_WINDOW, Window);                // int
-    PARAM(P_MSG, Msg);                      // int
-    PARAM(P_WPARAM, WParam);                // int
-    PARAM(P_LPARAM, LParam);                // int
-    PARAM(P_HANDLED, Handled);              // bool
-}
-
 /// New screen mode set.
 EVENT(E_SCREENMODE, ScreenMode)
 {
@@ -45,6 +35,13 @@ EVENT(E_SCREENMODE, ScreenMode)
     PARAM(P_FULLSCREEN, Fullscreen);        // bool
     PARAM(P_RESIZABLE, Resizable);          // bool
     PARAM(P_BORDERLESS, Borderless);        // bool
+}
+
+/// Window position changed.
+EVENT(E_WINDOWPOS, WindowPos)
+{
+    PARAM(P_X, X);                          // int
+    PARAM(P_Y, Y);                          // int
 }
 
 /// Graphics features checked.

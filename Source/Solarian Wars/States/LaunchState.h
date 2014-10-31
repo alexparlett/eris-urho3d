@@ -29,6 +29,7 @@ public:
 
     void HandleTimer(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
     void HandleKey(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
+    void HandleButton(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
 
 private:
     Urho3D::SharedPtr<Urho3D::UIElement> loading_;

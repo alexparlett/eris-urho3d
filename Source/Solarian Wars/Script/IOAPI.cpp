@@ -7,6 +7,7 @@
 #include "ScriptAPI.h"
 #include "IO/Locale.h"
 #include "IO/Settings.h"
+#include "IO/Bindings.h"
 
 #include <APITemplates.h>
 #include <angelscript.h>
@@ -28,6 +29,11 @@ static Settings* GetSettings()
     return GetScriptContext()->GetSubsystem<Settings>();
 }
 
+static Bindings* GetBindings()
+{
+    return GetScriptContext()->GetSubsystem<Bindings>();
+}
+
 static void RegisterSettings(asIScriptEngine* engine)
 {
     RegisterObject<Settings>(engine, "Settings");
@@ -45,8 +51,17 @@ static void RegisterLocale(asIScriptEngine* engine)
     engine->RegisterGlobalFunction("Locale@+ get_locale()", asFUNCTION(GetLocale), asCALL_CDECL);
 }
 
+static void RegisterBindings(asIScriptEngine* engine)
+{
+    RegisterObject<Bindings>(engine, "Bindings");
+    engine->RegisterObjectMethod("Bindings", "int get_actionKey(const String&in)", asMETHOD(Bindings, GetActionScanCode), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Bindings", "void set_actionKey(const String&in, int)", asMETHOD(Bindings, SetActionScanCode), asCALL_THISCALL);
+    engine->RegisterGlobalFunction("Bindings@+ get_bindings()", asFUNCTION(GetBindings), asCALL_CDECL);
+}
+
 void RegisterIOAPI(asIScriptEngine* engine)
 {
     RegisterLocale(engine);
     RegisterSettings(engine);
+    RegisterBindings(engine);
 }

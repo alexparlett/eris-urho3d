@@ -55,13 +55,13 @@ class URHO3D_API LogicComponent : public Component
     /// Called when the component is detached from a scene node, usually on destruction.
     virtual void Stop() {}
     /// Called on scene update, variable timestep.
-    virtual void Update(float timeStep) {}
+    virtual void Update(float timeStep);
     /// Called on scene post-update, variable timestep.
-    virtual void PostUpdate(float timeStep) {}
+    virtual void PostUpdate(float timeStep);
     /// Called on physics update, fixed timestep.
-    virtual void FixedUpdate(float timeStep) {}
+    virtual void FixedUpdate(float timeStep);
     /// Called on physics post-update, fixed timestep.
-    virtual void FixedPostUpdate(float timeStep) {}
+    virtual void FixedPostUpdate(float timeStep);
     
     /// Set what update events should be subscribed to. Use this for optimization: by default all are in use. Note that this is not an attribute and is not saved or network-serialized, therefore it should always be called eg. in the subclass constructor.
     void SetUpdateEventMask(unsigned char mask);
@@ -82,11 +82,12 @@ private:
     void HandleSceneUpdate(StringHash eventType, VariantMap& eventData);
     /// Handle scene post-update event.
     void HandleScenePostUpdate(StringHash eventType, VariantMap& eventData);
+#ifdef URHO3D_PHYSICS
     /// Handle physics pre-step event.
     void HandlePhysicsPreStep(StringHash eventType, VariantMap& eventData);
     /// Handle physics post-step event.
     void HandlePhysicsPostStep(StringHash eventType, VariantMap& eventData);
-    
+#endif
     /// Requested event subscription mask.
     unsigned char updateEventMask_;
     /// Current event subscription mask.

@@ -12,6 +12,7 @@
 #include "ModManager.h"
 #include "IO/Locale.h"
 #include "Script/ScriptAPI.h"
+#include "IO/Bindings.h"
 
 #include <APITemplates.h>
 #include <Script.h>
@@ -26,6 +27,9 @@
 #include <Log.h>
 #include <Renderer.h>
 #include <Viewport.h>
+#include <UI.h>
+#include <UIElement.h>
+#include <Cursor.h>
 
 #include <windows.h>
 
@@ -39,6 +43,7 @@ SolarianWars::SolarianWars(Context* context) :
     context->RegisterSubsystem(new StateManager(context));
     context->RegisterSubsystem(new ModManager(context));
     context->RegisterSubsystem(new Locale(context));
+    context->RegisterSubsystem(new Bindings(context));
 
     RegisterScriptAPI(GetSubsystem<Script>()->GetScriptEngine());
 }
@@ -52,6 +57,7 @@ void SolarianWars::Setup()
     Log* log = GetSubsystem<Log>();
     ModManager* mm = GetSubsystem<ModManager>();
     Locale* locale = GetSubsystem<Locale>();
+    Bindings* bindings = GetSubsystem <Bindings>();
 
     log->Open(settings->GetSetting("userdir").GetString() + "sw.log");
     log->WriteRaw("[" + Time::GetTimeStamp() + "] Solarian Wars " + settings->GetSetting("version").GetString() + "\n");
@@ -60,7 +66,12 @@ void SolarianWars::Setup()
 
     cache->SetAutoReloadResources(false);
 
+    input->SetMouseVisible(false);
+
     settings->Load();
+    bindings->Load();
+    mm->Load();
+    locale->Load();
 
     engineParameters_["Headless"] = false;
     engineParameters_["ResourcePaths"] = "00;Data";
@@ -89,8 +100,7 @@ void SolarianWars::Setup()
 
 void SolarianWars::Start()
 {
-    GetSubsystem<ModManager>()->Load();
-    GetSubsystem<Locale>()->Load(GetSubsystem<Settings>()->GetSetting("language", "enGB").GetString());
+    DefineCursor();
     GetSubsystem<Renderer>()->SetViewport(0, new Viewport(context_));
 
     VariantMap createData = GetEventDataMap();
@@ -115,6 +125,29 @@ void SolarianWars::ParseArgs()
 {
     if (GetArguments().Contains("-debug"))
         GetSubsystem<Log>()->SetLevel(LOG_DEBUG);
+}
+
+void SolarianWars::DefineCursor()
+{
+    UI* ui = GetSubsystem<UI>();
+    ResourceCache* rc = GetSubsystem<ResourceCache>();
+
+    Cursor* cursor = new Cursor(context_);
+    Image* image = rc->GetResource<Image>("Textures/UI/Cursors.png");
+
+    if (image)
+    {
+        cursor->DefineShape(CS_NORMAL, image, IntRect(96, 32, 128, 64), IntVector2(4, 2));
+        cursor->DefineShape(CS_REJECTDROP, image, IntRect(0, 0, 32, 32), IntVector2(0, 0));
+        cursor->DefineShape(CS_RESIZEDIAGONAL_TOPLEFT, image, IntRect(0, 32, 32, 64), IntVector2(0, 0));
+        cursor->DefineShape(CS_RESIZEDIAGONAL_TOPRIGHT, image, IntRect(96, 0, 128, 32), IntVector2(0, 0));
+        cursor->DefineShape(CS_RESIZEHORIZONTAL, image, IntRect(64, 0, 96, 32), IntVector2(0, 0));
+        cursor->DefineShape(CS_RESIZEVERTICAL, image, IntRect(32, 0, 64, 32), IntVector2(0, 0));
+        cursor->DefineShape(CS_ACCEPTDROP, image, IntRect(32, 32, 64, 64), IntVector2(0, 0));
+        cursor->DefineShape(CS_BUSY, image, IntRect(0, 64, 32, 96), IntVector2(0, 0));
+    }
+
+    ui->SetCursor(cursor);
 }
 
 DEFINE_APPLICATION_MAIN(SolarianWars)

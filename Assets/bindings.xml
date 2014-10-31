@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<bindings>
+    <action name="openMenu" code="41" />
+</bindings>

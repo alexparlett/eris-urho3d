@@ -148,27 +148,27 @@ public:
     /// React to mouse hover.
     virtual void OnHover(const IntVector2& position, const IntVector2& screenPosition, int buttons, int qualifiers, Cursor* cursor);
     /// React to mouse click begin.
-    virtual void OnClickBegin(const IntVector2& position, const IntVector2& screenPosition, int button, int buttons, int qualifiers, Cursor* cursor) {}
+    virtual void OnClickBegin(const IntVector2& position, const IntVector2& screenPosition, int button, int buttons, int qualifiers, Cursor* cursor);
     /// React to mouse click end.
-    virtual void OnClickEnd(const IntVector2& position, const IntVector2& screenPosition, int button, int buttons, int qualifiers, Cursor* cursor, UIElement* beginElement) {}
+    virtual void OnClickEnd(const IntVector2& position, const IntVector2& screenPosition, int button, int buttons, int qualifiers, Cursor* cursor, UIElement* beginElement);
     /// React to double mouse click.
-    virtual void OnDoubleClick(const IntVector2& position, const IntVector2& screenPosition, int button, int buttons, int qualifiers, Cursor* cursor) {}
+    virtual void OnDoubleClick(const IntVector2& position, const IntVector2& screenPosition, int button, int buttons, int qualifiers, Cursor* cursor);
     /// React to mouse drag begin.
-    virtual void OnDragBegin(const IntVector2& position, const IntVector2& screenPosition, int buttons, int qualifiers, Cursor* cursor) {}
+    virtual void OnDragBegin(const IntVector2& position, const IntVector2& screenPosition, int buttons, int qualifiers, Cursor* cursor);
     /// React to mouse drag motion.
-    virtual void OnDragMove(const IntVector2& position, const IntVector2& screenPosition, int buttons, int qualifiers, Cursor* cursor) {}
+    virtual void OnDragMove(const IntVector2& position, const IntVector2& screenPosition, int buttons, int qualifiers, Cursor* cursor);
     /// React to mouse drag end.
-    virtual void OnDragEnd(const IntVector2& position, const IntVector2& screenPosition, Cursor* cursor) {}
+    virtual void OnDragEnd(const IntVector2& position, const IntVector2& screenPosition, Cursor* cursor);
     /// React to drag and drop test. Return true to signal that the drop is acceptable.
-    virtual bool OnDragDropTest(UIElement* source) { return true; }
+    virtual bool OnDragDropTest(UIElement* source);
     /// React to drag and drop finish. Return true to signal that the drop was accepted.
-    virtual bool OnDragDropFinish(UIElement* source) { return true; }
+    virtual bool OnDragDropFinish(UIElement* source);
     /// React to mouse wheel.
-    virtual void OnWheel(int delta, int buttons, int qualifiers) {}
+    virtual void OnWheel(int delta, int buttons, int qualifiers);
     /// React to a key press.
-    virtual void OnKey(int key, int buttons, int qualifiers) {}
+    virtual void OnKey(int key, int buttons, int qualifiers);
     /// React to text input event.
-    virtual void OnTextInput(const String& text, int buttons, int qualifiers) {}
+    virtual void OnTextInput(const String& text, int buttons, int qualifiers);
     /// React to resize.
     virtual void OnResize() {}
     /// React to position change.
@@ -251,6 +251,12 @@ public:
     void SetUseDerivedOpacity(bool enable);
     /// Set whether reacts to input. Default false, but is enabled by subclasses if applicable.
     void SetEnabled(bool enable);
+    /// Set enabled state on self and child elements. Elements' own enabled state is remembered (IsEnabledSelf) and can be restored.
+    void SetDeepEnabled(bool enable);
+    /// Reset enabled state to the element's remembered state prior to calling SetDeepEnabled.
+    void ResetDeepEnabled();
+    /// Set enabled state on self and child elements. Unlike SetDeepEnabled this does not remember the elements' own enabled state, but overwrites it.
+    void SetEnabledRecursive(bool enable);
     /// Set whether value is editable through input. Not applicable to all elements. Default true.
     void SetEditable(bool enable);
     /// Set whether is focused. Only one element can be focused at a time.
@@ -379,6 +385,8 @@ public:
     bool HasFocus() const;
     /// Return whether reacts to input.
     bool IsEnabled() const { return enabled_; }
+    /// Returns the element's last own enabled state. May be different than the value returned by IsEnabled when SetDeepEnabled has been used.
+    bool IsEnabledSelf() const { return enabledPrev_; }
     /// Return whether value is editable through input.
     bool IsEditable() const { return editable_; }
     /// Return whether is selected. Actual meaning is element dependent.
@@ -511,6 +519,8 @@ protected:
     bool useDerivedOpacity_;
     /// Input enabled flag.
     bool enabled_;
+    /// Last SetEnabled flag before any SetDeepEnabled.
+    bool enabledPrev_;
     /// Value editable flag.
     bool editable_;
     /// Selected flag.

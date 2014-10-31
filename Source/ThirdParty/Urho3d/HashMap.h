@@ -53,6 +53,13 @@ public:
         {
         }
         
+        /// Copy-construct.
+        KeyValue(const KeyValue& value) :
+            first_(value.first_),
+            second_(value.second_)
+        {
+        }
+        
         /// Test for equality with another pair.
         bool operator == (const KeyValue& rhs) const { return first_ == rhs.first_ && second_ == rhs.second_; }
         /// Test for inequality with another pair.
@@ -62,6 +69,10 @@ public:
         const T first_;
         /// Value.
         U second_;
+        
+    private:
+        /// Prevent assignment.
+        KeyValue& operator = (const KeyValue& rhs);
     };
     
     /// Hash map node.
@@ -178,6 +189,7 @@ public:
         Clear();
         FreeNode(Tail());
         AllocatorUninitialize(allocator_);
+        delete[] ptrs_;
     }
     
     /// Assign a hash map.
@@ -451,6 +463,16 @@ public:
         return result;
     }
 
+    /// Return all the values.
+    Vector<U> Values() const
+    {
+        Vector<U> result;
+        result.Reserve(Size());
+        for (ConstIterator i = Begin(); i != End(); ++i)
+            result.Push(i->second_);
+        return result;
+    }
+    
     /// Return iterator to the beginning.
     Iterator Begin() { return Iterator(Head()); }
     /// Return iterator to the beginning.

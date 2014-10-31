@@ -42,6 +42,11 @@
 #include <angelscript.h>
 #include <cstring>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable:4505)
+#endif
+
 namespace Urho3D
 {
 
@@ -1066,8 +1071,12 @@ template <class T> void RegisterUIElement(asIScriptEngine* engine, const char* c
     engine->RegisterObjectMethod(className, "bool get_useDerivedOpacity() const", asMETHOD(T, GetUseDerivedOpacity), asCALL_THISCALL);
     if (!isSprite)
     {
+        engine->RegisterObjectMethod(className, "void SetDeepEnabled(bool)", asMETHOD(T, SetDeepEnabled), asCALL_THISCALL);
+        engine->RegisterObjectMethod(className, "void ResetDeepEnabled()", asMETHOD(T, ResetDeepEnabled), asCALL_THISCALL);
+        engine->RegisterObjectMethod(className, "void SetEnabledRecursive(bool)", asMETHOD(T, SetEnabledRecursive), asCALL_THISCALL);
         engine->RegisterObjectMethod(className, "void set_enabled(bool)", asMETHOD(T, SetEnabled), asCALL_THISCALL);
         engine->RegisterObjectMethod(className, "bool get_enabled() const", asMETHOD(T, IsEnabled), asCALL_THISCALL);
+        engine->RegisterObjectMethod(className, "bool get_enabledSelf() const", asMETHOD(T, IsEnabledSelf), asCALL_THISCALL);
         engine->RegisterObjectMethod(className, "void set_editable(bool)", asMETHOD(T, SetEditable), asCALL_THISCALL);
         engine->RegisterObjectMethod(className, "bool get_editable() const", asMETHOD(T, IsEditable), asCALL_THISCALL);
         engine->RegisterObjectMethod(className, "void set_focus(bool)", asMETHOD(T, SetFocus), asCALL_THISCALL);
@@ -1168,6 +1177,8 @@ template <class T> void RegisterWindow(asIScriptEngine* engine, const char* clas
     engine->RegisterObjectMethod(className, "const Color& get_modalFrameColor() const", asMETHOD(T, GetModalFrameColor), asCALL_THISCALL);
     engine->RegisterObjectMethod(className, "void set_modalFrameSize(const IntVector2&in)", asMETHOD(T, SetModalFrameSize), asCALL_THISCALL);
     engine->RegisterObjectMethod(className, "const IntVector2& get_modalFrameSize() const", asMETHOD(T, GetModalFrameSize), asCALL_THISCALL);
+    engine->RegisterObjectMethod(className, "void set_modalAutoDismiss(bool)", asMETHOD(T, SetModalAutoDismiss), asCALL_THISCALL);
+    engine->RegisterObjectMethod(className, "bool get_modalAutoDismiss() const", asMETHOD(T, GetModalAutoDismiss), asCALL_THISCALL);
     engine->RegisterObjectMethod(className, "void set_fixedWidthResizing(bool)", asMETHOD(T, SetFixedWidthResizing), asCALL_THISCALL);
     engine->RegisterObjectMethod(className, "bool get_fixedWidthResizing() const", asMETHOD(T, GetFixedWidthResizing), asCALL_THISCALL);
     engine->RegisterObjectMethod(className, "void set_fixedHeightResizing(bool)", asMETHOD(T, SetFixedHeightResizing), asCALL_THISCALL);
@@ -1193,3 +1204,7 @@ template <class T> void RegisterButton(asIScriptEngine* engine, const char* clas
 }
 
 }
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif

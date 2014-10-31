@@ -9,6 +9,7 @@
 #include <Timer.h>
 #include <Font.h>
 #include <InputEvents.h>
+#include <CoreEvents.h>
 
 #include "IO/Settings.h"
 #include "Core/Events.h"
@@ -59,8 +60,9 @@ void LaunchState::Create()
     bi->SetAlignment(HorizontalAlignment::HA_CENTER, VerticalAlignment::VA_CENTER);
 	bi->SetFocusMode(FocusMode::FM_NOTFOCUSABLE);
 
-    SubscribeToEvent("EndFrame", HANDLER(LaunchState, HandleTimer));
-    SubscribeToEvent("KeyUp", HANDLER(LaunchState, HandleKey));
+    SubscribeToEvent(E_ENDFRAME, HANDLER(LaunchState, HandleTimer));
+    SubscribeToEvent(E_KEYDOWN, HANDLER(LaunchState, HandleKey));
+    SubscribeToEvent(E_MOUSEBUTTONUP, HANDLER(LaunchState, HandleButton));
 }
 
 void LaunchState::Start()
@@ -96,7 +98,7 @@ void LaunchState::Destroy()
 
 void LaunchState::HandleTimer(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
 {
-    if (timer_.GetMSec(false) > 5000)
+    if (timer_.GetMSec(false) > 10000)
     {
         VariantMap createData = GetEventDataMap();
         createData[StateCreate::P_STATE] = new GalaxyState(context_);
@@ -111,7 +113,7 @@ void LaunchState::HandleTimer(Urho3D::StringHash eventType, Urho3D::VariantMap& 
 
 void LaunchState::HandleKey(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
 {
-    using namespace KeyUp;
+    using namespace KeyDown;
 
     int scanCode = eventData[P_SCANCODE].GetInt();
 
@@ -126,4 +128,18 @@ void LaunchState::HandleKey(Urho3D::StringHash eventType, Urho3D::VariantMap& ev
         changeData[StateChange::P_ID] = StringHash("GameState");
         SendEvent(E_STATE_CHANGE, changeData);
     }
+}
+
+void LaunchState::HandleButton(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
+{
+    using namespace MouseButtonDown;
+
+    VariantMap createData = GetEventDataMap();
+    createData[StateCreate::P_STATE] = new GalaxyState(context_);
+    createData[StateCreate::P_ID] = StringHash("GameState");
+    SendEvent(E_STATE_CREATE, createData);
+
+    VariantMap changeData = GetEventDataMap();
+    changeData[StateChange::P_ID] = StringHash("GameState");
+    SendEvent(E_STATE_CHANGE, changeData);
 }

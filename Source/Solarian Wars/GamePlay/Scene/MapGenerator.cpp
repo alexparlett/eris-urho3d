@@ -11,7 +11,7 @@
 using namespace Urho3D;
 
 MapGenerator::MapGenerator(ScriptFile* scriptFile) :
-	scriptFile_(scriptFile)
+scriptFile_(scriptFile)
 {
 }
 
@@ -21,11 +21,11 @@ MapGenerator::~MapGenerator()
 
 void MapGenerator::Generate()
 {
- 	asIScriptObject* obj = scriptFile_->CreateObject("Map", true);
-	if (obj)
-	{
-		asIScriptFunction* run = scriptFile_->GetMethod(obj, "void generate()");
+    asIScriptObject* obj = scriptFile_->CreateObject("Map", true);
+    if (obj)
+    {
+        asIScriptFunction* run = scriptFile_->GetMethod(obj, "void generate()");
         if (run)
             scriptFile_->Execute(obj, run);
-	}
+    }
 }

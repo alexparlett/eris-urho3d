@@ -22,4 +22,5 @@ public:
 
 private:
     void ParseArgs();
+    void BuildCursor();
 };
