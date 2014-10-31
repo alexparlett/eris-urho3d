@@ -70,8 +70,7 @@ void SolarianWars::Setup()
 
     settings->Load();
     bindings->Load();
-    mm->Load();
-    locale->Load();
+    locale->Load(settings->GetSetting("language", "enGB").GetString());
 
     engineParameters_["Headless"] = false;
     engineParameters_["ResourcePaths"] = "00;Data";
@@ -101,7 +100,9 @@ void SolarianWars::Setup()
 void SolarianWars::Start()
 {
     DefineCursor();
+
     GetSubsystem<Renderer>()->SetViewport(0, new Viewport(context_));
+    GetSubsystem<ModManager>()->Load();
 
     VariantMap createData = GetEventDataMap();
     createData[StateCreate::P_STATE] = new LaunchState(context_);
