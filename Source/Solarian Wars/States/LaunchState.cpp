@@ -13,7 +13,7 @@
 
 #include "IO/Settings.h"
 #include "Core/Events.h"
-#include "GalaxyState.h"
+#include "MenuState.h"
 
 using namespace Urho3D;
 
@@ -98,15 +98,17 @@ void LaunchState::Destroy()
 
 void LaunchState::HandleTimer(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
 {
-    if (timer_.GetMSec(false) > 10000)
+    if (timer_.GetMSec(false) > 5000 && !switching_)
     {
+        switching_ = true;
+
         VariantMap createData = GetEventDataMap();
-        createData[StateCreate::P_STATE] = new GalaxyState(context_);
-        createData[StateCreate::P_ID] = StringHash("GameState");
+        createData[StateCreate::P_STATE] = new MenuState(context_);
+        createData[StateCreate::P_ID] = StringHash("MenuState");
         SendEvent(E_STATE_CREATE, createData);
 
         VariantMap changeData = GetEventDataMap();
-        changeData[StateChange::P_ID] = StringHash("GameState");
+        changeData[StateChange::P_ID] = StringHash("MenuState");
         SendEvent(E_STATE_CHANGE, changeData);
     }
 }
@@ -117,15 +119,17 @@ void LaunchState::HandleKey(Urho3D::StringHash eventType, Urho3D::VariantMap& ev
 
     int scanCode = eventData[P_SCANCODE].GetInt();
 
-    if (scanCode == SCANCODE_SPACE || scanCode == SCANCODE_ESCAPE)
+    if ((scanCode == SCANCODE_SPACE || scanCode == SCANCODE_ESCAPE) && !switching_)
     {
+        switching_ = true;
+
         VariantMap createData = GetEventDataMap();
-        createData[StateCreate::P_STATE] = new GalaxyState(context_);
-        createData[StateCreate::P_ID] = StringHash("GameState");
+        createData[StateCreate::P_STATE] = new MenuState(context_);
+        createData[StateCreate::P_ID] = StringHash("MenuState");
         SendEvent(E_STATE_CREATE, createData);
 
         VariantMap changeData = GetEventDataMap();
-        changeData[StateChange::P_ID] = StringHash("GameState");
+        changeData[StateChange::P_ID] = StringHash("MenuState");
         SendEvent(E_STATE_CHANGE, changeData);
     }
 }
@@ -134,12 +138,17 @@ void LaunchState::HandleButton(Urho3D::StringHash eventType, Urho3D::VariantMap&
 {
     using namespace MouseButtonDown;
 
-    VariantMap createData = GetEventDataMap();
-    createData[StateCreate::P_STATE] = new GalaxyState(context_);
-    createData[StateCreate::P_ID] = StringHash("GameState");
-    SendEvent(E_STATE_CREATE, createData);
+    if (!switching_)
+    {
+        switching_ = true;
 
-    VariantMap changeData = GetEventDataMap();
-    changeData[StateChange::P_ID] = StringHash("GameState");
-    SendEvent(E_STATE_CHANGE, changeData);
+        VariantMap createData = GetEventDataMap();
+        createData[StateCreate::P_STATE] = new MenuState(context_);
+        createData[StateCreate::P_ID] = StringHash("MenuState");
+        SendEvent(E_STATE_CREATE, createData);
+
+        VariantMap changeData = GetEventDataMap();
+        changeData[StateChange::P_ID] = StringHash("MenuState");
+        SendEvent(E_STATE_CHANGE, changeData);
+    }
 }

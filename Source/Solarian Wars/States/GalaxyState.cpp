@@ -26,6 +26,7 @@
 #include <Skybox.h>
 #include <Model.h>
 #include <SoundListener.h>
+#include <UI.h>
 
 using namespace Urho3D;
 
@@ -62,6 +63,8 @@ void GalaxyState::Start ()
 
     scene_->GetComponent<NavigationMesh>()->Build();
     scene_->SetUpdateEnabled(true);
+
+    GetSubsystem<UI>()->GetCursor()->SetVisible(true);
 
 	SendEvent(E_GAME_STARTED);
 }

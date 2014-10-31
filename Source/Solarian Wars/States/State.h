@@ -14,11 +14,14 @@ class State : public Urho3D::Object
     BASEOBJECT(State)
 
 public:
-    State(Urho3D::Context* context) : Urho3D::Object(context) { }
+    State(Urho3D::Context* context) : Urho3D::Object(context), switching_(false) { }
     virtual ~State() { }
 
     virtual void Create() = 0;
     virtual void Start() = 0;
     virtual void Stop() = 0;
     virtual void Destroy() = 0;
+
+protected:
+    bool switching_;
 };

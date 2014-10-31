@@ -24,7 +24,7 @@ void MapGenerator::Generate()
     asIScriptObject* obj = scriptFile_->CreateObject("Map", true);
     if (obj)
     {
-        asIScriptFunction* run = scriptFile_->GetMethod(obj, "void generate()");
+        asIScriptFunction* run = scriptFile_->GetMethod(obj, "void Generate()");
         if (run)
             scriptFile_->Execute(obj, run);
     }

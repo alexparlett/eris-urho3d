@@ -1,6 +1,6 @@
 #include "Scripts/Types/System.as"
 
-class Galaxy
+shared class Galaxy : ScriptObject
 {
 	Array<System@> systems;
 

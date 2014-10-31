@@ -6,6 +6,10 @@
 
 #pragma once
 
+#include <Ptr.h>
+#include <Node.h>
+#include <Scene.h>
+
 #include "State.h"
 
 class MenuState : public State
@@ -18,12 +22,16 @@ public:
     virtual ~MenuState ();
 
     virtual void Create();
-
     virtual void Start();
-
     virtual void Stop();
-
     virtual void Destroy();
 
+private:
+    void CreateCamera();
+    void CreateScene();
+    void CreateUI();
+
+    Urho3D::SharedPtr<Urho3D::Scene> scene_;
+    Urho3D::SharedPtr<Urho3D::Node> camera_;
 };
 

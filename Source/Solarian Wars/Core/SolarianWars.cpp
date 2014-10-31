@@ -134,6 +134,8 @@ void SolarianWars::DefineCursor()
     ResourceCache* rc = GetSubsystem<ResourceCache>();
 
     Cursor* cursor = new Cursor(context_);
+    cursor->SetVisible(false);
+
     Image* image = rc->GetResource<Image>("Textures/UI/Cursors.png");
 
     if (image)
