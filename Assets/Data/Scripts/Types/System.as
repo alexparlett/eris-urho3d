@@ -1,8 +1,15 @@
 #include "Scripts/Types/Planet.as"
 
-class System : ScriptObject
+shared class System : ScriptObject
 {
+    Array<Planet@> planets;
+
 	System()
 	{
 	}
+    
+    void AddPlanet(Planet@ planet)
+    {
+        planets.Push(planet);
+    }
  }

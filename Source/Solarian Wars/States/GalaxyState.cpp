@@ -115,9 +115,9 @@ void GalaxyState::CreateScene()
 void GalaxyState::CreateCamera()
 {
     camera_ = scene_->CreateChild("CameraPivot");
-    camera_->SetPosition(Vector3(0.0f, 5.0f, 0.0f));
-    camera_->CreateComponent<SoundListener>();
+    camera_->SetPosition(Vector3(0.0f, 0.0f, -5.0f));
 
     Node* camNode = camera_->CreateChild("CameraNode");
     camNode->CreateComponent<Camera>();
+    camNode->CreateComponent<SoundListener>();
 }
