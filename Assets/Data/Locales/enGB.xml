@@ -2,9 +2,10 @@
 <locale language="enGB" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="../../Schema/locale.xsd">
     <page id="0">  
-        <line id="1">Continue</line>
-        <line id="2">New Game</line>
-        <line id="3">Load Game</line>
-        <line id="4">Exit</line>
+        <line id="1">NEW</line>
+        <line id="2">LOAD</line>
+        <line id="3">MODS</line>
+        <line id="4">OPTIONS</line>
+        <line id="5">EXIT</line>
     </page>
 </locale>

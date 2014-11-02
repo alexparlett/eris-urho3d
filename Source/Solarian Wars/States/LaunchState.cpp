@@ -11,17 +11,17 @@
 #include <InputEvents.h>
 #include <CoreEvents.h>
 #include <Model.h>
+#include <XMLFile.h>
 
 #include "IO/Settings.h"
 #include "Core/Events.h"
 #include "MenuState.h"
-#include "GalaxyState.h"
 
 using namespace Urho3D;
 
 LaunchState::LaunchState(Context* context) :
     State(context),
-    loading_(NULL),
+    launchRoot_(NULL),
     timer_(Timer())
 {
 }
@@ -31,8 +31,8 @@ LaunchState::~LaunchState()
     if (version_)
         version_.Reset();
 
-    if (loading_)
-        loading_.Reset();
+    if (launchRoot_)
+        launchRoot_.Reset();
 }
 
 void LaunchState::Create()
@@ -42,26 +42,24 @@ void LaunchState::Create()
     Graphics* graphics = GetSubsystem<Graphics>();
 
     UIElement* root = ui->GetRoot();
+    root->SetDefaultStyle(rc->GetResource<XMLFile>("UI/Style.xml"));
 
     version_ = root->CreateChild<Text>("Version");
-    version_->SetAlignment(HorizontalAlignment::HA_LEFT, VerticalAlignment::VA_TOP);
+    version_->SetAlignment(HorizontalAlignment::HA_RIGHT, VerticalAlignment::VA_TOP);
     version_->SetTextAlignment(HorizontalAlignment::HA_LEFT);
     version_->SetText("Rev: " + GetSubsystem<Settings>()->GetSetting("version").GetString().ToUpper());
-    version_->SetFocusMode(FocusMode::FM_NOTFOCUSABLE);
-    version_->SetPosition(0, 0);
-    version_->SetSize(100, 50);
     version_->SetColor(Color::WHITE);
     version_->SetFont(rc->GetResource<Font>("Fonts/msyi.ttf"), 12);
 
-    loading_ = root->CreateChild<UIElement>("LoadingScreen");
+    launchRoot_ = root->CreateChild<UIElement>("LaunchRoot");
+    launchRoot_->SetSize(graphics->GetWidth(), graphics->GetHeight());
+    launchRoot_->SetVisible(false);
 
-    BorderImage* bi = loading_->CreateChild<BorderImage>("Background");
-    bi->SetTexture(rc->GetResource<Texture2D>("Textures/Icon.png"));
-    bi->SetPosition(graphics->GetWidth() / 2, graphics->GetHeight() / 2);
+    BorderImage* bi = launchRoot_->CreateChild<BorderImage>("LaunchLogo");
+    bi->SetTexture(rc->GetResource<Texture2D>("Textures/UI/LaunchLogo.png"));
     bi->SetSize(512, 512);
     bi->SetAlignment(HorizontalAlignment::HA_CENTER, VerticalAlignment::VA_CENTER);
-	bi->SetFocusMode(FocusMode::FM_NOTFOCUSABLE);
-
+    bi->SetBlendMode(BLEND_ALPHA);
 }
 
 void LaunchState::Start()
@@ -72,8 +70,7 @@ void LaunchState::Start()
 
     AsyncLoadCoreData();
 
-    loading_->SetEnabled(true);
-	loading_->SetVisible(true);
+	launchRoot_->SetVisible(true);
 
     timer_.Reset();
 }
@@ -82,8 +79,8 @@ void LaunchState::Stop()
 {
     UnsubscribeFromAllEvents();
 
-    loading_->SetVisible(false);
-	loading_->SetEnabled(false);
+    launchRoot_->SetVisible(false);
+	launchRoot_->SetDeepEnabled(false);
 }
 
 void LaunchState::Destroy()
@@ -94,10 +91,10 @@ void LaunchState::Destroy()
         version_.Reset();    
     }
 
-    if (loading_)
+    if (launchRoot_)
     {
-        loading_->Remove();
-        loading_.Reset();
+        launchRoot_->Remove();
+        launchRoot_.Reset();
     }
 }
 
@@ -108,12 +105,12 @@ void LaunchState::HandleTimer(Urho3D::StringHash eventType, Urho3D::VariantMap& 
         switching_ = true;
 
         VariantMap createData = GetEventDataMap();
-        createData[StateCreate::P_STATE] = new GalaxyState(context_);
-        createData[StateCreate::P_ID] = StringHash("GalaxyState");
+        createData[StateCreate::P_STATE] = new MenuState(context_);
+        createData[StateCreate::P_ID] = StringHash("MenuState");
         SendEvent(E_STATE_CREATE, createData);
 
         VariantMap changeData = GetEventDataMap();
-        changeData[StateChange::P_ID] = StringHash("GalaxyState");
+        changeData[StateChange::P_ID] = StringHash("MenuState");
         SendEvent(E_STATE_CHANGE, changeData);
     }
 }
@@ -129,12 +126,12 @@ void LaunchState::HandleKey(Urho3D::StringHash eventType, Urho3D::VariantMap& ev
         switching_ = true;
 
         VariantMap createData = GetEventDataMap();
-        createData[StateCreate::P_STATE] = new GalaxyState(context_);
-        createData[StateCreate::P_ID] = StringHash("GalaxyState");
+        createData[StateCreate::P_STATE] = new MenuState(context_);
+        createData[StateCreate::P_ID] = StringHash("MenuState");
         SendEvent(E_STATE_CREATE, createData);
 
         VariantMap changeData = GetEventDataMap();
-        changeData[StateChange::P_ID] = StringHash("GalaxyState");
+        changeData[StateChange::P_ID] = StringHash("MenuState");
         SendEvent(E_STATE_CHANGE, changeData);
     }
 }
@@ -148,12 +145,12 @@ void LaunchState::HandleButton(Urho3D::StringHash eventType, Urho3D::VariantMap&
         switching_ = true;
 
         VariantMap createData = GetEventDataMap();
-        createData[StateCreate::P_STATE] = new GalaxyState(context_);
-        createData[StateCreate::P_ID] = StringHash("GalaxyState");
+        createData[StateCreate::P_STATE] = new MenuState(context_);
+        createData[StateCreate::P_ID] = StringHash("MenuState");
         SendEvent(E_STATE_CREATE, createData);
 
         VariantMap changeData = GetEventDataMap();
-        changeData[StateChange::P_ID] = StringHash("GalaxyState");
+        changeData[StateChange::P_ID] = StringHash("MenuState");
         SendEvent(E_STATE_CHANGE, changeData);
     }
 }

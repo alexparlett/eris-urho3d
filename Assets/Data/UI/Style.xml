@@ -1,0 +1,13 @@
+<elements>
+    <element type="BorderImage" >
+        <attribute name="Texture" value="Texture2D;Textures/UI/UIAtlas.png" />
+    </element>
+    <element type="Button" style="BorderImage">
+		<attribute name="Horiz Alignment" value="Center" />
+		<attribute name="Bring To Front" value="true" />
+		<attribute name="Image Rect" value="284 86 514 157" />
+		<attribute name="Border" value="15 33 15 33" />
+		<attribute name="Hover Image Offset" value="-234 0" />
+		<attribute name="Blend Mode" value="alpha" />
+    </element>
+</elements>

@@ -89,7 +89,7 @@ void SolarianWars::Setup()
     engineParameters_["MaterialQuality"] = settings->GetSetting("shaders", 2).GetInt();
     engineParameters_["Shadows"] = settings->GetSetting("shadows", 2).GetInt() > 0 ? true : false;
     engineParameters_["LowQualityShadows"] = settings->GetSetting("shadows", 2).GetInt() == 1 ? true : false;
-    engineParameters_["RenderPath"] = "RenderPaths/Deferred.xml";
+    engineParameters_["RenderPath"] = "RenderPaths/Forward.xml";
 
     audio->SetMasterGain(SoundType::SOUND_MASTER, settings->GetSetting("master", 1.0f).GetFloat());
     audio->SetMasterGain(SoundType::SOUND_AMBIENT, settings->GetSetting("ambient", 0.6f).GetFloat());
@@ -104,7 +104,6 @@ void SolarianWars::Start()
 
     GetSubsystem<ModManager>()->Load();
     GetSubsystem<Locale>()->Load(GetSubsystem<Settings>()->GetSetting("language", "enGB").GetString());
-
     GetSubsystem<Renderer>()->SetViewport(0, new Viewport(context_));
 
     VariantMap createData = GetEventDataMap();
@@ -143,7 +142,7 @@ void SolarianWars::DefineCursor()
 
     if (image)
     {
-        cursor->DefineShape(CS_NORMAL, image, IntRect(96, 32, 128, 64), IntVector2(4, 2));
+        cursor->DefineShape(CS_NORMAL, image, IntRect(96, 32, 128, 64), IntVector2(0, 0));
         cursor->DefineShape(CS_REJECTDROP, image, IntRect(0, 0, 32, 32), IntVector2(0, 0));
         cursor->DefineShape(CS_RESIZEDIAGONAL_TOPLEFT, image, IntRect(0, 32, 32, 64), IntVector2(0, 0));
         cursor->DefineShape(CS_RESIZEDIAGONAL_TOPRIGHT, image, IntRect(96, 0, 128, 32), IntVector2(0, 0));
