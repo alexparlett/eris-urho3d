@@ -1,0 +1,6 @@
+<material>
+    <technique name="Techniques/DiffNormal.xml" />
+    <texture unit="diffuse" name="Textures/Planets/Planet-Earth-Diffuse.jpg" />
+    <texture unit="normal" name="Textures/Planets/Planet-Earth-Normals.png" />
+    <cull value="none" />
+</material>

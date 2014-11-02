@@ -25,6 +25,10 @@
         <language>enGB</language>
         <autosave>true</autosave>
         <frequency>15</frequency>
+        <scrollSpeed>150.0</scrollSpeed>
+        <rotateSpeed>10.0</rotateSpeed>
+        <panSpeed>10.0</panSpeed>
+        <inverted>false</inverted>
     </game>
     <interface>
         <scale>1.0</scale>

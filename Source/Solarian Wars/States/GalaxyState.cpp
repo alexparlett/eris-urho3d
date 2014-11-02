@@ -27,13 +27,19 @@
 #include <Model.h>
 #include <SoundListener.h>
 #include <UI.h>
+#include <Input.h>
+#include <InputEvents.h>
 
 using namespace Urho3D;
 
 GalaxyState::GalaxyState(Context* context) :
     State(context),
     scene_(NULL),
-    camera_(NULL)
+    camera_(NULL),
+    bindings_(GetSubsystem<Bindings>()),
+    settings_(GetSubsystem<Settings>()),
+    ui_(GetSubsystem<UI>()),
+    time_(GetSubsystem<Time>())
 {
     TurnResolver::RegisterObject(context);
 }
@@ -57,9 +63,14 @@ void GalaxyState::Create ()
 
 void GalaxyState::Start ()
 {
+    SubscribeToEvent(E_MOUSEMOVE, HANDLER(GalaxyState, HandleMouseMove));
+    SubscribeToEvent(E_MOUSEBUTTONUP, HANDLER(GalaxyState, HandleMouseClick));
+    SubscribeToEvent(E_MOUSEWHEEL, HANDLER(GalaxyState, HandleMouseWheel));
+    SubscribeToEvent(E_KEYDOWN, HANDLER(GalaxyState, HandleKeyDown));
+
     Viewport* viewport = GetSubsystem<Renderer>()->GetViewport(0);
     viewport->SetScene(scene_);
-    viewport->SetCamera(camera_->GetChild("CameraNode")->GetComponent<Camera>());
+    viewport->SetCamera(scene_->GetDefaultCamera());
 
     scene_->GetComponent<NavigationMesh>()->Build();
     scene_->SetUpdateEnabled(true);
@@ -72,6 +83,8 @@ void GalaxyState::Start ()
 void GalaxyState::Stop ()
 {
 	SendEvent(E_GAME_FINISHED);
+
+    UnsubscribeFromAllEvents();
 
     scene_->SetUpdateEnabled(false);
 }
@@ -115,9 +128,84 @@ void GalaxyState::CreateScene()
 void GalaxyState::CreateCamera()
 {
     camera_ = scene_->CreateChild("CameraPivot");
-    camera_->SetPosition(Vector3(0.0f, 0.0f, -5.0f));
+    camera_->SetPosition(Vector3(0.0f, 0.0f, -15.0f));
 
     Node* camNode = camera_->CreateChild("CameraNode");
-    camNode->CreateComponent<Camera>();
-    camNode->CreateComponent<SoundListener>();
+    Camera* cam = camNode->CreateComponent<Camera>();
+    cam->SetFarClip(100.f);
+    cam->SetFov(75.f);
+
+    SoundListener* listener = camNode->CreateComponent<SoundListener>();
+
+    camNode->GetScene()->SetDefaultCamera(cam);
+}
+
+void GalaxyState::HandleMouseMove(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
+{
+    using namespace MouseMove;
+
+    int buttons = eventData[P_BUTTONS].GetInt();
+    int dx = eventData[P_DX].GetInt();
+    int dy = eventData[P_DY].GetInt();
+
+    if (buttons & MOUSEB_RIGHT)
+    {
+        float x = dx * time_->GetTimeStep() * settings_->GetSetting("rotateSpeed", 10.f).GetFloat();
+        float y = dy * time_->GetTimeStep() * settings_->GetSetting("rotateSpeed;", 10.f).GetFloat();
+
+        if (settings_->GetSetting("inverted", false).GetBool())
+            camera_->Rotate(Quaternion(-y, -x, 0));
+        else
+            camera_->Rotate(Quaternion(y, x, 0));
+    }
+    else if (buttons & MOUSEB_MIDDLE)
+    {
+        float x = dx * time_->GetTimeStep() * settings_->GetSetting("panSpeed", 10.f).GetFloat();
+        float y = dy * time_->GetTimeStep() * settings_->GetSetting("panSpeed;", 10.f).GetFloat();
+
+
+        if (settings_->GetSetting("inverted", false).GetBool())
+            camera_->Translate(Vector3(x, -y, 0));
+        else
+            camera_->Translate(Vector3(-x, y, 0));
+    }
+}
+
+void GalaxyState::HandleMouseClick(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
+{
+
+}
+
+void GalaxyState::HandleMouseWheel(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
+{
+    using namespace MouseWheel;
+
+    float value = eventData[P_WHEEL].GetInt() * time_->GetTimeStep() * settings_->GetSetting("scrollSpeed", 150.f).GetFloat();
+
+    camera_->Translate(Vector3(0, 0, value));
+}
+
+void GalaxyState::HandleKeyDown(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
+{
+    using namespace KeyDown;
+
+    int scanCode = eventData[P_SCANCODE].GetInt();
+    int qualifiers = eventData[P_QUALIFIERS].GetInt();
+
+    if (scanCode == SCANCODE_ESCAPE)
+    {
+        SendEvent(E_TOGGLE_ESCAPE_MENU);
+    }
+    else if (scanCode == bindings_->GetActionScanCode("eventWindowToggle"))
+    {
+        SendEvent(E_TOGGLE_EVENT_WINDOW);
+    }
+    else if (scanCode == bindings_->GetActionScanCode("diplomacyWindowToggle"))
+    {
+        SendEvent(E_TOGGLE_DIPLOMACY_WINDOW);
+    }
+    else if (scanCode == bindings_->GetActionScanCode("endTurn"))
+    {
+        SendEvent(E_END_TURN);
+    }
 }

@@ -30,6 +30,8 @@
 #include <UI.h>
 #include <UIElement.h>
 #include <Cursor.h>
+#include <Color.h>
+#include <Zone.h>
 
 #include <windows.h>
 
@@ -55,8 +57,6 @@ void SolarianWars::Setup()
     ResourceCache* cache = GetSubsystem<ResourceCache>();
     Input* input = GetSubsystem<Input>();
     Log* log = GetSubsystem<Log>();
-    ModManager* mm = GetSubsystem<ModManager>();
-    Locale* locale = GetSubsystem<Locale>();
     Bindings* bindings = GetSubsystem <Bindings>();
 
     log->Open(settings->GetSetting("userdir").GetString() + "sw.log");
@@ -67,10 +67,10 @@ void SolarianWars::Setup()
     cache->SetAutoReloadResources(false);
 
     input->SetMouseVisible(false);
+    input->SetToggleFullscreen(true);
 
     settings->Load();
     bindings->Load();
-    locale->Load(settings->GetSetting("language", "enGB").GetString());
 
     engineParameters_["Headless"] = false;
     engineParameters_["ResourcePaths"] = "00;Data";
@@ -89,6 +89,7 @@ void SolarianWars::Setup()
     engineParameters_["MaterialQuality"] = settings->GetSetting("shaders", 2).GetInt();
     engineParameters_["Shadows"] = settings->GetSetting("shadows", 2).GetInt() > 0 ? true : false;
     engineParameters_["LowQualityShadows"] = settings->GetSetting("shadows", 2).GetInt() == 1 ? true : false;
+    engineParameters_["RenderPath"] = "RenderPaths/Deferred.xml";
 
     audio->SetMasterGain(SoundType::SOUND_MASTER, settings->GetSetting("master", 1.0f).GetFloat());
     audio->SetMasterGain(SoundType::SOUND_AMBIENT, settings->GetSetting("ambient", 0.6f).GetFloat());
@@ -101,8 +102,10 @@ void SolarianWars::Start()
 {
     DefineCursor();
 
-    GetSubsystem<Renderer>()->SetViewport(0, new Viewport(context_));
     GetSubsystem<ModManager>()->Load();
+    GetSubsystem<Locale>()->Load(GetSubsystem<Settings>()->GetSetting("language", "enGB").GetString());
+
+    GetSubsystem<Renderer>()->SetViewport(0, new Viewport(context_));
 
     VariantMap createData = GetEventDataMap();
     createData[StateCreate::P_STATE] = new LaunchState(context_);
@@ -136,7 +139,7 @@ void SolarianWars::DefineCursor()
     Cursor* cursor = new Cursor(context_);
     cursor->SetVisible(false);
 
-    Image* image = rc->GetResource<Image>("Textures/UI/Cursors.png");
+    Image* image = rc->GetResource<Image>("Textures/Cursors.png");
 
     if (image)
     {

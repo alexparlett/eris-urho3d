@@ -126,6 +126,10 @@ void Settings::LoadGame(const XMLElement& game)
     settings_["language"] = game.GetChild("language").GetValue();
     settings_["autosave"] = ToBool(game.GetChild("autosave").GetValue());
     settings_["frequency"] = ToInt(game.GetChild("frequency").GetValue());
+    settings_["scrollSpeed"] = ToFloat(game.GetChild("scrollSpeed").GetValue());
+    settings_["rotateSpeed"] = ToFloat(game.GetChild("rotateSpeed").GetValue());
+    settings_["panSpeed"] = ToFloat(game.GetChild("panSpeed").GetValue());
+    settings_["inverted"] = ToBool(game.GetChild("inverted").GetValue());
 }
 
 void Settings::SaveGraphics(XMLElement& root)
@@ -164,4 +168,8 @@ void Settings::SaveGame(XMLElement& root)
     game.CreateChild("language").SetValue(settings_["language"].ToString());
     game.CreateChild("autosave").SetValue(settings_["autosave"].ToString());
     game.CreateChild("frequency").SetValue(settings_["frequency"].ToString());
+    game.CreateChild("scrollSpeed").SetValue(settings_["scrollSpeed"].ToString());
+    game.CreateChild("rotateSpeed").SetValue(settings_["rotateSpeed"].ToString());
+    game.CreateChild("panSpeed").SetValue(settings_["panSpeed"].ToString());
+    game.CreateChild("inverted").SetValue(settings_["inverted"].ToString());
 }
