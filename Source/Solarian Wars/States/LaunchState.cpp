@@ -50,6 +50,7 @@ void LaunchState::Create()
     version_->SetText("Rev: " + GetSubsystem<Settings>()->GetSetting("version").GetString().ToUpper());
     version_->SetColor(Color::WHITE);
     version_->SetFont(rc->GetResource<Font>("Fonts/msyi.ttf"), 12);
+    version_->SetPriority(M_MAX_INT);
 
     launchRoot_ = root->CreateChild<UIElement>("LaunchRoot");
     launchRoot_->SetSize(graphics->GetWidth(), graphics->GetHeight());
@@ -104,14 +105,8 @@ void LaunchState::HandleTimer(Urho3D::StringHash eventType, Urho3D::VariantMap& 
     {
         switching_ = true;
 
-        VariantMap createData = GetEventDataMap();
-        createData[StateCreate::P_STATE] = new MenuState(context_);
-        createData[StateCreate::P_ID] = StringHash("MenuState");
-        SendEvent(E_STATE_CREATE, createData);
+        SwitchToMenu();
 
-        VariantMap changeData = GetEventDataMap();
-        changeData[StateChange::P_ID] = StringHash("MenuState");
-        SendEvent(E_STATE_CHANGE, changeData);
     }
 }
 
@@ -123,16 +118,7 @@ void LaunchState::HandleKey(Urho3D::StringHash eventType, Urho3D::VariantMap& ev
 
     if ((scanCode == SCANCODE_SPACE || scanCode == SCANCODE_ESCAPE) && !switching_)
     {
-        switching_ = true;
-
-        VariantMap createData = GetEventDataMap();
-        createData[StateCreate::P_STATE] = new MenuState(context_);
-        createData[StateCreate::P_ID] = StringHash("MenuState");
-        SendEvent(E_STATE_CREATE, createData);
-
-        VariantMap changeData = GetEventDataMap();
-        changeData[StateChange::P_ID] = StringHash("MenuState");
-        SendEvent(E_STATE_CHANGE, changeData);
+        SwitchToMenu();
     }
 }
 
@@ -142,16 +128,7 @@ void LaunchState::HandleButton(Urho3D::StringHash eventType, Urho3D::VariantMap&
 
     if (!switching_)
     {
-        switching_ = true;
-
-        VariantMap createData = GetEventDataMap();
-        createData[StateCreate::P_STATE] = new MenuState(context_);
-        createData[StateCreate::P_ID] = StringHash("MenuState");
-        SendEvent(E_STATE_CREATE, createData);
-
-        VariantMap changeData = GetEventDataMap();
-        changeData[StateChange::P_ID] = StringHash("MenuState");
-        SendEvent(E_STATE_CHANGE, changeData);
+        SwitchToMenu();
     }
 }
 
@@ -162,4 +139,22 @@ void LaunchState::AsyncLoadCoreData()
     rc->BackgroundLoadResource<Model>("Models/Box.mdl");
     rc->BackgroundLoadResource<Model>("Models/Plane.mdl");
     rc->BackgroundLoadResource<Model>("Models/Sphere.mdl");
+}
+
+void LaunchState::SwitchToMenu()
+{
+    switching_ = true;
+
+    VariantMap createData = GetEventDataMap();
+    createData[StateCreate::P_STATE] = new MenuState(context_);
+    createData[StateCreate::P_ID] = StringHash("MenuState");
+    SendEvent(E_STATE_CREATE, createData);
+
+    VariantMap changeData = GetEventDataMap();
+    changeData[StateChange::P_ID] = StringHash("MenuState");
+    SendEvent(E_STATE_CHANGE, changeData);
+
+    VariantMap deleteData = GetEventDataMap();
+    deleteData[StateChange::P_ID] = StringHash("LaunchState");
+    SendEvent(E_STATE_DESTROY, deleteData);
 }

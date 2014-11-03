@@ -1,0 +1,6 @@
+<texture>
+    <quality low="0" />
+    <cull value="none" />
+    <mipmap enable="false" />
+</texture>
+

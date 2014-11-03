@@ -102,6 +102,7 @@ void SolarianWars::Start()
 {
     DefineCursor();
 
+    GetSubsystem<StateManager>()->InitializeLoadingUI();
     GetSubsystem<ModManager>()->Load();
     GetSubsystem<Locale>()->Load(GetSubsystem<Settings>()->GetSetting("language", "enGB").GetString());
     GetSubsystem<Renderer>()->SetViewport(0, new Viewport(context_));
@@ -122,6 +123,7 @@ void SolarianWars::Stop()
     context_->RemoveSubsystem<Locale>();
     context_->RemoveSubsystem<ModManager>();
     context_->RemoveSubsystem<Settings>();
+    context_->RemoveSubsystem<Bindings>();
 }
 
 void SolarianWars::ParseArgs()
@@ -139,7 +141,6 @@ void SolarianWars::DefineCursor()
     cursor->SetVisible(false);
 
     Image* image = rc->GetResource<Image>("Textures/Cursors.png");
-
     if (image)
     {
         cursor->DefineShape(CS_NORMAL, image, IntRect(96, 32, 128, 64), IntVector2(0, 0));

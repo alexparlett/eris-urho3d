@@ -12,6 +12,7 @@
 #include <UIElement.h>
 #include <Texture2D.h>
 #include <Font.h>
+#include <Button.h>
 
 #include "State.h"
 #include "IO/Locale.h"
@@ -37,6 +38,7 @@ private:
 
     void CreateBottomBrace(Urho3D::Texture2D* atlas);
     void CreateButtons(Urho3D::Font* font);
+    Urho3D::Button* BuildMenuButton(const Urho3D::String& content, Urho3D::Font* font);
 
     void PlayClicked(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
     void LoadClicked(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);

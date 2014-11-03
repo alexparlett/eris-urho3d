@@ -28,6 +28,9 @@ public:
     virtual void Destroy();
 
     void HandleTimer(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
+
+    void SwitchToMenu();
+
     void HandleKey(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
     void HandleButton(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
     void AsyncLoadCoreData();

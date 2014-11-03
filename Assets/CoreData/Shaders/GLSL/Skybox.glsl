@@ -16,5 +16,5 @@ void VS()
 
 void PS()
 {
-    gl_FragColor = cMatDiffColor * textureCube(sDiffCubeMap, vTexCoord);
+    gl_FragColor = textureCube(sDiffCubeMap, vTexCoord);
 }

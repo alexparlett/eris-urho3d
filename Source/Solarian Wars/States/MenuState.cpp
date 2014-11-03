@@ -153,65 +153,11 @@ void MenuState::CreateButtons(Font* font)
 
     menuRoot_->AddChild(buttonRoot);
 
-    Button* playButton = new Button(context_);
-    playButton->SetStyleAuto();
-    playButton->SetFocusMode(FM_RESETFOCUS);
-
-    Text* playText = new Text(context_);
-    playText->SetFont(font, 18);
-    playText->SetText(locale_->Localize(0, 1));
-    playText->SetAlignment(HorizontalAlignment::HA_CENTER, VerticalAlignment::VA_CENTER);
-    playText->SetTextAlignment(HorizontalAlignment::HA_CENTER);
-
-    playButton->AddChild(playText);
-
-    Button* loadButton = new Button(context_);
-    loadButton->SetStyleAuto();
-    loadButton->SetFocusMode(FM_RESETFOCUS);
-
-    Text* loadText = new Text(context_);
-    loadText->SetFont(font, 18);
-    loadText->SetText(locale_->Localize(0, 2));
-    loadText->SetAlignment(HorizontalAlignment::HA_CENTER, VerticalAlignment::VA_CENTER);
-    loadText->SetTextAlignment(HorizontalAlignment::HA_CENTER);
-
-    loadButton->AddChild(loadText);
-
-    Button* modsButton = new Button(context_);
-    modsButton->SetStyleAuto();
-    modsButton->SetFocusMode(FM_RESETFOCUS);
-
-    Text* modsText = new Text(context_);
-    modsText->SetFont(font, 18);
-    modsText->SetText(locale_->Localize(0, 3));
-    modsText->SetAlignment(HorizontalAlignment::HA_CENTER, VerticalAlignment::VA_CENTER);
-    modsText->SetTextAlignment(HorizontalAlignment::HA_CENTER);
-
-    modsButton->AddChild(modsText);
-
-    Button* optionsButton = new Button(context_);
-    optionsButton->SetStyleAuto();
-    optionsButton->SetFocusMode(FM_RESETFOCUS);
-
-    Text* optionsText = new Text(context_);
-    optionsText->SetFont(font, 18);
-    optionsText->SetText(locale_->Localize(0, 4));
-    optionsText->SetAlignment(HorizontalAlignment::HA_CENTER, VerticalAlignment::VA_CENTER);
-    optionsText->SetTextAlignment(HorizontalAlignment::HA_CENTER);
-
-    optionsButton->AddChild(optionsText);
-
-    Button* exitButton = new Button(context_);
-    exitButton->SetStyleAuto();
-    exitButton->SetFocusMode(FM_RESETFOCUS);
-
-    Text* exitText = new Text(context_);
-    exitText->SetFont(font, 18);
-    exitText->SetText(locale_->Localize(0, 5));
-    exitText->SetAlignment(HorizontalAlignment::HA_CENTER, VerticalAlignment::VA_CENTER);
-    exitText->SetTextAlignment(HorizontalAlignment::HA_CENTER);
-
-    exitButton->AddChild(exitText);
+    Button* playButton = BuildMenuButton(locale_->Localize(0, 1), font);
+    Button* loadButton = BuildMenuButton(locale_->Localize(0, 2), font);
+    Button* modsButton = BuildMenuButton(locale_->Localize(0, 3), font);
+    Button* optionsButton = BuildMenuButton(locale_->Localize(0, 4), font);
+    Button* exitButton = BuildMenuButton(locale_->Localize(0, 5), font);
 
     buttonRoot->AddChild(playButton);
     buttonRoot->AddChild(loadButton);
@@ -224,6 +170,23 @@ void MenuState::CreateButtons(Font* font)
     SubscribeToEvent(modsButton, E_RELEASED, HANDLER(MenuState, ModsClicked));
     SubscribeToEvent(optionsButton, E_RELEASED, HANDLER(MenuState, OptionsClicked));
     SubscribeToEvent(exitButton, E_RELEASED, HANDLER(MenuState, ExitClicked));
+}
+
+Urho3D::Button* MenuState::BuildMenuButton(const String& content, Font* font)
+{
+    Button* button = new Button(context_);
+    button->SetStyleAuto();
+    button->SetFocusMode(FM_RESETFOCUS);
+
+    Text* text = new Text(context_);
+    text->SetFont(font, 18);
+    text->SetText(content);
+    text->SetAlignment(HorizontalAlignment::HA_CENTER, VerticalAlignment::VA_CENTER);
+    text->SetTextAlignment(HorizontalAlignment::HA_CENTER);
+
+    button->AddChild(text);
+
+    return button;
 }
 
 void MenuState::PlayClicked(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
