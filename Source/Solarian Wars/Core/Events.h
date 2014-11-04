@@ -67,3 +67,7 @@ EVENT(E_TOGGLE_DIPLOMACY_WINDOW, ToggleDiplomacyWindow)
 EVENT(E_END_TURN, EndTurn)
 {
 }
+
+EVENT(E_ANIMATION_FINISHED, AnimationFinished)
+{
+}

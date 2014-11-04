@@ -12,6 +12,7 @@
 #include <CoreEvents.h>
 #include <Model.h>
 #include <XMLFile.h>
+#include <ValueAnimation.h>
 
 #include "IO/Settings.h"
 #include "Core/Events.h"
@@ -23,7 +24,8 @@ LaunchState::LaunchState(Context* context) :
     State(context),
     launchRoot_(NULL),
     timer_(Timer()),
-    currentLogoIndex_(0)
+    currentLogoIndex_(0),
+    fading_(false)
 {
 }
 
@@ -46,20 +48,32 @@ void LaunchState::Create()
     launchRoot_->SetSize(graphics->GetWidth(), graphics->GetHeight());
     launchRoot_->SetVisible(false);
 
-    BorderImage* bi = CreateLaunchLogo(rc, "Textures/UI/LaunchLogo.png");
+    launchRoot_->AddChild(CreateLaunchLogo(rc, "Textures/UI/LaunchLogo.png"));
+    launchRoot_->AddChild(CreateLaunchLogo(rc, "Textures/UI/LoadingLogo.png"));
+    launchRoot_->AddChild(CreateLaunchLogo(rc, "Textures/UI/LaunchLogo.png"));
 
-    launchLogos_.Push(SharedPtr<BorderImage>(bi));
-    launchRoot_->AddChild(bi);
+    opacityOutAnimation_ = new ValueAnimation(context_);
+    opacityOutAnimation_->SetKeyFrame(0.0f, 1.f);
+    opacityOutAnimation_->SetKeyFrame(1.0f, 0.5f);
+    opacityOutAnimation_->SetKeyFrame(2.0f, 0.0f);
+    opacityOutAnimation_->SetEventFrame(2.0f, E_ANIMATION_FINISHED);
+
+    opacityInAnimation_ = new ValueAnimation(context_);
+    opacityInAnimation_->SetKeyFrame(0.0f, 0.f);
+    opacityInAnimation_->SetKeyFrame(1.0f, 0.0f);
+    opacityInAnimation_->SetKeyFrame(2.0f, 0.5f);
+    opacityInAnimation_->SetKeyFrame(3.0f, 1.0f);
 }
 
 void LaunchState::Start()
 {
     launchRoot_->SetVisible(true);
-    launchLogos_[currentLogoIndex_]->SetVisible(true);
+    launchLogos_[currentLogoIndex_]->SetAttributeAnimation("Opacity", opacityInAnimation_, WM_ONCE);
 
     SubscribeToEvent(E_ENDFRAME, HANDLER(LaunchState, HandleTimer));
     SubscribeToEvent(E_KEYDOWN, HANDLER(LaunchState, HandleKey));
     SubscribeToEvent(E_MOUSEBUTTONUP, HANDLER(LaunchState, HandleButton));
+    SubscribeToEvent(E_ANIMATION_FINISHED, HANDLER(LaunchState, HandleAnimationFinished));
 
     AsyncLoadCoreData();
 
@@ -76,6 +90,18 @@ void LaunchState::Stop()
 
 void LaunchState::Destroy()
 {
+    launchLogos_.Clear();
+
+    if (opacityOutAnimation_)
+    {
+        opacityOutAnimation_.Reset();
+    }
+
+    if (opacityInAnimation_)
+    {
+        opacityInAnimation_.Reset();
+    }
+
     if (launchRoot_)
     {
         launchRoot_->Remove();
@@ -89,25 +115,20 @@ BorderImage* LaunchState::CreateLaunchLogo(ResourceCache* rc, const String& text
     bi->SetTexture(rc->GetResource<Texture2D>(textureName));
     bi->SetAlignment(HorizontalAlignment::HA_CENTER, VerticalAlignment::VA_CENTER);
     bi->SetBlendMode(BLEND_ALPHA);
-    bi->SetVisible(false);
+    bi->SetOpacity(0.f);
     bi->SetSize(bi->GetTexture()->GetWidth(), bi->GetTexture()->GetHeight());
+    bi->SetAnimationEnabled(true);
+    
+    launchLogos_.Push(SharedPtr<BorderImage>(bi));
 
     return bi;
 }
 
 void LaunchState::HandleTimer(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
 {
-    if (timer_.GetMSec(false) > 5000 && !switching_)
+    if (timer_.GetMSec(false) > 5000 && !switching_ && !fading_)
     {
-        if (currentLogoIndex_ < launchLogos_.Size() - 1)
-        {
-            launchLogos_[currentLogoIndex_]->SetVisible(false);
-            launchLogos_[++currentLogoIndex_]->SetVisible(true);
-        }
-        else
-        {
-            SwitchToMenu();
-        }
+        SwitchLogo();
     }
 }
 
@@ -117,17 +138,9 @@ void LaunchState::HandleKey(Urho3D::StringHash eventType, Urho3D::VariantMap& ev
 
     int scanCode = eventData[P_SCANCODE].GetInt();
 
-    if ((scanCode == SCANCODE_SPACE || scanCode == SCANCODE_ESCAPE) && !switching_)
+    if ((scanCode == SCANCODE_SPACE || scanCode == SCANCODE_ESCAPE) && !switching_ && !fading_)
     {
-        if (currentLogoIndex_ < launchLogos_.Size() - 1)
-        {
-            launchLogos_[currentLogoIndex_]->SetVisible(false);
-            launchLogos_[++currentLogoIndex_]->SetVisible(true);
-        }
-        else
-        {
-            SwitchToMenu();
-        }
+        SwitchLogo();
     }
 }
 
@@ -135,18 +148,21 @@ void LaunchState::HandleButton(Urho3D::StringHash eventType, Urho3D::VariantMap&
 {
     using namespace MouseButtonDown;
 
-    if (!switching_)
+    if (!switching_ && !fading_)
     {
-        if (currentLogoIndex_ < launchLogos_.Size() - 1)
-        {
-            launchLogos_[currentLogoIndex_]->SetVisible(false);
-            launchLogos_[++currentLogoIndex_]->SetVisible(true);
-        }
-        else
-        {
-            SwitchToMenu();
-        }
+        SwitchLogo();
     }
+}
+
+void LaunchState::HandleAnimationFinished(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
+{
+    if (currentLogoIndex_ >= launchLogos_.Size() - 1)
+    {
+        SwitchToMenu();
+    }
+    
+    timer_.Reset();
+    fading_ = false;
 }
 
 void LaunchState::AsyncLoadCoreData()
@@ -174,4 +190,14 @@ void LaunchState::SwitchToMenu()
     VariantMap deleteData = GetEventDataMap();
     deleteData[StateChange::P_ID] = StringHash("LaunchState");
     SendEvent(E_STATE_DESTROY, deleteData);
+}
+
+void LaunchState::SwitchLogo()
+{
+    fading_ = true;
+
+    launchLogos_[currentLogoIndex_++]->SetAttributeAnimation("Opacity", opacityOutAnimation_, WrapMode::WM_ONCE);
+
+    if (currentLogoIndex_ < launchLogos_.Size())
+        launchLogos_[currentLogoIndex_]->SetAttributeAnimation("Opacity", opacityInAnimation_, WrapMode::WM_ONCE);
 }

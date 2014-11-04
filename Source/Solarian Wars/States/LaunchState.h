@@ -16,6 +16,7 @@
 #include <BorderImage.h>
 #include <ResourceCache.h>
 #include <Vector.h>
+#include <ValueAnimation.h>
 
 class LaunchState : public State
 {
@@ -33,17 +34,23 @@ public:
 
 private:
     void SwitchToMenu();
+    void SwitchLogo();
     void AsyncLoadCoreData();
+    void FadeOutFinalLogo();
 
     Urho3D::BorderImage* CreateLaunchLogo(Urho3D::ResourceCache* rc, const Urho3D::String& textureName);
 
     void HandleTimer(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
     void HandleKey(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
     void HandleButton(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
+    void HandleAnimationFinished(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
 
     Urho3D::SharedPtr<Urho3D::UIElement> launchRoot_;
     Urho3D::Vector<Urho3D::SharedPtr<Urho3D::BorderImage>> launchLogos_;
+    Urho3D::SharedPtr<Urho3D::ValueAnimation> opacityOutAnimation_;
+    Urho3D::SharedPtr<Urho3D::ValueAnimation> opacityInAnimation_;
     Urho3D::Timer timer_;
     unsigned currentLogoIndex_;
+    bool fading_;
 };
 
