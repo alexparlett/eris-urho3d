@@ -49,8 +49,6 @@ void LaunchState::Create()
     launchRoot_->SetVisible(false);
 
     launchRoot_->AddChild(CreateLaunchLogo(rc, "Textures/UI/LaunchLogo.png"));
-    launchRoot_->AddChild(CreateLaunchLogo(rc, "Textures/UI/LoadingLogo.png"));
-    launchRoot_->AddChild(CreateLaunchLogo(rc, "Textures/UI/LaunchLogo.png"));
 
     opacityOutAnimation_ = new ValueAnimation(context_);
     opacityOutAnimation_->SetKeyFrame(0.0f, 1.f);
