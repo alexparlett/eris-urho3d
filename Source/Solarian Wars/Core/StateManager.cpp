@@ -77,14 +77,14 @@ void StateManager::InitializeLoadingUI()
     loadingRoot_->SetColor(Color::BLACK);
     loadingRoot_->SetSize(graphics->GetWidth(), graphics->GetHeight());
     loadingRoot_->SetVisible(false);
-    loadingRoot_->SetPriority(1000);
+    loadingRoot_->SetPriority(M_MAX_INT - 1);
 
     BorderImage* logo = loadingRoot_->CreateChild<BorderImage>("LoadingLogo");
     logo->SetTexture(rc->GetResource<Texture2D>("Textures/UI/LoadingLogo.png"));
     logo->SetSize(512, 512);
     logo->SetAlignment(HorizontalAlignment::HA_CENTER, VerticalAlignment::VA_CENTER);
     logo->SetBlendMode(BLEND_ALPHA);
-    logo->SetPriority(1001);
+    logo->SetPriority(M_MAX_INT - 1);
 }
 
 

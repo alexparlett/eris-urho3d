@@ -39,8 +39,15 @@ static void RegisterGlobalFunctions(asIScriptEngine* engine)
     engine->RegisterGlobalFunction("bool RegisterGlobalScriptObject(const String&in, ScriptObject@)", asFUNCTION(RegisterGlobalScriptObject), asCALL_CDECL);
 }
 
+static void RegisterUserInterface(asIScriptEngine* engine)
+{
+    engine->RegisterInterface("UserInterface");
+    engine->RegisterInterfaceMethod("UserInterface", "void Create()");
+}
+
 void RegisterGameAPI(asIScriptEngine* engine)
 {
     RegisterGlobalFunctions(engine);
     RegisterMap(engine);
+    RegisterUserInterface(engine);
 }

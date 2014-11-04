@@ -36,7 +36,6 @@ private:
     void CreateScene();
     void CreateUI();
 
-    void CreateBottomBrace(Urho3D::Texture2D* atlas);
     void CreateButtons(Urho3D::Font* font);
     Urho3D::Button* BuildMenuButton(const Urho3D::String& content, Urho3D::Font* font);
 

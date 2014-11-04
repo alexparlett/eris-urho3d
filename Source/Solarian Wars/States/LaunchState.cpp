@@ -52,9 +52,11 @@ void LaunchState::Create()
     version_->SetFont(rc->GetResource<Font>("Fonts/msyi.ttf"), 12);
     version_->SetPriority(M_MAX_INT);
 
-    launchRoot_ = root->CreateChild<UIElement>("LaunchRoot");
+    launchRoot_ = root->CreateChild<BorderImage>("LoadingBackground");
+    launchRoot_->SetColor(Color::BLACK);
     launchRoot_->SetSize(graphics->GetWidth(), graphics->GetHeight());
     launchRoot_->SetVisible(false);
+
 
     BorderImage* bi = launchRoot_->CreateChild<BorderImage>("LaunchLogo");
     bi->SetTexture(rc->GetResource<Texture2D>("Textures/UI/LaunchLogo.png"));

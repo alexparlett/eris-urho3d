@@ -15,6 +15,7 @@
 #include <Ptr.h>
 #include <UI.h>
 #include <Timer.h>
+#include <ScriptFile.h>
 
 class GalaxyState : public State
 {
@@ -38,6 +39,7 @@ private:
     void HandleMouseClick(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
     void HandleMouseWheel(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
     void HandleKeyDown(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
+    void HandleGameFinished(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
 
 	Urho3D::SharedPtr<Urho3D::Scene> scene_;
     Urho3D::SharedPtr<Urho3D::Node> camera_;

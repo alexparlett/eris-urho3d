@@ -27,6 +27,7 @@
 #include <Graphics.h>
 #include <Button.h>
 #include <InputEvents.h>
+#include <Sprite.h>
 
 using namespace Urho3D;
 
@@ -126,21 +127,9 @@ void MenuState::CreateUI()
     menuRoot_->SetSize(graphics->GetWidth(), graphics->GetHeight());
     menuRoot_->SetVisible(false);
 
-    Texture2D* atlas = rc->GetResource<Texture2D>("Textures/UI/UIAtlas.png");
     Font* font =rc->GetResource<Font>("Fonts/CaviarDreams.ttf");
 
-    CreateBottomBrace(atlas);
     CreateButtons(font);
-}
-
-void MenuState::CreateBottomBrace(Texture2D* atlas)
-{
-    BorderImage* bottomBrace = menuRoot_->CreateChild<BorderImage>("BottomBrace");
-    bottomBrace->SetTexture(atlas);
-    bottomBrace->SetImageRect(IntRect(174, 37, 294, 81));
-    bottomBrace->SetSize(120, 45);
-    bottomBrace->SetAlignment(HorizontalAlignment::HA_CENTER, VerticalAlignment::VA_BOTTOM);
-    bottomBrace->SetBlendMode(BLEND_ALPHA);
 }
 
 void MenuState::CreateButtons(Font* font)
@@ -148,7 +137,8 @@ void MenuState::CreateButtons(Font* font)
     UIElement* buttonRoot = new UIElement(context_);
     buttonRoot->SetAlignment(HorizontalAlignment::HA_CENTER, VerticalAlignment::VA_CENTER);
     buttonRoot->SetLayoutMode(LM_VERTICAL);
-    buttonRoot->SetFixedSize(230, 355);
+    buttonRoot->SetLayoutSpacing(10);
+    buttonRoot->SetFixedSize(200, 300);
     buttonRoot->SetEnabled(false);
 
     menuRoot_->AddChild(buttonRoot);

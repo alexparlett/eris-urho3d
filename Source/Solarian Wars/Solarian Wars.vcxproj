@@ -236,7 +236,6 @@ xcopy "$(SolutionDir)Assets\bindings.xml" "$(SolutionDir)Game" /Y /D</Command>
     <ClInclude Include="Core\SolarianWars.h" />
     <ClInclude Include="GamePlay\Scene\Components\TurnResolver.h" />
     <ClInclude Include="States\State.h" />
-    <ClInclude Include="GamePlay\Scene\MapGenerator.h" />
     <ClInclude Include="IO\Locale.h" />
     <ClInclude Include="States\MenuState.h" />
     <ClInclude Include="States\GalaxyState.h" />
@@ -252,7 +251,6 @@ xcopy "$(SolutionDir)Assets\bindings.xml" "$(SolutionDir)Game" /Y /D</Command>
     <ClCompile Include="Script\GameAPI.cpp" />
     <ClCompile Include="Script\IOAPI.cpp" />
     <ClCompile Include="Core\SolarianWars.cpp" />
-    <ClCompile Include="GamePlay\Scene\MapGenerator.cpp" />
     <ClCompile Include="GamePlay\Scene\Components\TurnResolver.cpp" />
     <ClCompile Include="IO\Locale.cpp" />
     <ClCompile Include="States\MenuState.cpp" />

@@ -7,5 +7,7 @@
         <line id="3">MODS</line>
         <line id="4">OPTIONS</line>
         <line id="5">EXIT</line>
+        <line id="6">CONTINUE</line>
+        <line id="7">SAVE</line>
     </page>
 </locale>

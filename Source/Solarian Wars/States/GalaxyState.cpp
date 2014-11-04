@@ -5,9 +5,9 @@
 ////////////////////////////////////////////
 
 #include "GalaxyState.h"
+#include "MenuState.h"
 
 #include "Core/Events.h"
-#include "GamePlay/Scene/MapGenerator.h"
 #include "GamePlay/Scene/Components/TurnResolver.h"
 
 #include <ResourceCache.h>
@@ -30,6 +30,8 @@
 #include <Input.h>
 #include <InputEvents.h>
 
+#include <angelscript.h>
+
 using namespace Urho3D;
 
 GalaxyState::GalaxyState(Context* context) :
@@ -48,16 +50,25 @@ GalaxyState::~GalaxyState()
 {
 }
 
-void GalaxyState::Create ()
+void GalaxyState::Create()
 {
+    ResourceCache* rc = GetSubsystem<ResourceCache>();
+
     CreateScene();
     CreateCamera();
 
-    ScriptFile* file = GetSubsystem<ResourceCache>()->GetResource<ScriptFile>("Scripts/Maps/CampaignMap.as");
-    if (file)
+    ScriptFile* mapFile = rc->GetResource<ScriptFile>("Scripts/Maps/CampaignMap.as");
+    if (mapFile)
     {
-        MapGenerator gen(file);
-        gen.Generate();
+        asIScriptObject* object = mapFile->CreateObject("Map", true);
+        mapFile->Execute(object, "void Generate()");
+    }
+
+    ScriptFile* uiFile = rc->GetResource<ScriptFile>("Scripts/UI/GalaxyUI.as");
+    if (uiFile)
+    {
+        asIScriptObject* object = uiFile->CreateObject("UserInterface", true);
+        uiFile->Execute(object, "void Create()");
     }
 }
 
@@ -67,25 +78,23 @@ void GalaxyState::Start ()
     SubscribeToEvent(E_MOUSEBUTTONUP, HANDLER(GalaxyState, HandleMouseClick));
     SubscribeToEvent(E_MOUSEWHEEL, HANDLER(GalaxyState, HandleMouseWheel));
     SubscribeToEvent(E_KEYDOWN, HANDLER(GalaxyState, HandleKeyDown));
+    SubscribeToEvent(E_GAME_FINISHED, HANDLER(GalaxyState, HandleGameFinished));
 
     Viewport* viewport = GetSubsystem<Renderer>()->GetViewport(0);
     viewport->SetScene(scene_);
     viewport->SetCamera(scene_->GetDefaultCamera());
 
     scene_->GetComponent<NavigationMesh>()->Build();
-    scene_->SetUpdateEnabled(true);
-
-    GetSubsystem<UI>()->GetCursor()->SetVisible(true);
 
 	SendEvent(E_GAME_STARTED);
+
+    scene_->SetUpdateEnabled(true);
+    GetSubsystem<UI>()->GetCursor()->SetVisible(true);
 }
 
 void GalaxyState::Stop ()
 {
-	SendEvent(E_GAME_FINISHED);
-
     UnsubscribeFromAllEvents();
-
     scene_->SetUpdateEnabled(false);
 }
 
@@ -102,6 +111,8 @@ void GalaxyState::Destroy ()
         scene_->ResetScene();
         scene_.Reset();
     }
+
+    GetSubsystem<ResourceCache>()->ReleaseAllResources();
 }
 
 void GalaxyState::CreateScene()
@@ -208,4 +219,20 @@ void GalaxyState::HandleKeyDown(Urho3D::StringHash eventType, Urho3D::VariantMap
     {
         SendEvent(E_END_TURN);
     }
+}
+
+void GalaxyState::HandleGameFinished(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
+{
+    VariantMap createData = GetEventDataMap();
+    createData[StateCreate::P_STATE] = new MenuState(context_);
+    createData[StateCreate::P_ID] = StringHash("MenuState");
+    SendEvent(E_STATE_CREATE, createData);
+
+    VariantMap changeData = GetEventDataMap();
+    changeData[StateChange::P_ID] = StringHash("MenuState");
+    SendEvent(E_STATE_CHANGE, changeData);
+
+    VariantMap deleteData = GetEventDataMap();
+    deleteData[StateChange::P_ID] = StringHash("GalaxyState");
+    SendEvent(E_STATE_DESTROY, deleteData);
 }

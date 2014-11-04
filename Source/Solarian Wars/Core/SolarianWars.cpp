@@ -140,7 +140,7 @@ void SolarianWars::DefineCursor()
     Cursor* cursor = new Cursor(context_);
     cursor->SetVisible(false);
 
-    Image* image = rc->GetResource<Image>("Textures/Cursors.png");
+    Image* image = rc->GetResource<Image>("Textures/UI/Cursors.png");
     if (image)
     {
         cursor->DefineShape(CS_NORMAL, image, IntRect(96, 32, 128, 64), IntVector2(0, 0));
