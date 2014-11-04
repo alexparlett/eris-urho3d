@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <elements>
-    <element type="Button" >
+    <element type="Button">
         <attribute name="Texture" value="Texture2D;Textures/UI/UIAtlas.png" />    
 		<attribute name="Horiz Alignment" value="Center" />
 		<attribute name="Image Rect" value="202 100 367 143" />

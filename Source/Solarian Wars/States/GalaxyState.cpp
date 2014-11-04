@@ -203,7 +203,7 @@ void GalaxyState::HandleKeyDown(Urho3D::StringHash eventType, Urho3D::VariantMap
     int scanCode = eventData[P_SCANCODE].GetInt();
     int qualifiers = eventData[P_QUALIFIERS].GetInt();
 
-    if (scanCode == SCANCODE_ESCAPE)
+    if (scanCode == SCANCODE_ESCAPE && !GetSubsystem<UI>()->GetFocusElement())
     {
         SendEvent(E_TOGGLE_ESCAPE_MENU);
     }

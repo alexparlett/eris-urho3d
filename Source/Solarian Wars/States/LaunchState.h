@@ -12,6 +12,10 @@
 #include <Timer.h>
 #include <Ptr.h>
 #include <Text.h>
+#include <Str.h>
+#include <BorderImage.h>
+#include <ResourceCache.h>
+#include <Vector.h>
 
 class LaunchState : public State
 {
@@ -27,15 +31,19 @@ public:
     virtual void Stop();
     virtual void Destroy();
 
-    void HandleTimer(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
-
+private:
     void SwitchToMenu();
+    void AsyncLoadCoreData();
 
+    Urho3D::BorderImage* CreateLaunchLogo(Urho3D::ResourceCache* rc, const Urho3D::String& textureName);
+
+    void HandleTimer(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
     void HandleKey(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
     void HandleButton(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
-    void AsyncLoadCoreData();
-private:
+
     Urho3D::SharedPtr<Urho3D::UIElement> launchRoot_;
+    Urho3D::Vector<Urho3D::SharedPtr<Urho3D::BorderImage>> launchLogos_;
     Urho3D::Timer timer_;
+    unsigned currentLogoIndex_;
 };
 

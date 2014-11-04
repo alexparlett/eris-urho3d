@@ -21,11 +21,6 @@ class GalaxyUI : UserInterface, ScriptObject
         SubscribeToEvent("ToggleEscapeMenu", "HandleEscapeMenu");   
     }
     
-    void Destroy()
-    {
-        uiRoot.Remove();
-    }
-    
     void HandleGameStarted(StringHash eventType, VariantMap& eventData)
     {
         uiRoot.visible = true;
@@ -33,7 +28,6 @@ class GalaxyUI : UserInterface, ScriptObject
     
     void HandleGameFinished(StringHash eventType, VariantMap& eventData)
     {
-        uiRoot.visible = false;
         uiRoot.Remove();
     }
     

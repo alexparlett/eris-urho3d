@@ -22,7 +22,8 @@ using namespace Urho3D;
 LaunchState::LaunchState(Context* context) :
     State(context),
     launchRoot_(NULL),
-    timer_(Timer())
+    timer_(Timer()),
+    currentLogoIndex_(0)
 {
 }
 
@@ -45,23 +46,22 @@ void LaunchState::Create()
     launchRoot_->SetSize(graphics->GetWidth(), graphics->GetHeight());
     launchRoot_->SetVisible(false);
 
+    BorderImage* bi = CreateLaunchLogo(rc, "Textures/UI/LaunchLogo.png");
 
-    BorderImage* bi = launchRoot_->CreateChild<BorderImage>("LaunchLogo");
-    bi->SetTexture(rc->GetResource<Texture2D>("Textures/UI/LaunchLogo.png"));
-    bi->SetSize(512, 512);
-    bi->SetAlignment(HorizontalAlignment::HA_CENTER, VerticalAlignment::VA_CENTER);
-    bi->SetBlendMode(BLEND_ALPHA);
+    launchLogos_.Push(SharedPtr<BorderImage>(bi));
+    launchRoot_->AddChild(bi);
 }
 
 void LaunchState::Start()
 {
+    launchRoot_->SetVisible(true);
+    launchLogos_[currentLogoIndex_]->SetVisible(true);
+
     SubscribeToEvent(E_ENDFRAME, HANDLER(LaunchState, HandleTimer));
     SubscribeToEvent(E_KEYDOWN, HANDLER(LaunchState, HandleKey));
     SubscribeToEvent(E_MOUSEBUTTONUP, HANDLER(LaunchState, HandleButton));
 
     AsyncLoadCoreData();
-
-	launchRoot_->SetVisible(true);
 
     timer_.Reset();
 }
@@ -83,12 +83,31 @@ void LaunchState::Destroy()
     }
 }
 
+BorderImage* LaunchState::CreateLaunchLogo(ResourceCache* rc, const String& textureName)
+{
+    BorderImage* bi = new BorderImage(context_);
+    bi->SetTexture(rc->GetResource<Texture2D>(textureName));
+    bi->SetAlignment(HorizontalAlignment::HA_CENTER, VerticalAlignment::VA_CENTER);
+    bi->SetBlendMode(BLEND_ALPHA);
+    bi->SetVisible(false);
+    bi->SetSize(bi->GetTexture()->GetWidth(), bi->GetTexture()->GetHeight());
+
+    return bi;
+}
+
 void LaunchState::HandleTimer(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
 {
     if (timer_.GetMSec(false) > 5000 && !switching_)
     {
-        SwitchToMenu();
-
+        if (currentLogoIndex_ < launchLogos_.Size() - 1)
+        {
+            launchLogos_[currentLogoIndex_]->SetVisible(false);
+            launchLogos_[++currentLogoIndex_]->SetVisible(true);
+        }
+        else
+        {
+            SwitchToMenu();
+        }
     }
 }
 
@@ -100,7 +119,15 @@ void LaunchState::HandleKey(Urho3D::StringHash eventType, Urho3D::VariantMap& ev
 
     if ((scanCode == SCANCODE_SPACE || scanCode == SCANCODE_ESCAPE) && !switching_)
     {
-        SwitchToMenu();
+        if (currentLogoIndex_ < launchLogos_.Size() - 1)
+        {
+            launchLogos_[currentLogoIndex_]->SetVisible(false);
+            launchLogos_[++currentLogoIndex_]->SetVisible(true);
+        }
+        else
+        {
+            SwitchToMenu();
+        }
     }
 }
 
@@ -110,7 +137,15 @@ void LaunchState::HandleButton(Urho3D::StringHash eventType, Urho3D::VariantMap&
 
     if (!switching_)
     {
-        SwitchToMenu();
+        if (currentLogoIndex_ < launchLogos_.Size() - 1)
+        {
+            launchLogos_[currentLogoIndex_]->SetVisible(false);
+            launchLogos_[++currentLogoIndex_]->SetVisible(true);
+        }
+        else
+        {
+            SwitchToMenu();
+        }
     }
 }
 
