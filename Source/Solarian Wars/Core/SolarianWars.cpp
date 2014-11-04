@@ -32,6 +32,7 @@
 #include <Cursor.h>
 #include <Color.h>
 #include <Zone.h>
+#include <Font.h>
 
 #include <windows.h>
 
@@ -101,6 +102,7 @@ void SolarianWars::Setup()
 void SolarianWars::Start()
 {
     DefineCursor();
+    DefineVersion();
 
     GetSubsystem<StateManager>()->InitializeLoadingUI();
     GetSubsystem<ModManager>()->Load();
@@ -119,6 +121,12 @@ void SolarianWars::Start()
 
 void SolarianWars::Stop()
 {
+    if (version_)
+    {
+        version_->Remove();
+        version_.Reset();
+    }
+
     context_->RemoveSubsystem<StateManager>();
     context_->RemoveSubsystem<Locale>();
     context_->RemoveSubsystem<ModManager>();
@@ -154,6 +162,24 @@ void SolarianWars::DefineCursor()
     }
 
     ui->SetCursor(cursor);
+}
+
+void SolarianWars::DefineVersion()
+{
+    UI* ui = GetSubsystem<UI>();
+    ResourceCache* rc = GetSubsystem<ResourceCache>();
+
+    UIElement* root = ui->GetRoot();
+    root->SetDefaultStyle(rc->GetResource<XMLFile>("UI/Style.xml"));
+
+    version_ = root->CreateChild<Text>("Version");
+    version_->SetAlignment(HorizontalAlignment::HA_RIGHT, VerticalAlignment::VA_TOP);
+    version_->SetTextAlignment(HorizontalAlignment::HA_LEFT);
+    version_->SetText("Rev: " + GetSubsystem<Settings>()->GetSetting("version").GetString().ToUpper());
+    version_->SetColor(Color::WHITE);
+    version_->SetFont(rc->GetResource<Font>("Fonts/msyi.ttf"), 12);
+    version_->SetPriority(M_MAX_INT);
+
 }
 
 DEFINE_APPLICATION_MAIN(SolarianWars)

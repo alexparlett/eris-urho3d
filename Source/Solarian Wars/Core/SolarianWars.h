@@ -8,6 +8,8 @@
 
 #include <Engine.h>
 #include <Application.h>
+#include <Ptr.h>
+#include <Text.h>
 
 class SolarianWars : public Urho3D::Application
 {
@@ -23,4 +25,7 @@ public:
 private:
     void ParseArgs();
     void DefineCursor();
+    void DefineVersion();
+
+    Urho3D::SharedPtr<Urho3D::Text> version_;
 };

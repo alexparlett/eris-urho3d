@@ -36,7 +36,6 @@ public:
     void AsyncLoadCoreData();
 private:
     Urho3D::SharedPtr<Urho3D::UIElement> launchRoot_;
-    Urho3D::SharedPtr<Urho3D::Text> version_;
     Urho3D::Timer timer_;
 };
 

@@ -28,9 +28,6 @@ LaunchState::LaunchState(Context* context) :
 
 LaunchState::~LaunchState()
 {
-    if (version_)
-        version_.Reset();
-
     if (launchRoot_)
         launchRoot_.Reset();
 }
@@ -42,17 +39,8 @@ void LaunchState::Create()
     Graphics* graphics = GetSubsystem<Graphics>();
 
     UIElement* root = ui->GetRoot();
-    root->SetDefaultStyle(rc->GetResource<XMLFile>("UI/Style.xml"));
 
-    version_ = root->CreateChild<Text>("Version");
-    version_->SetAlignment(HorizontalAlignment::HA_RIGHT, VerticalAlignment::VA_TOP);
-    version_->SetTextAlignment(HorizontalAlignment::HA_LEFT);
-    version_->SetText("Rev: " + GetSubsystem<Settings>()->GetSetting("version").GetString().ToUpper());
-    version_->SetColor(Color::WHITE);
-    version_->SetFont(rc->GetResource<Font>("Fonts/msyi.ttf"), 12);
-    version_->SetPriority(M_MAX_INT);
-
-    launchRoot_ = root->CreateChild<BorderImage>("LoadingBackground");
+    launchRoot_ = root->CreateChild<BorderImage>("LaunchBackground");
     launchRoot_->SetColor(Color::BLACK);
     launchRoot_->SetSize(graphics->GetWidth(), graphics->GetHeight());
     launchRoot_->SetVisible(false);
@@ -88,12 +76,6 @@ void LaunchState::Stop()
 
 void LaunchState::Destroy()
 {
-    if (version_)
-    {
-        version_->Remove();
-        version_.Reset();    
-    }
-
     if (launchRoot_)
     {
         launchRoot_->Remove();
@@ -105,8 +87,6 @@ void LaunchState::HandleTimer(Urho3D::StringHash eventType, Urho3D::VariantMap& 
 {
     if (timer_.GetMSec(false) > 5000 && !switching_)
     {
-        switching_ = true;
-
         SwitchToMenu();
 
     }
