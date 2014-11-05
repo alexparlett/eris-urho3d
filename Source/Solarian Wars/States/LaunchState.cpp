@@ -13,6 +13,8 @@
 #include <Model.h>
 #include <XMLFile.h>
 #include <ValueAnimation.h>
+#include <Variant.h>
+#include <StringHash.h>
 
 #include "IO/Settings.h"
 #include "Core/Events.h"
@@ -25,7 +27,7 @@ LaunchState::LaunchState(Context* context) :
     launchRoot_(NULL),
     timer_(Timer()),
     currentLogoIndex_(0),
-    fading_(false)
+    fading_(true)
 {
 }
 
@@ -50,17 +52,26 @@ void LaunchState::Create()
 
     launchRoot_->AddChild(CreateLaunchLogo(rc, "Textures/UI/LaunchLogo.png"));
 
+    StringHash paramName("Out");
+
+    VariantMap outParams = VariantMap();
+    outParams[paramName] = true;
+
     opacityOutAnimation_ = new ValueAnimation(context_);
     opacityOutAnimation_->SetKeyFrame(0.0f, 1.f);
     opacityOutAnimation_->SetKeyFrame(1.0f, 0.5f);
     opacityOutAnimation_->SetKeyFrame(2.0f, 0.0f);
-    opacityOutAnimation_->SetEventFrame(2.0f, E_ANIMATION_FINISHED);
+    opacityOutAnimation_->SetEventFrame(2.0f, E_ANIMATION_FINISHED, outParams);
+
+    VariantMap inParams = VariantMap();
+    inParams[paramName] = false;
 
     opacityInAnimation_ = new ValueAnimation(context_);
     opacityInAnimation_->SetKeyFrame(0.0f, 0.f);
     opacityInAnimation_->SetKeyFrame(1.0f, 0.0f);
     opacityInAnimation_->SetKeyFrame(2.0f, 0.5f);
     opacityInAnimation_->SetKeyFrame(3.0f, 1.0f);
+    opacityInAnimation_->SetEventFrame(3.0f, E_ANIMATION_FINISHED, inParams);
 }
 
 void LaunchState::Start()
@@ -159,8 +170,11 @@ void LaunchState::HandleAnimationFinished(Urho3D::StringHash eventType, Urho3D::
         SwitchToMenu();
     }
     
-    timer_.Reset();
-    fading_ = false;
+    if (!eventData[StringHash("Out")].GetBool())
+    {
+        timer_.Reset();
+        fading_ = false;
+    }
 }
 
 void LaunchState::AsyncLoadCoreData()
