@@ -138,7 +138,7 @@ void MenuState::CreateButtons(Font* font)
     buttonRoot->SetAlignment(HorizontalAlignment::HA_CENTER, VerticalAlignment::VA_CENTER);
     buttonRoot->SetLayoutMode(LM_VERTICAL);
     buttonRoot->SetLayoutSpacing(10);
-    buttonRoot->SetFixedSize(200, 300);
+    buttonRoot->SetMinSize(200, 0);
     buttonRoot->SetEnabled(false);
 
     menuRoot_->AddChild(buttonRoot);
@@ -167,6 +167,9 @@ Urho3D::Button* MenuState::BuildMenuButton(const String& content, Font* font)
     Button* button = new Button(context_);
     button->SetStyleAuto();
     button->SetFocusMode(FM_RESETFOCUS);
+    button->SetMinSize(0, 40);
+    button->SetLayoutMode(LM_HORIZONTAL);
+    button->SetLayoutBorder(IntRect(15, 15, 15, 15));
 
     Text* text = new Text(context_);
     text->SetFont(font, 18);

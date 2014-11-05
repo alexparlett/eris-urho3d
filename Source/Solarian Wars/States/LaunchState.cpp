@@ -15,6 +15,7 @@
 #include <ValueAnimation.h>
 #include <Variant.h>
 #include <StringHash.h>
+#include <PackageFile.h>
 
 #include "IO/Settings.h"
 #include "Core/Events.h"
@@ -50,7 +51,7 @@ void LaunchState::Create()
     launchRoot_->SetSize(graphics->GetWidth(), graphics->GetHeight());
     launchRoot_->SetVisible(false);
 
-    launchRoot_->AddChild(CreateLaunchLogo(rc, "Textures/UI/LaunchLogo.png"));
+    launchRoot_->AddChild(CreateLaunchLogo(rc, "textures/ui/launchlogo.png"));
 
     StringHash paramName("Out");
 
@@ -83,8 +84,6 @@ void LaunchState::Start()
     SubscribeToEvent(E_KEYDOWN, HANDLER(LaunchState, HandleKey));
     SubscribeToEvent(E_MOUSEBUTTONUP, HANDLER(LaunchState, HandleButton));
     SubscribeToEvent(E_ANIMATION_FINISHED, HANDLER(LaunchState, HandleAnimationFinished));
-
-    AsyncLoadCoreData();
 
     timer_.Reset();
 }
@@ -165,25 +164,18 @@ void LaunchState::HandleButton(Urho3D::StringHash eventType, Urho3D::VariantMap&
 
 void LaunchState::HandleAnimationFinished(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
 {
-    if (currentLogoIndex_ >= launchLogos_.Size() - 1)
-    {
-        SwitchToMenu();
-    }
-    
     if (!eventData[StringHash("Out")].GetBool())
     {
         timer_.Reset();
         fading_ = false;
     }
-}
-
-void LaunchState::AsyncLoadCoreData()
-{
-    ResourceCache* rc = GetSubsystem<ResourceCache>();
-
-    rc->BackgroundLoadResource<Model>("Models/Box.mdl");
-    rc->BackgroundLoadResource<Model>("Models/Plane.mdl");
-    rc->BackgroundLoadResource<Model>("Models/Sphere.mdl");
+    else
+    {
+        if (currentLogoIndex_ >= launchLogos_.Size() - 1)
+        {
+            SwitchToMenu();
+        }
+    }
 }
 
 void LaunchState::SwitchToMenu()

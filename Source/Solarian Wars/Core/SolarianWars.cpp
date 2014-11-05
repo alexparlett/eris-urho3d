@@ -90,7 +90,7 @@ void SolarianWars::Setup()
     engineParameters_["MaterialQuality"] = settings->GetSetting("shaders", 2).GetInt();
     engineParameters_["Shadows"] = settings->GetSetting("shadows", 2).GetInt() > 0 ? true : false;
     engineParameters_["LowQualityShadows"] = settings->GetSetting("shadows", 2).GetInt() == 1 ? true : false;
-    engineParameters_["RenderPath"] = "RenderPaths/Forward.xml";
+    engineParameters_["RenderPath"] = "RenderPaths/Deferred.xml";
 
     audio->SetMasterGain(SoundType::SOUND_MASTER, settings->GetSetting("master", 1.0f).GetFloat());
     audio->SetMasterGain(SoundType::SOUND_AMBIENT, settings->GetSetting("ambient", 0.6f).GetFloat());
@@ -179,7 +179,6 @@ void SolarianWars::DefineVersion()
     version_->SetColor(Color::WHITE);
     version_->SetFont(rc->GetResource<Font>("Fonts/msyi.ttf"), 12);
     version_->SetPriority(M_MAX_INT);
-
 }
 
 DEFINE_APPLICATION_MAIN(SolarianWars)

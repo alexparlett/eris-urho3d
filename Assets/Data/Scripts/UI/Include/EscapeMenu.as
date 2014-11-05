@@ -7,7 +7,7 @@ class EscapeMenu
         @window = uiRoot.CreateChild("Window","EscapeMenuWindow");
         window.SetStyleAuto();
         window.SetAlignment(HA_CENTER, VA_CENTER); 
-        window.SetFixedSize(195,240);
+        window.SetMinSize(195,0);
         window.layoutBorder = IntRect(15,15,15,15);
         window.layoutMode = LM_VERTICAL;
         window.layoutSpacing = 5;
@@ -47,6 +47,9 @@ class EscapeMenu
         Button@ button = Button();
         button.SetStyleAuto();
         button.focusMode = FM_RESETFOCUS;
+        button.layoutMode = LM_HORIZONTAL;
+        button.minHeight = 30;
+        button.layoutBorder = IntRect(10,10,10,10);
         
         Text@ text = Text();
         text.SetFont(font, 12);

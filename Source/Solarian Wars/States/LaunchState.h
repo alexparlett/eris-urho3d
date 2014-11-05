@@ -35,7 +35,6 @@ public:
 private:
     void SwitchToMenu();
     void SwitchLogo();
-    void AsyncLoadCoreData();
     void FadeOutFinalLogo();
 
     Urho3D::BorderImage* CreateLaunchLogo(Urho3D::ResourceCache* rc, const Urho3D::String& textureName);
