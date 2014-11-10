@@ -19,32 +19,32 @@ Mod::Mod(const String& dir, XMLFile& file)
     version_ = root.GetChild("version").GetValue();
 }
 
-const String& Mod::GetId()
+const String& Mod::GetId() const
 {
     return id_;
 }
 
-const String& Mod::GetName()
+const String& Mod::GetName() const
 {
     return name_;
 }
 
-const String& Mod::GetDirectory()
+const String& Mod::GetDirectory() const
 {
     return directory_;
 }
 
-const String& Mod::GetDescription()
+const String& Mod::GetDescription() const
 {
     return description_;
 }
 
-const String& Mod::GetAuthor()
+const String& Mod::GetAuthor() const
 {
     return author_;
 }
 
-const String& Mod::GetVersion()
+const String& Mod::GetVersion() const
 {
     return version_;
 }

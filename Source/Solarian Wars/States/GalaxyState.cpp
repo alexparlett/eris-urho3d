@@ -8,7 +8,6 @@
 #include "MenuState.h"
 
 #include "Core/Events.h"
-#include "GamePlay/Scene/Components/TurnResolver.h"
 
 #include <ResourceCache.h>
 #include <Scene.h>
@@ -43,7 +42,6 @@ GalaxyState::GalaxyState(Context* context) :
     ui_(GetSubsystem<UI>()),
     time_(GetSubsystem<Time>())
 {
-    TurnResolver::RegisterObject(context);
 }
 
 GalaxyState::~GalaxyState()
@@ -124,7 +122,6 @@ void GalaxyState::CreateScene()
     scene_->CreateComponent<PhysicsWorld>();
     scene_->CreateComponent<Octree>();
     scene_->CreateComponent<NavigationMesh>();
-    scene_->CreateComponent<TurnResolver>();
 
     Node* skyboxNode = scene_->CreateChild("Skybox");
     skyboxNode->SetScale(0.25f);
@@ -214,10 +211,6 @@ void GalaxyState::HandleKeyDown(Urho3D::StringHash eventType, Urho3D::VariantMap
     else if (scanCode == bindings_->GetActionScanCode("diplomacyWindowToggle"))
     {
         SendEvent(E_TOGGLE_DIPLOMACY_WINDOW);
-    }
-    else if (scanCode == bindings_->GetActionScanCode("endTurn"))
-    {
-        SendEvent(E_END_TURN);
     }
 }
 

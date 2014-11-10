@@ -18,12 +18,12 @@ public:
     Mod(const Urho3D::String& dir, Urho3D::XMLFile& file);
     virtual ~Mod() { }
 
-    const Urho3D::String& GetId();
-    const Urho3D::String& GetName();
-    const Urho3D::String& GetDirectory();
-    const Urho3D::String& GetDescription();
-    const Urho3D::String& GetAuthor();
-    const Urho3D::String& GetVersion();
+    const Urho3D::String& GetId() const;
+    const Urho3D::String& GetName() const;
+    const Urho3D::String& GetDirectory() const;
+    const Urho3D::String& GetDescription() const;
+    const Urho3D::String& GetAuthor() const;
+    const Urho3D::String& GetVersion() const;
 
 private:
     Urho3D::String id_;

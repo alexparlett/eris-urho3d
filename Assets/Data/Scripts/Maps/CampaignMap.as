@@ -9,10 +9,10 @@ class CampaignMap : Map, ScriptObject
     
     void Generate()
 	{	
-        CreateSolari();
+        CreateSolariSystem();
 	}
     
-	void CreateSolari()
+	void CreateSolariSystem()
 	{
 		Node@ sysNode = scene.CreateChild("Solari");
         sysNode.position = Vector3(0,0,0);
@@ -20,21 +20,24 @@ class CampaignMap : Map, ScriptObject
         ScriptObject@ object = sysNode.CreateScriptObject("Scripts/Types/System.as", "System");
         if (object !is null)
         {
-            System@ system = cast<System>(object);       
-            system.AddPlanet(CreatePlanet(sysNode, "Solari Prime", Vector3(0,0,0), "Materials/Planets/SolariPrime.xml"));
+            System@ system = cast<System>(object);  
+            
+            system.AddPlanet(CreatePlanet(sysNode, "Solari Prime", Vector3(30,0,30), "SolariPrime"));
         }
 	}
     
-    Planet@ CreatePlanet(Node@ system, const String& name, const Vector3& position, const String& material)
+    Planet@ CreatePlanet(Node@ system, const String& name, const Vector3& position, const String& typeName)
     {
         Node@ planetNode = system.CreateChild(name);
         planetNode.position = position;
         
-        StaticModel@ model = planetNode.CreateComponent("StaticModel");
-        model.model = cast<Model@>(cache.GetResource("Model","Models/Sphere.mdl"));
-        model.material = cast<Material@>(cache.GetResource("Material", material));
+        PlanetType@ type = typeCache.GetPlanetType(typeName);
         
-        ScriptObject@ object = planetNode.CreateScriptObject("Scripts/Types/Planet.as", "Planet");
+        StaticModel@ model = planetNode.CreateComponent("StaticModel");
+        model.model = type.GetModel();
+        model.material = type.GetMaterial();
+        
+        ScriptObject@ object = planetNode.CreateScriptObject(type.GetScriptFile(), type.GetScriptClass());
         if (object !is null)
         {
             Planet@ planet = cast<Planet>(object);

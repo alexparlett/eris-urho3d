@@ -23,7 +23,7 @@ public:
     void Load();
     void Save();
 
-    int GetActionScanCode(const Urho3D::String& action);
+    int GetActionScanCode(const Urho3D::String& action) const;
     void SetActionScanCode(const Urho3D::String& action, int scanCode);
     void SetActionScanCodeFromKey(const Urho3D::String& action, int keyCode);
 

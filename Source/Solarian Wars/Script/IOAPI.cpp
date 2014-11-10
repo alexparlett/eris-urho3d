@@ -44,9 +44,9 @@ static void RegisterSettings(asIScriptEngine* engine)
 
 static void RegisterLocale(asIScriptEngine* engine)
 {
-    RegisterRefCounted<Locale>(engine, "Locale");
-    engine->RegisterObjectMethod("Locale", "String Localize(int,int) const", asMETHOD(Locale, Localize), asCALL_THISCALL);
-    engine->RegisterObjectMethod("Locale", "void Replace(String&in, int, const String&in) const", asMETHODPR(Locale, Replace, (Urho3D::String& line, int token, const Urho3D::String& value) const, void), asCALL_THISCALL);
+    RegisterObject<Locale>(engine, "Locale");
+    engine->RegisterObjectMethod("Locale", "String Localize(uint,uint) const", asMETHOD(Locale, Localize), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Locale", "void Replace(String&in, uint, const String&in) const", asMETHODPR(Locale, Replace, (Urho3D::String& line, unsigned token, const Urho3D::String& value) const, void), asCALL_THISCALL);
     engine->RegisterObjectMethod("Locale", "void Replace(String&in, Array<String>@+) const", asFUNCTION(LocaleReplacePODVector), asCALL_CDECL_OBJLAST);
     engine->RegisterGlobalFunction("Locale@+ get_locale()", asFUNCTION(GetLocale), asCALL_CDECL);
 }
@@ -54,7 +54,7 @@ static void RegisterLocale(asIScriptEngine* engine)
 static void RegisterBindings(asIScriptEngine* engine)
 {
     RegisterObject<Bindings>(engine, "Bindings");
-    engine->RegisterObjectMethod("Bindings", "int get_actionKey(const String&in)", asMETHOD(Bindings, GetActionScanCode), asCALL_THISCALL);
+    engine->RegisterObjectMethod("Bindings", "int get_actionKey(const String&in) const", asMETHOD(Bindings, GetActionScanCode), asCALL_THISCALL);
     engine->RegisterObjectMethod("Bindings", "void set_actionKey(const String&in, int)", asMETHOD(Bindings, SetActionScanCode), asCALL_THISCALL);
     engine->RegisterGlobalFunction("Bindings@+ get_bindings()", asFUNCTION(GetBindings), asCALL_CDECL);
 }

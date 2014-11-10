@@ -51,9 +51,6 @@
     <ClInclude Include="States\State.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GamePlay\Scene\Components\TurnResolver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Script\ScriptAPI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -90,9 +87,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="States\GalaxyState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GamePlay\Scene\Components\TurnResolver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Script\IOAPI.cpp">

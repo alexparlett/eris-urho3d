@@ -27,9 +27,9 @@ Page::Page(XMLElement& page) :
     }
 }
 
-String Page::GetLine(int line) const
+String Page::GetLine(unsigned line) const
 {
-    HashMap<int, String>::ConstIterator findIt = lines_.Find(line);
+    HashMap<unsigned, String>::ConstIterator findIt = lines_.Find(line);
     return findIt != lines_.End() ? findIt->second_ : String::EMPTY;
 }
 
@@ -61,13 +61,13 @@ void Locale::Load(const String& fileName)
     }
 }
 
-String Locale::Localize(int page, int line) const
+String Locale::Localize(unsigned page, unsigned line) const
 {
-    HashMap<int, SharedPtr<Page>>::ConstIterator findIt = pages_.Find(page);
+    HashMap<unsigned, SharedPtr<Page>>::ConstIterator findIt = pages_.Find(page);
     return findIt != pages_.End() ? findIt->second_->GetLine(line) : String::EMPTY;
 }
 
-void Locale::Replace(String& line, int token, const String& value) const
+void Locale::Replace(String& line, unsigned token, const String& value) const
 {
     line.Replace(ToString("{%d}", token), value);
 }

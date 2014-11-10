@@ -83,7 +83,7 @@ void Bindings::Save()
         LOGERROR("Unable to open " + fileName);
 }
 
-int Bindings::GetActionScanCode(const String& action)
+int Bindings::GetActionScanCode(const String& action) const
 {
     HashMap<String, int>::Iterator findIt = actionMap_.Find(action);
     if (findIt != actionMap_.End())

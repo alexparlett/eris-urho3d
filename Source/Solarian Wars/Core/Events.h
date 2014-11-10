@@ -48,10 +48,6 @@ EVENT(E_GAME_FINISHED, GameFinished)
 {
 }
 
-EVENT(E_GAME_TURN, GameTurn)
-{
-}
-
 EVENT(E_TOGGLE_ESCAPE_MENU, ToggleEscapeMenu)
 {
 }
@@ -61,10 +57,6 @@ EVENT(E_TOGGLE_EVENT_WINDOW, ToggleEventWindow)
 }
 
 EVENT(E_TOGGLE_DIPLOMACY_WINDOW, ToggleDiplomacyWindow)
-{
-}
-
-EVENT(E_END_TURN, EndTurn)
 {
 }
 
