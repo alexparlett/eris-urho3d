@@ -21,7 +21,6 @@ class CampaignMap : Map, ScriptObject
         if (object !is null)
         {
             System@ system = cast<System>(object);  
-            
             system.AddPlanet(CreatePlanet(sysNode, "Solari Prime", Vector3(30,0,30), "SolariPrime"));
         }
 	}

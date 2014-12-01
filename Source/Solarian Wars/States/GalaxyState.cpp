@@ -75,7 +75,6 @@ void GalaxyState::Start ()
     SubscribeToEvent(E_MOUSEMOVE, HANDLER(GalaxyState, HandleMouseMove));
     SubscribeToEvent(E_MOUSEBUTTONUP, HANDLER(GalaxyState, HandleMouseClick));
     SubscribeToEvent(E_MOUSEWHEEL, HANDLER(GalaxyState, HandleMouseWheel));
-    SubscribeToEvent(E_KEYDOWN, HANDLER(GalaxyState, HandleKeyDown));
     SubscribeToEvent(E_GAME_FINISHED, HANDLER(GalaxyState, HandleGameFinished));
 
     Viewport* viewport = GetSubsystem<Renderer>()->GetViewport(0);
@@ -191,27 +190,6 @@ void GalaxyState::HandleMouseWheel(Urho3D::StringHash eventType, Urho3D::Variant
     float value = eventData[P_WHEEL].GetInt() * time_->GetTimeStep() * settings_->GetSetting("scrollSpeed", 150.f).GetFloat();
 
     camera_->Translate(Vector3(0, 0, value));
-}
-
-void GalaxyState::HandleKeyDown(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
-{
-    using namespace KeyDown;
-
-    int scanCode = eventData[P_SCANCODE].GetInt();
-    int qualifiers = eventData[P_QUALIFIERS].GetInt();
-
-    if (scanCode == SCANCODE_ESCAPE && !GetSubsystem<UI>()->GetFocusElement())
-    {
-        SendEvent(E_TOGGLE_ESCAPE_MENU);
-    }
-    else if (scanCode == bindings_->GetActionScanCode("eventWindowToggle"))
-    {
-        SendEvent(E_TOGGLE_EVENT_WINDOW);
-    }
-    else if (scanCode == bindings_->GetActionScanCode("diplomacyWindowToggle"))
-    {
-        SendEvent(E_TOGGLE_DIPLOMACY_WINDOW);
-    }
 }
 
 void GalaxyState::HandleGameFinished(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)

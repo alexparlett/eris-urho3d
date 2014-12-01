@@ -17,8 +17,7 @@ class GalaxyUI : UserInterface, ScriptObject
         @escapeMenu = EscapeMenu(uiRoot);
         
         SubscribeToEvent("GameStart", "HandleGameStarted");
-        SubscribeToEvent("GameFinished", "HandleGameFinished");        
-        SubscribeToEvent("ToggleEscapeMenu", "HandleEscapeMenu");   
+        SubscribeToEvent("GameFinished", "HandleGameFinished");         
     }
     
     void HandleGameStarted(StringHash eventType, VariantMap& eventData)
@@ -29,10 +28,5 @@ class GalaxyUI : UserInterface, ScriptObject
     void HandleGameFinished(StringHash eventType, VariantMap& eventData)
     {
         uiRoot.Remove();
-    }
-    
-    void HandleEscapeMenu(StringHash eventType, VariantMap& eventData)
-    {
-        escapeMenu.ToggleVisible();
     }
 }

@@ -38,7 +38,6 @@ private:
     void HandleMouseMove(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
     void HandleMouseClick(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
     void HandleMouseWheel(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
-    void HandleKeyDown(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
     void HandleGameFinished(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
 
 	Urho3D::SharedPtr<Urho3D::Scene> scene_;
