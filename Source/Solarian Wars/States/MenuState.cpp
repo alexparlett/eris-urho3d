@@ -8,26 +8,26 @@
 #include "Core/Events.h"
 #include "GalaxyState.h"
 
-#include <ResourceCache.h>
-#include <Octree.h>
-#include <Skybox.h>
-#include <SoundListener.h>
-#include <Renderer.h>
-#include <UI.h>
-#include <Camera.h>
-#include <Vector3.h>
-#include <Model.h>
-#include <Material.h>
-#include <Viewport.h>
-#include <BorderImage.h>
-#include <Font.h>
-#include <Text.h>
-#include <UIEvents.h>
-#include <Texture2D.h>
-#include <Graphics.h>
-#include <Button.h>
-#include <InputEvents.h>
-#include <Sprite.h>
+#include <Resource/ResourceCache.h>
+#include <Graphics/Octree.h>
+#include <Graphics/Skybox.h>
+#include <Audio/SoundListener.h>
+#include <Graphics/Renderer.h>
+#include <UI/UI.h>
+#include <Graphics/Camera.h>
+#include <Math/Vector3.h>
+#include <Graphics/Model.h>
+#include <Graphics/Material.h>
+#include <Graphics/Viewport.h>
+#include <UI/BorderImage.h>
+#include <UI/Font.h>
+#include <UI/Text.h>
+#include <UI/UIEvents.h>
+#include <Graphics/Texture2D.h>
+#include <Graphics/Graphics.h>
+#include <UI/Button.h>
+#include <Input/InputEvents.h>
+#include <UI/Sprite.h>
 
 using namespace Urho3D;
 
@@ -52,7 +52,7 @@ void MenuState::Start()
 {
     Viewport* viewport = GetSubsystem<Renderer>()->GetViewport(0);
     viewport->SetScene(scene_);
-    viewport->SetCamera(scene_->GetDefaultCamera());
+    viewport->SetCamera(camera_->GetComponent<Camera>());
 
     scene_->SetUpdateEnabled(true);
     menuRoot_->SetVisible(true);
@@ -111,8 +111,6 @@ void MenuState::CreateCamera()
 
     Node* camNode = camera_->CreateChild("CameraNode");
     Camera* cam = camNode->CreateComponent<Camera>();
-
-    scene_->SetDefaultCamera(cam);
 }
 
 void MenuState::CreateUI()
@@ -155,11 +153,11 @@ void MenuState::CreateButtons(Font* font)
     buttonRoot->AddChild(optionsButton);
     buttonRoot->AddChild(exitButton);
 
-    SubscribeToEvent(playButton, E_RELEASED, HANDLER(MenuState, PlayClicked));
-    SubscribeToEvent(loadButton, E_RELEASED, HANDLER(MenuState, LoadClicked));
-    SubscribeToEvent(modsButton, E_RELEASED, HANDLER(MenuState, ModsClicked));
-    SubscribeToEvent(optionsButton, E_RELEASED, HANDLER(MenuState, OptionsClicked));
-    SubscribeToEvent(exitButton, E_RELEASED, HANDLER(MenuState, ExitClicked));
+    SubscribeToEvent(playButton, E_RELEASED, URHO3D_HANDLER(MenuState, PlayClicked));
+    SubscribeToEvent(loadButton, E_RELEASED, URHO3D_HANDLER(MenuState, LoadClicked));
+    SubscribeToEvent(modsButton, E_RELEASED, URHO3D_HANDLER(MenuState, ModsClicked));
+    SubscribeToEvent(optionsButton, E_RELEASED, URHO3D_HANDLER(MenuState, OptionsClicked));
+    SubscribeToEvent(exitButton, E_RELEASED, URHO3D_HANDLER(MenuState, ExitClicked));
 }
 
 Urho3D::Button* MenuState::BuildMenuButton(const String& content, Font* font)

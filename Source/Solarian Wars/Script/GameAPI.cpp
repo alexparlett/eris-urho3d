@@ -6,9 +6,9 @@
 
 #include "ScriptAPI.h"
 
-#include <APITemplates.h>
-#include <angelscript.h>
-#include <Script.h>
+#include <AngelScript/APITemplates.h>
+#include <AngelScript/angelscript.h>
+#include <AngelScript/Script.h>
 
 using namespace Urho3D;
 

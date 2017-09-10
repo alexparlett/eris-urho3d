@@ -7,13 +7,13 @@
 #include "Settings.h"
 #include "../gitversion.h"
 
-#include <File.h>
-#include <XMLFile.h>
-#include <FileSystem.h>
-#include <XMLElement.h>
-#include <PackageFile.h>
-#include <Log.h>
-#include <StringUtils.h>
+#include <IO/File.h>
+#include <Resource/XMLFile.h>
+#include <IO/FileSystem.h>
+#include <Resource/XMLElement.h>
+#include <IO/PackageFile.h>
+#include <IO/Log.h>
+#include <Core/StringUtils.h>
 
 using namespace Urho3D;
 
@@ -37,14 +37,14 @@ void Settings::Load(void)
 
     if (!file.IsOpen())
     {
-        LOGERROR("Unable to open settings file " + fileName);
+        URHO3D_LOGERROR("Unable to open settings file " + fileName);
         return;
     }
 
-    XMLFile xmlFile = XMLFile(context_);
-    if (xmlFile.Load(file))
+    XMLFile* xmlFile = new XMLFile(context_);
+    if (xmlFile->Load(file))
     {
-        XMLElement root = xmlFile.GetRoot();
+        XMLElement root = xmlFile->GetRoot();
 
         XMLElement graphics = root.GetChild("graphics");
         LoadGraphics(graphics);
@@ -55,28 +55,33 @@ void Settings::Load(void)
         XMLElement game = root.GetChild("game");
         LoadGame(game);
     }
+	delete(xmlFile);
 }
 
 void Settings::Save(void)
 {
     String fileName = settings_["userdir"].GetString() + "settings.xml";
 
-    File file = File(context_, fileName, FILE_WRITE);
-    if (file.IsOpen())
+    File* file = new File(context_, fileName, FILE_WRITE);
+    if (file->IsOpen())
     {
-        XMLFile xmlFile = XMLFile(context_);
-        XMLElement root = xmlFile.CreateRoot("settings");
+        XMLFile* xmlFile = new XMLFile(context_);
+        XMLElement root = xmlFile->CreateRoot("settings");
 
         SaveGraphics(root);
         SaveSound(root);
         SaveGame(root);
 
-        if (!xmlFile.Save(file))
-            LOGERROR("Unable to save " + fileName);
+        if (!xmlFile->Save(*file))
+			URHO3D_LOGERROR("Unable to save " + fileName);
+
+		delete(xmlFile);
         
     }
     else
-        LOGERROR("Unable to open " + fileName);
+		URHO3D_LOGERROR("Unable to open " + fileName);
+
+	delete(file);
 }
 
 const Variant& Settings::GetSetting(const String& name, const Variant& default) const

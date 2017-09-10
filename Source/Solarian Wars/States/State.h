@@ -6,12 +6,11 @@
 
 #pragma once
 
-#include <Object.h>
+#include <Core/Object.h>
 
 class State : public Urho3D::Object
 {
-    OBJECT(State)
-    BASEOBJECT(State)
+	URHO3D_OBJECT(State, Urho3D::Object)
 
 public:
     State(Urho3D::Context* context) : Urho3D::Object(context), switching_(false) { }

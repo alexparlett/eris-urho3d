@@ -6,14 +6,14 @@
 
 #pragma once
 
-#include <Engine.h>
-#include <Application.h>
-#include <Ptr.h>
-#include <Text.h>
+#include <Engine/Engine.h>
+#include <Engine/Application.h>
+#include <Container/Ptr.h>
+#include <UI/Text.h>
 
 class SolarianWars : public Urho3D::Application
 {
-    OBJECT(SolarianWars)
+    URHO3D_OBJECT(SolarianWars,Urho3D::Application)
 
 public:
     SolarianWars(Urho3D::Context* context);

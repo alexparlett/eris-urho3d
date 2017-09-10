@@ -30,9 +30,6 @@
     <ClInclude Include="States\LaunchState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IO\Mod.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Core\ModManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -58,6 +55,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IO\Module.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -9,34 +9,36 @@
 
 #include "Core/Events.h"
 
-#include <ResourceCache.h>
-#include <Scene.h>
-#include <Script.h>
-#include <ScriptFile.h>
-#include <PhysicsWorld.h>
-#include <Octree.h>
-#include <NavigationMesh.h>
-#include <Navigable.h>
-#include <Log.h>
-#include <Renderer.h>
-#include <Viewport.h>
-#include <Material.h>
-#include <TextureCube.h>
-#include <Skybox.h>
-#include <Model.h>
-#include <SoundListener.h>
-#include <UI.h>
-#include <Input.h>
-#include <InputEvents.h>
+#include <Resource/ResourceCache.h>
+#include <Scene/Scene.h>
+#include <AngelScript/Script.h>
+#include <AngelScript/ScriptFile.h>
+#include <Physics/PhysicsWorld.h>
+#include <Graphics/Octree.h>
+#include <Navigation/NavigationMesh.h>
+#include <Navigation/Navigable.h>
+#include <IO/Log.h>
+#include <Graphics/Renderer.h>
+#include <Graphics/Viewport.h>
+#include <Graphics/Material.h>
+#include <Graphics/TextureCube.h>
+#include <Graphics/Skybox.h>
+#include <Graphics/Model.h>
+#include <Audio/SoundListener.h>
+#include <UI/UI.h>
+#include <Input/Input.h>
+#include <Input/InputEvents.h>
 
-#include <angelscript.h>
+#include <AngelScript/angelscript.h>
+
+#include <utility>
 
 using namespace Urho3D;
 
 GalaxyState::GalaxyState(Context* context) :
     State(context),
-    scene_(NULL),
-    camera_(NULL),
+    scene_(),
+    camera_(),
     bindings_(GetSubsystem<Bindings>()),
     settings_(GetSubsystem<Settings>()),
     ui_(GetSubsystem<UI>()),
@@ -72,14 +74,14 @@ void GalaxyState::Create()
 
 void GalaxyState::Start ()
 {
-    SubscribeToEvent(E_MOUSEMOVE, HANDLER(GalaxyState, HandleMouseMove));
-    SubscribeToEvent(E_MOUSEBUTTONUP, HANDLER(GalaxyState, HandleMouseClick));
-    SubscribeToEvent(E_MOUSEWHEEL, HANDLER(GalaxyState, HandleMouseWheel));
-    SubscribeToEvent(E_GAME_FINISHED, HANDLER(GalaxyState, HandleGameFinished));
+    SubscribeToEvent(E_MOUSEMOVE, URHO3D_HANDLER(GalaxyState, HandleMouseMove));
+    SubscribeToEvent(E_MOUSEBUTTONUP, URHO3D_HANDLER(GalaxyState, HandleMouseClick));
+    SubscribeToEvent(E_MOUSEWHEEL, URHO3D_HANDLER(GalaxyState, HandleMouseWheel));
+    SubscribeToEvent(E_GAME_FINISHED, URHO3D_HANDLER(GalaxyState, HandleGameFinished));
 
     Viewport* viewport = GetSubsystem<Renderer>()->GetViewport(0);
     viewport->SetScene(scene_);
-    viewport->SetCamera(scene_->GetDefaultCamera());
+    viewport->SetCamera(camera_->GetComponent<Camera>());
 
     scene_->GetComponent<NavigationMesh>()->Build();
 
@@ -143,8 +145,6 @@ void GalaxyState::CreateCamera()
     cam->SetFov(75.f);
 
     SoundListener* listener = camNode->CreateComponent<SoundListener>();
-
-    camNode->GetScene()->SetDefaultCamera(cam);
 }
 
 void GalaxyState::HandleMouseMove(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)

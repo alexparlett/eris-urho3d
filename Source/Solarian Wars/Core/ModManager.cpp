@@ -8,21 +8,21 @@
 #include "ModManager.h"
 #include "IO/Settings.h"
 
-#include <FileSystem.h>
-#include <File.h>
-#include <XMLFile.h>
-#include <ForEach.h>
-#include <Log.h>
-#include <ResourceCache.h>
+#include <IO/FileSystem.h>
+#include <IO/File.h>
+#include <Resource/XMLFile.h>
+#include <Container/ForEach.h>
+#include <IO/Log.h>
+#include <Resource/ResourceCache.h>
 
 using namespace Urho3D;
 
-ModManager::ModManager(Context* context) : 
+ModManager::ModManager(Context* context) :
     Object(context)
 {
-    SubscribeToEvent(E_MOD_ACTIVATE, HANDLER(ModManager, HandleActivate));
-    SubscribeToEvent(E_MOD_DEACTIVATE, HANDLER(ModManager, HandleDeactivate));
-    SubscribeToEvent(E_MOD_ORDER_SAVE, HANDLER(ModManager, HandleSave));
+    SubscribeToEvent(E_MOD_ACTIVATE, URHO3D_HANDLER(ModManager, HandleActivate));
+    SubscribeToEvent(E_MOD_DEACTIVATE, URHO3D_HANDLER(ModManager, HandleDeactivate));
+    SubscribeToEvent(E_MOD_ORDER_SAVE, URHO3D_HANDLER(ModManager, HandleSave));
 }
 
 void ModManager::Load()
@@ -72,13 +72,13 @@ void ModManager::Save()
             root.CreateChild("mod").SetValue(id);
 
         if (!orderXml.Save(orderFile))
-            LOGERROR("Unable to save mod order " + orderFilename);
+            URHO3D_LOGERROR("Unable to save mod order " + orderFilename);
     }
     else
-        LOGERROR("Unable to open mod order " + orderFilename);
+		URHO3D_LOGERROR("Unable to open mod order " + orderFilename);
 }
 
-const HashMap<String, Mod>& ModManager::GetModDescriptors() const
+const HashMap<String, Module>& ModManager::GetModDescriptors() const
 {
     return modDescriptors_;
 }
@@ -153,7 +153,7 @@ void ModManager::ScanDirectory(String& root)
                 XMLFile descriptor(context_);
                 descriptor.Load(file);
 
-                Mod mod(dir, descriptor);
+                Module mod(dir, descriptor);
 
                 modDescriptors_[mod.GetId()] = mod;
             }

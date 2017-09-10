@@ -9,8 +9,8 @@
 #include "IO/Settings.h"
 #include "IO/Bindings.h"
 
-#include <APITemplates.h>
-#include <angelscript.h>
+#include <AngelScript/APITemplates.h>
+#include <AngelScript/angelscript.h>
 
 using namespace Urho3D;
 

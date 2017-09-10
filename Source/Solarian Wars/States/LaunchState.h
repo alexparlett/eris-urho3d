@@ -8,20 +8,19 @@
 
 #include "State.h"
 
-#include <UIElement.h>
-#include <Timer.h>
-#include <Ptr.h>
-#include <Text.h>
-#include <Str.h>
-#include <BorderImage.h>
-#include <ResourceCache.h>
-#include <Vector.h>
-#include <ValueAnimation.h>
+#include <UI/UIElement.h>
+#include <Core/Timer.h>
+#include <Container/Ptr.h>
+#include <UI/Text.h>
+#include <Container/Str.h>
+#include <UI/BorderImage.h>
+#include <Resource/ResourceCache.h>
+#include <Container/Vector.h>
+#include <Scene/ValueAnimation.h>
 
 class LaunchState : public State
 {
-    OBJECT(LaunchState)
-    BASEOBJECT(State)
+    URHO3D_OBJECT(LaunchState,State)
 
 public:
     LaunchState(Urho3D::Context* context);

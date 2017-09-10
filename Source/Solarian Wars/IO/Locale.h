@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <Object.h>
-#include <Ptr.h>
-#include <HashMap.h>
-#include <XMLElement.h>
+#include <Core/Object.h>
+#include <Container/Ptr.h>
+#include <Container/HashMap.h>
+#include <Resource/XMLElement.h>
 
 class Page : public Urho3D::RefCounted
 {
@@ -25,7 +25,7 @@ private:
 
 class Locale : public Urho3D::Object
 {
-    OBJECT(Locale)
+    URHO3D_OBJECT(Locale, Urho3D::Object)
 
 public:
     Locale(Urho3D::Context* context);

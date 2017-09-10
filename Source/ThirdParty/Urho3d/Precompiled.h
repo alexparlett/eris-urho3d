@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2008-2014 the Urho3D project.
+// Copyright (c) 2008-2017 the Urho3D project.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,9 +20,16 @@
 // THE SOFTWARE.
 //
 
-#pragma once
+#ifdef __cplusplus
 
-#include "HashMap.h"
-#include "HashSet.h"
-#include "Sort.h"
-#include "Str.h"
+#ifndef URHO3D_PCH_INCLUDED
+#define URHO3D_PCH_INCLUDED
+
+#include "Container/HashMap.h"
+#include "Container/HashSet.h"
+#include "Container/Sort.h"
+#include "Container/Str.h"
+
+#endif
+
+#endif

@@ -4,13 +4,13 @@
 //
 ////////////////////////////////////////////
 
+#include <AngelScript/APITemplates.h>
+#include <Resource/ResourceCache.h>
+#include <Resource/XMLElement.h>
+#include <IO/Log.h>
+
 #include "Locale.h"
 #include "Settings.h"
-
-#include <APITemplates.h>
-#include <ResourceCache.h>
-#include <XMLFile.h>
-#include <Log.h>
 
 using namespace Urho3D;
 

@@ -7,12 +7,12 @@
 #include "Bindings.h"
 #include "Settings.h"
 
-#include <FileSystem.h>
-#include <File.h>
-#include <Log.h>
-#include <Context.h>
-#include <XMLFile.h>
-#include <ForEach.h>
+#include <IO/FileSystem.h>
+#include <IO/File.h>
+#include <IO/Log.h>
+#include <Core/Context.h>
+#include <Resource/XMLFile.h>
+#include <Container/ForEach.h>
 
 using namespace Urho3D;
 
@@ -38,14 +38,14 @@ void Bindings::Load()
 
     if (!file.IsOpen())
     {
-        LOGERROR("Unable to open bindings file " + fileName);
+		URHO3D_LOGERROR("Unable to open bindings file " + fileName);
         return;
     }
 
-    XMLFile xmlFile = XMLFile(context_);
-    if (xmlFile.Load(file))
+	XMLFile* xmlFile = new XMLFile(context_);
+    if (xmlFile->Load(file))
     {
-        XMLElement root = xmlFile.GetRoot();
+        XMLElement root = xmlFile->GetRoot();
         XPathResultSet results = root.Select("action");
 
         for (unsigned i = 0; i < results.Size(); i++)
@@ -54,6 +54,7 @@ void Bindings::Load()
             actionMap_[action.GetAttribute("name")] = ToInt(action.GetAttribute("code"));
         }
     }
+	delete(xmlFile);
 }
 
 void Bindings::Save()
@@ -62,11 +63,11 @@ void Bindings::Save()
 
     String fileName = settings->GetSetting("userdir").GetString() + "bindings.xml";
 
-    File file = File(context_, fileName, FILE_WRITE);
-    if (file.IsOpen())
+    File* file = new File(context_, fileName, FILE_WRITE);
+    if (file->IsOpen())
     {
-        XMLFile xmlFile = XMLFile(context_);
-        XMLElement root = xmlFile.CreateRoot("bindings");
+        XMLFile* xmlFile = new XMLFile(context_);
+        XMLElement root = xmlFile->CreateRoot("bindings");
 
         HashMap<String, int>::Iterator iter = actionMap_.Begin();
         for (iter; iter != actionMap_.End(); iter++)
@@ -76,16 +77,20 @@ void Bindings::Save()
             action.SetInt("code", iter->second_);
         }
 
-        if (!xmlFile.Save(file))
-            LOGERROR("Unable to save " + fileName);
+        if (!xmlFile->Save(*file))
+			URHO3D_LOGERROR("Unable to save " + fileName);
+
+		delete(xmlFile);
     }
     else
-        LOGERROR("Unable to open " + fileName);
+		URHO3D_LOGERROR("Unable to open " + fileName);
+
+	delete(file);
 }
 
 int Bindings::GetActionScanCode(const String& action) const
 {
-    HashMap<String, int>::Iterator findIt = actionMap_.Find(action);
+    HashMap<String, int>::ConstIterator findIt = actionMap_.Find(action);
     if (findIt != actionMap_.End())
     {
         return findIt->second_;

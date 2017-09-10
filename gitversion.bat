@@ -1,4 +1,4 @@
-@ECHO OFF
+@ECHO ON
 cd %1
 git describe --long --tags --dirty --always > gitversion.tmp
 SET /p version= < gitversion.tmp

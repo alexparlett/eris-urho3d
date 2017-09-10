@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2008-2014 the Urho3D project.
+// Copyright (c) 2008-2017 the Urho3D project.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,20 +20,33 @@
 // THE SOFTWARE.
 //
 
-#ifdef _MSC_VER
-#pragma warning(disable: 4251)
-#pragma warning(disable: 4275)
-#endif
-
 #ifndef URHO3D_API_H
 #define URHO3D_API_H
+
+#pragma warning(disable: 4251)
+#pragma warning(disable: 4275)
+
+#if _MSC_VER < 1900
+#define strtoll _strtoi64
+#define strtoull _strtoui64
+#endif
+
+
+#define URHO3D_STATIC_DEFINE
+#define URHO3D_OPENGL
+/* #undef URHO3D_D3D11 */
+#define URHO3D_SSE
+/* #undef URHO3D_DATABASE_ODBC */
+/* #undef URHO3D_DATABASE_SQLITE */
+/* #undef URHO3D_LUAJIT */
+/* #undef URHO3D_TESTING */
 
 #ifdef URHO3D_STATIC_DEFINE
 #  define URHO3D_API
 #  define URHO3D_NO_EXPORT
 #else
 #  ifndef URHO3D_API
-#    ifdef URHO3D_EXPORTS
+#    ifdef Urho3D_EXPORTS
         /* We are building this library */
 #      define URHO3D_API __declspec(dllexport)
 #    else
@@ -49,14 +62,22 @@
 
 #ifndef URHO3D_DEPRECATED
 #  define URHO3D_DEPRECATED __declspec(deprecated)
-#  define URHO3D_DEPRECATED_EXPORT URHO3D_API __declspec(deprecated)
-#  define URHO3D_DEPRECATED_NO_EXPORT URHO3D_NO_EXPORT __declspec(deprecated)
 #endif
 
-#define DEFINE_NO_DEPRECATED 0
-#if DEFINE_NO_DEPRECATED
-# define URHO3D_NO_DEPRECATED
+#ifndef URHO3D_DEPRECATED_EXPORT
+#  define URHO3D_DEPRECATED_EXPORT URHO3D_API URHO3D_DEPRECATED
 #endif
 
+#ifndef URHO3D_DEPRECATED_NO_EXPORT
+#  define URHO3D_DEPRECATED_NO_EXPORT URHO3D_NO_EXPORT URHO3D_DEPRECATED
 #endif
 
+#if 0 /* DEFINE_NO_DEPRECATED */
+#  ifndef URHO3D_NO_DEPRECATED
+#    define URHO3D_NO_DEPRECATED
+#  endif
+#endif
+
+#define NONSCRIPTABLE 
+
+#endif

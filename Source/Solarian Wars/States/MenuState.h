@@ -6,21 +6,20 @@
 
 #pragma once
 
-#include <Ptr.h>
-#include <Node.h>
-#include <Scene.h>
-#include <UIElement.h>
-#include <Texture2D.h>
-#include <Font.h>
-#include <Button.h>
+#include <Container/Ptr.h>
+#include <Scene/Node.h>
+#include <Scene/Scene.h>
+#include <UI/UIElement.h>
+#include <Graphics/Texture2D.h>
+#include <UI/Font.h>
+#include <UI/Button.h>
 
 #include "State.h"
 #include "IO/Locale.h"
 
 class MenuState : public State
 {
-    OBJECT (MenuState)
-    BASEOBJECT(State)
+    URHO3D_OBJECT (MenuState, State)
 
 public:
     MenuState (Urho3D::Context* context);

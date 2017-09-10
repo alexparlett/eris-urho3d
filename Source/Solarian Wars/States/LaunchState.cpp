@@ -1,21 +1,21 @@
 #include "LaunchState.h"
 
-#include <Graphics.h>
-#include <Context.h>
-#include <ResourceCache.h>
-#include <UI.h>
-#include <Texture2D.h>
-#include <Text.h>
-#include <Timer.h>
-#include <Font.h>
-#include <InputEvents.h>
-#include <CoreEvents.h>
-#include <Model.h>
-#include <XMLFile.h>
-#include <ValueAnimation.h>
-#include <Variant.h>
-#include <StringHash.h>
-#include <PackageFile.h>
+#include <Graphics/Graphics.h>
+#include <Core/Context.h>
+#include <Resource/ResourceCache.h>
+#include <UI/UI.h>
+#include <Graphics/Texture2D.h>
+#include <UI/Text.h>
+#include <Core/Timer.h>
+#include <UI/Font.h>
+#include <Input/InputEvents.h>
+#include <Core/CoreEvents.h>
+#include <Graphics/Model.h>
+#include <Resource/XMLFile.h>
+#include <Scene/ValueAnimation.h>
+#include <Core/Variant.h>
+#include <Math/StringHash.h>
+#include <IO/PackageFile.h>
 
 #include "IO/Settings.h"
 #include "Core/Events.h"
@@ -25,7 +25,7 @@ using namespace Urho3D;
 
 LaunchState::LaunchState(Context* context) :
     State(context),
-    launchRoot_(NULL),
+    launchRoot_(),
     timer_(Timer()),
     currentLogoIndex_(0),
     fading_(true)
@@ -80,10 +80,10 @@ void LaunchState::Start()
     launchRoot_->SetVisible(true);
     launchLogos_[currentLogoIndex_]->SetAttributeAnimation("Opacity", opacityInAnimation_, WM_ONCE);
 
-    SubscribeToEvent(E_ENDFRAME, HANDLER(LaunchState, HandleTimer));
-    SubscribeToEvent(E_KEYDOWN, HANDLER(LaunchState, HandleKey));
-    SubscribeToEvent(E_MOUSEBUTTONUP, HANDLER(LaunchState, HandleButton));
-    SubscribeToEvent(E_ANIMATION_FINISHED, HANDLER(LaunchState, HandleAnimationFinished));
+    SubscribeToEvent(E_ENDFRAME, URHO3D_HANDLER(LaunchState, HandleTimer));
+    SubscribeToEvent(E_KEYDOWN, URHO3D_HANDLER(LaunchState, HandleKey));
+    SubscribeToEvent(E_MOUSEBUTTONUP, URHO3D_HANDLER(LaunchState, HandleButton));
+    SubscribeToEvent(E_ANIMATION_FINISHED, URHO3D_HANDLER(LaunchState, HandleAnimationFinished));
 
     timer_.Reset();
 }

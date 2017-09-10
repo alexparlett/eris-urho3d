@@ -6,19 +6,19 @@
 
 #pragma once
 
-#include <Object.h>
-#include <HashMap.h>
-#include <Ptr.h>
-#include <Variant.h>
-#include <StringHash.h>
-#include <UIElement.h>
-#include <Cursor.h>
+#include <Core/Object.h>
+#include <Container/HashMap.h>
+#include <Container/Ptr.h>
+#include <Core/Variant.h>
+#include <Math/StringHash.h>
+#include <UI/UIElement.h>
+#include <UI/Cursor.h>
 
 #include "States/State.h"
 
 class StateManager : public Urho3D::Object
 {
-    OBJECT(StateManager)
+    URHO3D_OBJECT(StateManager,Urho3D::Object)
 
 public:
     StateManager(Urho3D::Context* context);

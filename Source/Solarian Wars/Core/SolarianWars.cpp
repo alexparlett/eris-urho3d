@@ -14,25 +14,25 @@
 #include "Script/ScriptAPI.h"
 #include "IO/Bindings.h"
 
-#include <APITemplates.h>
-#include <Script.h>
-#include <FileSystem.h>
-#include <Input.h>
-#include <Graphics.h>
-#include <Audio.h>
-#include <ResourceCache.h>
-#include <StringHash.h>
-#include <DebugHud.h>
-#include <Console.h>
-#include <Log.h>
-#include <Renderer.h>
-#include <Viewport.h>
-#include <UI.h>
-#include <UIElement.h>
-#include <Cursor.h>
-#include <Color.h>
-#include <Zone.h>
-#include <Font.h>
+#include <AngelScript/APITemplates.h>
+#include <AngelScript/Script.h>
+#include <IO/FileSystem.h>
+#include <Input/Input.h>
+#include <Graphics/Graphics.h>
+#include <Audio/Audio.h>
+#include <Resource/ResourceCache.h>
+#include <Math/StringHash.h>
+#include <Engine/DebugHud.h>
+#include <Engine/Console.h>
+#include <IO/Log.h>
+#include <Graphics/Renderer.h>
+#include <Graphics/Viewport.h>
+#include <UI/UI.h>
+#include <UI/UIElement.h>
+#include <UI/Cursor.h>
+#include <Math/Color.h>
+#include <Graphics/Zone.h>
+#include <UI/Font.h>
 
 #include <windows.h>
 
@@ -92,11 +92,11 @@ void SolarianWars::Setup()
     engineParameters_["LowQualityShadows"] = settings->GetSetting("shadows", 2).GetInt() == 1 ? true : false;
     engineParameters_["RenderPath"] = "RenderPaths/Deferred.xml";
 
-    audio->SetMasterGain(SoundType::SOUND_MASTER, settings->GetSetting("master", 1.0f).GetFloat());
-    audio->SetMasterGain(SoundType::SOUND_AMBIENT, settings->GetSetting("ambient", 0.6f).GetFloat());
-    audio->SetMasterGain(SoundType::SOUND_MUSIC, settings->GetSetting("music", 0.4f).GetFloat());
-    audio->SetMasterGain(SoundType::SOUND_EFFECT, settings->GetSetting("effects", 0.6f).GetFloat());
-    audio->SetMasterGain(SoundType::SOUND_UI, settings->GetSetting("interface", 0.6f).GetFloat());
+    audio->SetMasterGain("master", settings->GetSetting("master", 1.0f).GetFloat());
+    audio->SetMasterGain("ambient", settings->GetSetting("ambient", 0.6f).GetFloat());
+    audio->SetMasterGain("music", settings->GetSetting("music", 0.4f).GetFloat());
+    audio->SetMasterGain("effects", settings->GetSetting("effects", 0.6f).GetFloat());
+    audio->SetMasterGain("interface", settings->GetSetting("interface", 0.6f).GetFloat());
 }
 
 void SolarianWars::Start()
@@ -181,4 +181,4 @@ void SolarianWars::DefineVersion()
     version_->SetPriority(M_MAX_INT);
 }
 
-DEFINE_APPLICATION_MAIN(SolarianWars)
+URHO3D_DEFINE_APPLICATION_MAIN(SolarianWars)

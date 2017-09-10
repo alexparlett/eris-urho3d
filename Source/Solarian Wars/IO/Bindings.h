@@ -6,16 +6,16 @@
 
 #pragma once
 
-#include <Object.h>
-#include <Input.h>
-#include <HashMap.h>
-#include <Str.h>
-#include <XMLElement.h>
-#include <Ptr.h>
+#include <Core/Object.h>
+#include <Input/Input.h>
+#include <Container/HashMap.h>
+#include <Container/Str.h>
+#include <Resource/XMLElement.h>
+#include <Container/Ptr.h>
 
 class Bindings : public Urho3D::Object
 {
-    OBJECT(Bindings)
+    URHO3D_OBJECT(Bindings, Urho3D::Object)
 
 public:
     Bindings(Urho3D::Context* context);

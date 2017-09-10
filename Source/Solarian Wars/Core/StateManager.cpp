@@ -8,14 +8,14 @@
 #include "StateManager.h"
 #include "Events.h"
 
-#include <Log.h>
-#include <CoreEvents.h>
-#include <UI.h>
-#include <BorderImage.h>
-#include <Texture2D.h>
-#include <Graphics.h>
-#include <ResourceCache.h>
-#include <Color.h>
+#include <IO/Log.h>
+#include <Core/CoreEvents.h>
+#include <UI/UI.h>
+#include <UI/BorderImage.h>
+#include <Graphics/Texture2D.h>
+#include <Graphics/Graphics.h>
+#include <Resource/ResourceCache.h>
+#include <Math/Color.h>
 
 using namespace Urho3D;
 
@@ -27,10 +27,10 @@ StateManager::StateManager(Context* context) :
     awaitingCreate_(HashMap<StringHash, SharedPtr<State>>()),
     awaitingDelete_(HashMap<StringHash, SharedPtr<State>>())
 {
-    SubscribeToEvent(E_STATE_CREATE, HANDLER(StateManager, HandleCreate));
-    SubscribeToEvent(E_STATE_CHANGE, HANDLER(StateManager, HandleChange));
-    SubscribeToEvent(E_STATE_DESTROY, HANDLER(StateManager, HandleDestroy));
-	SubscribeToEvent(E_BEGINFRAME, HANDLER(StateManager, HandleBeginFrame));
+    SubscribeToEvent(E_STATE_CREATE, URHO3D_HANDLER(StateManager, HandleCreate));
+    SubscribeToEvent(E_STATE_CHANGE, URHO3D_HANDLER(StateManager, HandleChange));
+    SubscribeToEvent(E_STATE_DESTROY, URHO3D_HANDLER(StateManager, HandleDestroy));
+	SubscribeToEvent(E_BEGINFRAME, URHO3D_HANDLER(StateManager, HandleBeginFrame));
 }
 
 StateManager::~StateManager()
@@ -102,7 +102,7 @@ void StateManager::HandleCreate(StringHash eventType, VariantMap& eventData)
             awaitingCreate_[id] = state;
         }
         else
-            LOGERROR("State already exists with id of " + id.ToString());
+			URHO3D_LOGERROR("State already exists with id of " + id.ToString());
     }
 }
 
@@ -119,12 +119,12 @@ void StateManager::HandleChange(StringHash eventType, VariantMap& eventData)
         }
         else
         {
-            LOGERROR("State with id " + eventData[P_ID].ToString() + " does not exist.");
+			URHO3D_LOGERROR("State with id " + eventData[P_ID].ToString() + " does not exist.");
         }
     }
     else
     {
-        LOGERROR("State with id " + eventData[P_ID].ToString() + " is not a valid id.");
+		URHO3D_LOGERROR("State with id " + eventData[P_ID].ToString() + " is not a valid id.");
     }
 }
 
@@ -141,10 +141,10 @@ void StateManager::HandleDestroy(StringHash eventType, VariantMap& eventData)
 			states_.Erase(id);
 		}
 		else
-			LOGERROR("Cannot destroy state " + id.ToString() + " either current, next or doesn't exist.");
+			URHO3D_LOGERROR("Cannot destroy state " + id.ToString() + " either current, next or doesn't exist.");
 	}
 	else
-		LOGERROR("State with id " + id.ToString() + " is not a valid id.");
+		URHO3D_LOGERROR("State with id " + id.ToString() + " is not a valid id.");
 }
 
 void StateManager::HandleBeginFrame(StringHash eventType, VariantMap& eventData)
@@ -189,7 +189,7 @@ void StateManager::SwitchToNext()
             newActive->Start();
         }
         else
-            LOGERRORF("State with id %s is not a valid id.", nextState_);
+			URHO3D_LOGERRORF("State with id %s is not a valid id.", nextState_);
     }
 }
 

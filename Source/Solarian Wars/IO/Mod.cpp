@@ -4,11 +4,11 @@
 //
 ////////////////////////////////////////////
 
-#include "Mod.h"
+#include "Module.h"
 
 using namespace Urho3D; 
 
-Mod::Mod(const String& dir, XMLFile& file)
+Module::Module(const String& dir, XMLFile& file)
 {
     XMLElement root = file.GetRoot();
     id_ = root.GetAttribute("id");
@@ -19,32 +19,32 @@ Mod::Mod(const String& dir, XMLFile& file)
     version_ = root.GetChild("version").GetValue();
 }
 
-const String& Mod::GetId() const
+const String& Module::GetId() const
 {
     return id_;
 }
 
-const String& Mod::GetName() const
+const String& Module::GetName() const
 {
     return name_;
 }
 
-const String& Mod::GetDirectory() const
+const String& Module::GetDirectory() const
 {
     return directory_;
 }
 
-const String& Mod::GetDescription() const
+const String& Module::GetDescription() const
 {
     return description_;
 }
 
-const String& Mod::GetAuthor() const
+const String& Module::GetAuthor() const
 {
     return author_;
 }
 
-const String& Mod::GetVersion() const
+const String& Module::GetVersion() const
 {
     return version_;
 }

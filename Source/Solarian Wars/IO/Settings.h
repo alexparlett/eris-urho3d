@@ -7,14 +7,14 @@
 
 #pragma once
 
-#include <Object.h>
-#include <Str.h>
-#include <XMLElement.h>
-#include <Variant.h>
+#include <Core/Object.h>
+#include <Container/Str.h>
+#include <Resource/XMLElement.h>
+#include <Core/Variant.h>
 
 class Settings : public Urho3D::Object
 {
-    OBJECT(Settings)
+	URHO3D_OBJECT(Settings,Urho3D::Object)
 
 public:
     Settings(Urho3D::Context* context);

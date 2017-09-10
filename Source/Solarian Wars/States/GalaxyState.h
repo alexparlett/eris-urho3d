@@ -10,17 +10,16 @@
 #include "IO/Bindings.h"
 #include "IO/Settings.h"
 
-#include <Camera.h>
-#include <Node.h>
-#include <Ptr.h>
-#include <UI.h>
-#include <Timer.h>
-#include <ScriptFile.h>
+#include <Graphics/Camera.h>
+#include <Scene/Node.h>
+#include <Container/Ptr.h>
+#include <UI/UI.h>
+#include <Core/Timer.h>
+#include <AngelScript/ScriptFile.h>
 
 class GalaxyState : public State
 {
-    OBJECT(GalaxyState)
-    BASEOBJECT(State)
+    URHO3D_OBJECT(GalaxyState,State)
 
 public:
     GalaxyState(Urho3D::Context* context);
